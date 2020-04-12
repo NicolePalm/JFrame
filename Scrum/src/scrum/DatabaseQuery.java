@@ -15,19 +15,18 @@ import oru.inf.InfException;
  */
 public class DatabaseQuery {
     
-    private static InfDB idb;
+    //private static InfDB idb;
      
     public DatabaseQuery (InfDB idb){
-    this.idb = idb;
+   // this.idb = idb;
     }
     
     
-    public static boolean InsertNewUser (String firstname, String lastname, String email, String password){
+    public static boolean InsertNewUser (String firstname, String lastname, String email, String password, InfDB idb){
     
         boolean success = false;
         try{        
-            String sql = "INSERT INTO User1 (user_id, firstname,lastname,email,user_password, adminstatus, blocknotifications) VALUES "
-                    + "(1,'" + firstname + "','" + lastname + "','" + email + "','" + password + "',0,0)";
+            String sql = "INSERT INTO User1 (user_id, firstname,lastname,email,user_password, adminstatus, blocknotifications) VALUES (4,'" + firstname + "','" + lastname + "','" + email + "','" + password + "',0,0)";
             idb.insert(sql);
             System.out.println("Lyckades");
             success = true; 
