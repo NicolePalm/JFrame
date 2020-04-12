@@ -4,11 +4,9 @@
  * and open the template in the editor.
  */
 package scrum;
-
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.derby.iapi.sql.PreparedStatement;
+import javax.swing.JOptionPane;
+import oru.inf.InfDB;
+import oru.inf.InfException;
 
 /**
  *
@@ -16,17 +14,22 @@ import org.apache.derby.iapi.sql.PreparedStatement;
  */
 public class CreateAccount extends javax.swing.JFrame {
 
-    /**
-     * Creates new form CreateAccount
-     */
-    public CreateAccount() {
+        private InfDB idb;
+        
+        public CreateAccount(InfDB idb) {
         initComponents();
-        try {
-            DatabaseClass a1 = new DatabaseClass();
-        } catch (SQLException ex) {
-            Logger.getLogger(LoggInScreen.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.idb = idb;
+        
     }
+        public void RegistreraDig(){
+            String Firstname = GetString.hamtaFalt(JFirstname);
+            String Lastname = GetString.hamtaFalt(JLastname);
+            String Email = GetString.hamtaFalt(JEmail);
+            String Password = GetString.hamtaLosenord(JPassword);
+            String PasswordIgen = GetString.hamtaLosenord(JPasswordIgen);
+            //Mellan ska validering ske, så att alla fält är i fyllda och att emailadress inte finns i databasen
+            DatabaseQuery.InsertNewUser(Firstname, Lastname, Email, Password);
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -42,15 +45,19 @@ public class CreateAccount extends javax.swing.JFrame {
         JLastname = new javax.swing.JTextField();
         JEmail = new javax.swing.JTextField();
         JPassword = new javax.swing.JPasswordField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        JCreate = new javax.swing.JButton();
+        JlblFirstname = new javax.swing.JLabel();
+        JlblLastname = new javax.swing.JLabel();
+        JlblEmail = new javax.swing.JLabel();
+        JlblPassword = new javax.swing.JLabel();
+        JbtnRegistreraDig = new javax.swing.JButton();
+        JPasswordIgen = new javax.swing.JPasswordField();
+        JlblPasswordIgen = new javax.swing.JLabel();
+        JlblRegistering = new javax.swing.JLabel();
 
         jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setName("JRegistrera"); // NOI18N
 
         JFirstname.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -64,65 +71,92 @@ public class CreateAccount extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Förnamn");
+        JPassword.setActionCommand("<Not Set>");
 
-        jLabel2.setText("Efternamn");
+        JlblFirstname.setText("Förnamn");
+        JlblFirstname.setName("JlblFirstname"); // NOI18N
 
-        jLabel3.setText("Email adress");
+        JlblLastname.setText("Efternamn");
+        JlblLastname.setName("JlblLastname"); // NOI18N
 
-        jLabel4.setText("Lösenord");
+        JlblEmail.setText("Email adress");
+        JlblEmail.setName("JlblEmail"); // NOI18N
 
-        JCreate.setText("Skapa konto");
-        JCreate.addActionListener(new java.awt.event.ActionListener() {
+        JlblPassword.setText("Lösenord");
+        JlblPassword.setName("JlblPassword"); // NOI18N
+
+        JbtnRegistreraDig.setText("Registrera dig");
+        JbtnRegistreraDig.setName("JbtnRegistreraDig"); // NOI18N
+        JbtnRegistreraDig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JCreateActionPerformed(evt);
+                JbtnRegistreraDigActionPerformed(evt);
             }
         });
+
+        JPasswordIgen.setName("JPasswordIgen"); // NOI18N
+
+        JlblPasswordIgen.setText("Upprepa lösenord");
+        JlblPasswordIgen.setName("JlblPasswordIgen"); // NOI18N
+
+        JlblRegistering.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        JlblRegistering.setText("Registrering");
+        JlblRegistering.setName("JlblRegistering"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(108, 108, 108)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(JFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(JLastname, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(JEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(JPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(107, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(JCreate)
-                .addGap(231, 231, 231))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(JlblPasswordIgen)
+                            .addComponent(JlblEmail)
+                            .addComponent(JlblPassword)
+                            .addComponent(JlblLastname)
+                            .addComponent(JlblFirstname)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(JPassword)
+                                    .addComponent(JEmail, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(JLastname, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(JFirstname, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(JPasswordIgen))
+                                .addGap(33, 33, 33)
+                                .addComponent(JbtnRegistreraDig))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(JlblRegistering, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(78, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addComponent(JlblRegistering, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                .addGap(30, 30, 30)
+                .addComponent(JlblFirstname)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(JFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(57, 57, 57)
-                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(JlblLastname)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(JLastname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addComponent(JlblEmail)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(JEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(61, 61, 61)
-                .addComponent(jLabel4)
+                .addGap(18, 18, 18)
+                .addComponent(JlblPassword)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(JPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54)
-                .addComponent(JCreate)
-                .addGap(33, 33, 33))
+                .addGap(21, 21, 21)
+                .addComponent(JlblPasswordIgen)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(JPasswordIgen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JbtnRegistreraDig))
+                .addGap(28, 28, 28))
         );
 
         pack();
@@ -136,60 +170,24 @@ public class CreateAccount extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_JLastnameActionPerformed
 
-    private void JCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JCreateActionPerformed
-        String firstname = JFirstname.getText();
-        String lastname = JLastname.getText();
-        String email = JEmail.getText();
-        String pw = String.valueOf(JPassword.getPassword());
-        PreparedStatement st = a1.preparedStatement
-        
-    }//GEN-LAST:event_JCreateActionPerformed
+    private void JbtnRegistreraDigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbtnRegistreraDigActionPerformed
+        RegistreraDig();
+    }//GEN-LAST:event_JbtnRegistreraDigActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CreateAccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CreateAccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CreateAccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CreateAccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CreateAccount().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton JCreate;
     private javax.swing.JTextField JEmail;
     private javax.swing.JTextField JFirstname;
     private javax.swing.JTextField JLastname;
     private javax.swing.JPasswordField JPassword;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPasswordField JPasswordIgen;
+    private javax.swing.JButton JbtnRegistreraDig;
+    private javax.swing.JLabel JlblEmail;
+    private javax.swing.JLabel JlblFirstname;
+    private javax.swing.JLabel JlblLastname;
+    private javax.swing.JLabel JlblPassword;
+    private javax.swing.JLabel JlblPasswordIgen;
+    private javax.swing.JLabel JlblRegistering;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
