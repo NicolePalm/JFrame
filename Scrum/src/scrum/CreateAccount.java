@@ -32,12 +32,20 @@ public class CreateAccount extends javax.swing.JFrame {
             ArrayList<String> emails = new ArrayList<String>();
             emails = idb.fetchColumn("select EMAIL from USER1");
             boolean InvalidEmail = false;
-            if(emails.contains(Email)){
+            for(String mails : emails){
+            if(mails.equals(Email)){
             InvalidEmail = true;
             }
+            }
             
-            if(Password  == PasswordIgen && InvalidEmail == false){ 
+            if(Password.equals(PasswordIgen) && InvalidEmail == false){ 
             boolean test = NewUser.InsertNewUser(Firstname, Lastname, Email, Password,idb);
+            if(test = true){
+            JOptionPane.showMessageDialog(null, "Välkommen "+Firstname+"!");
+            int userID = UserIDParse.ReturnIDFromEmail(Email, idb);
+            new UserPanel(idb,userID).setVisible(true);
+            dispose();
+            }
            }
             else{ 
             JOptionPane.showMessageDialog(null, "Password matchar inte eller Email redan tagen");

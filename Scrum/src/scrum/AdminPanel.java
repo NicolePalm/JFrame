@@ -14,9 +14,9 @@ import oru.inf.InfDB;
  */
 public class AdminPanel extends javax.swing.JFrame {
     
-    private String currentUser;
+    private int currentUser;
     private InfDB idb;
-    public AdminPanel(InfDB idb, String id) {
+    public AdminPanel(InfDB idb, int id) {
         this.idb = idb;
         this.currentUser = id;
         initComponents();

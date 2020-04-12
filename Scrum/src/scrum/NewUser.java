@@ -26,15 +26,11 @@ public class NewUser {
     
         boolean success = false;
         try{    
-            //String sql = "INSERT INTO User1 (user_id, firstname,lastname,email,user_password, adminstatus, blocknotifications) VALUES "
-                   // + "(2,'" + firstname + "','" + lastname + "','" + email + "','" + password + "',0,0)";
+
             String id = idb.getAutoIncrement("USER1","USER_ID");
             String sql = "INSERT INTO User1 (user_id, firstname,lastname,email,user_password, adminstatus, blocknotifications) VALUES ("+ id +",'"+ firstname + "','" + lastname + "','" + email + "','" + password + "',0,0)";
-            System.out.println(sql);
-            
-            //String sql = "INSERT INTO User1 (user_id, firstname,lastname,email,user_password, adminstatus, blocknotifications) VALUES ("id"','" + firstname + "','" + lastname + "','" + email + "','" + password + "',0,0)";
+
             idb.insert(sql);
-            System.out.println("Lyckades");
             success = true; 
             }
             catch(InfException e){

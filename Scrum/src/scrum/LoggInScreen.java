@@ -140,18 +140,17 @@ public class LoggInScreen extends javax.swing.JFrame {
          String pw = JPassWord.getText();
          String checkPW = "SELECT USER_PASSWORD from USER1 where EMAIL = '"+email+"'";
          String checkAdmin = "SELECT ADMINSTATUS from USER1 where EMAIL = '"+email+"'";
-         String checkID = "SELECT USER_ID from USER1 where EMAIL = '"+email+"'";
          String svarPW = idb.fetchSingle(checkPW);
          String svarAdmin = idb.fetchSingle(checkAdmin);
-         String id = idb.fetchSingle(checkID);
          int admin = Integer.parseInt(svarAdmin);
-         if(svarPW == pw){
+         int userID = UserIDParse.ReturnIDFromEmail(email, idb);
+         if(svarPW.equals(pw)){
              if(admin == 1){
-               new CreateAccount(idb).setVisible(true);
+               new AdminPanel(idb,userID).setVisible(true);
                dispose();  
              }
              else{
-                 new UserPanel(idb,id).setVisible(true);
+                 new UserPanel(idb,userID).setVisible(true);
                  dispose();
              }
          }
