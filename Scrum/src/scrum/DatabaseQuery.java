@@ -27,7 +27,7 @@ public class DatabaseQuery {
         boolean success = false;
         try{        
             String sql = "INSERT INTO User1 (user_id, firstname,lastname,email,user_password, adminstatus, blocknotifications) VALUES "
-                    + "(1,'" + firstname + "','" + lastname + "','" + email + "','" + password + "',0,0)";
+                    + "(2,'" + firstname + "','" + lastname + "','" + email + "','" + password + "',0,0)";
             idb.insert(sql);
             System.out.println("Lyckades");
             success = true; 

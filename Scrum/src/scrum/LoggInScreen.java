@@ -6,6 +6,8 @@ import oru.inf.InfDB;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import oru.inf.InfException;
 
  //@author Danie
  
@@ -133,7 +135,19 @@ public class LoggInScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_JPassWordActionPerformed
 
     private void JbtnLoggInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbtnLoggInActionPerformed
-        
+     try{
+         String id = JUserName.getText();
+         String pw = JPassWord.getText();
+         String sqlPW = "SELECT USER_PASSWORD from USER1 where EMAIL = hej@gmail.com";
+         System.out.println(sqlPW);
+         String sqlSvar = idb.fetchSingle(sqlPW);
+         System.out.println(sqlSvar);
+     }
+     catch(InfException loginFail){
+         JOptionPane.showMessageDialog(null, "Ange ID och lösenord!");
+          System.out.println(loginFail.getMessage());    
+     }
+     
     }//GEN-LAST:event_JbtnLoggInActionPerformed
 
     private void JbtnRegistreraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbtnRegistreraActionPerformed
