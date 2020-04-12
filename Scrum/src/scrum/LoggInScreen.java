@@ -136,12 +136,25 @@ public class LoggInScreen extends javax.swing.JFrame {
 
     private void JbtnLoggInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbtnLoggInActionPerformed
      try{
-         String id = JUserName.getText();
+         String email = JUserName.getText();
          String pw = JPassWord.getText();
-         String sqlPW = "SELECT USER_PASSWORD from USER1 where EMAIL = hej@gmail.com";
-         System.out.println(sqlPW);
-         String sqlSvar = idb.fetchSingle(sqlPW);
-         System.out.println(sqlSvar);
+         String checkPW = "SELECT USER_PASSWORD from USER1 where EMAIL = '"+email+"'";
+         String checkAdmin = "SELECT ADMINSTATUS from USER1 where EMAIL = '"+email+"'";
+         String checkID = "SELECT USER_ID from USER1 where EMAIL = '"+email+"'";
+         String svarPW = idb.fetchSingle(checkPW);
+         String svarAdmin = idb.fetchSingle(checkAdmin);
+         String id = idb.fetchSingle(checkID);
+         int admin = Integer.parseInt(svarAdmin);
+         if(svarPW == pw){
+             if(admin == 1){
+               new CreateAccount(idb).setVisible(true);
+               dispose();  
+             }
+             else{
+                 new UserPanel(idb,id).setVisible(true);
+                 dispose();
+             }
+         }
      }
      catch(InfException loginFail){
          JOptionPane.showMessageDialog(null, "Ange ID och lösenord!");
