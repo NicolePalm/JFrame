@@ -28,7 +28,7 @@ public class CreateAccount extends javax.swing.JFrame {
             String Password = GetString.hamtaLosenord(JPassword);
             String PasswordIgen = GetString.hamtaLosenord(JPasswordIgen);
             //Mellan ska validering ske, så att alla fält är i fyllda och att emailadress inte finns i databasen
-            DatabaseQuery.InsertNewUser(Firstname, Lastname, Email, Password);
+            boolean test = DatabaseQuery.InsertNewUser(Firstname, Lastname, Email, Password,idb);
         }
 
     /**
