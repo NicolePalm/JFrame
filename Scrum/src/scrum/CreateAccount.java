@@ -7,6 +7,7 @@ package scrum;
 import javax.swing.JOptionPane;
 import oru.inf.InfDB;
 import oru.inf.InfException;
+import java.util.ArrayList;
 
 /**
  *
@@ -21,14 +22,32 @@ public class CreateAccount extends javax.swing.JFrame {
         this.idb = idb;
         
     }
-        public void RegistreraDig(){
+        public void RegistreraDig() {
+            try{
             String Firstname = GetString.hamtaFalt(JFirstname);
             String Lastname = GetString.hamtaFalt(JLastname);
             String Email = GetString.hamtaFalt(JEmail);
             String Password = GetString.hamtaLosenord(JPassword);
             String PasswordIgen = GetString.hamtaLosenord(JPasswordIgen);
-            //Mellan ska validering ske, så att alla fält är i fyllda och att emailadress inte finns i databasen
-            boolean test = DatabaseQuery.InsertNewUser(Firstname, Lastname, Email, Password,idb);
+            ArrayList<String> emails = new ArrayList<String>();
+            emails = idb.fetchColumn("select EMAIL from USER1");
+            boolean InvalidEmail = false;
+            if(emails.contains(Email)){
+            InvalidEmail = true;
+            }
+            
+            if(Password  == PasswordIgen && InvalidEmail == false){ 
+            boolean test = NewUser.InsertNewUser(Firstname, Lastname, Email, Password,idb);
+           }
+            else{ 
+            JOptionPane.showMessageDialog(null, "Password matchar inte eller Email redan tagen");
+            }   
+            }
+            catch(InfException regFail){
+            
+            System.out.println(regFail.getMessage());    
+            }
+            
         }
 
     /**
