@@ -1,8 +1,6 @@
 package scrum;
 import java.sql.SQLException;
 import oru.inf.InfDB;
-
-
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,7 +14,7 @@ public class NewPost extends javax.swing.JFrame {
         
         public NewPost(InfDB idb, int id) {
         initComponents();
-        new FillComboBoxFromDb(idb).fyllBoxElevhem(jCategories);
+        new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, "Jobb");
         this.idb = idb;
         this.currentUser = id;     
     }
@@ -62,6 +60,11 @@ public class NewPost extends javax.swing.JFrame {
         jButton1.setText("Skapa inlägg");
 
         jType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Jobb", "Fritid" }));
+        jType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTypeActionPerformed(evt);
+            }
+        });
 
         jCategories.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -149,6 +152,12 @@ public class NewPost extends javax.swing.JFrame {
     private void jCategoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCategoriesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jCategoriesActionPerformed
+
+    private void jTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTypeActionPerformed
+        jCategories.removeAllItems();
+        String type = jType.getSelectedItem().toString();
+        new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, type);
+    }//GEN-LAST:event_jTypeActionPerformed
 
     /**
      * @param args the command line arguments

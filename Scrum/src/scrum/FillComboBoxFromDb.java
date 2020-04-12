@@ -3,6 +3,7 @@ package scrum;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.JComboBox;
 
 
@@ -11,16 +12,20 @@ public class FillComboBoxFromDb {
     public FillComboBoxFromDb(InfDB idb){
         this.idb = idb;
     }
-public void fyllBoxElevhem(JComboBox box){
+public void fillComboboxCategories(JComboBox box, String type){
         
-ArrayList <String> categories = new ArrayList(); 
+ArrayList <HashMap<String,String>> categories = new ArrayList();
+ArrayList <String> getCategories = new ArrayList();
 try{        
-String enRad = ""; //Deklarering av lokal String variabel
-categories = idb.fetchColumn("select CATEGORYNAME from CATEGORY");
+categories = idb.fetchRows("select CATEGORYNAME, CATEGORYTYPE from CATEGORY");
 
-for(String categories_ : categories){ 
-enRad = categories_; 
-box.addItem(enRad); 
+for(HashMap <String, String> categories_ : categories){ 
+if(categories_.get("CATEGORYTYPE").equals(type)){
+    getCategories.add(categories_.get("CATEGORYNAME"));
+}  
+}
+for(String typeCategories : getCategories){
+    box.addItem(typeCategories);
 }
 }
 catch(Exception e){
