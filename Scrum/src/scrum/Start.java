@@ -18,7 +18,7 @@ public class Start {
           //File db = new File ("Scrumdb.FDB");
           //String path = db.getAbsolutePath();
           idb = new InfDB("C:\\db\\Scrumdb.fdb");
-          System.out.println("Conncention");
+          System.out.println("Connection");
           new LoggInScreen(idb).setVisible(true);
         }
         

@@ -15,6 +15,8 @@ import java.util.ArrayList;
 public class UserPanel extends javax.swing.JFrame {
     private int currentUser;
     private InfDB idb;
+    
+    
     public UserPanel(InfDB idb, int id) {
         this.idb = idb;
         this.currentUser = id;
@@ -99,7 +101,7 @@ public class UserPanel extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jNewPostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNewPostActionPerformed
-        new NewPost(idb,currentUser).setVisible(true);
+        new NewPosts(idb,currentUser).setVisible(true);
     }//GEN-LAST:event_jNewPostActionPerformed
 
     /**
