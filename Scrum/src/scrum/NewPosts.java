@@ -1,4 +1,7 @@
 package scrum;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import static java.time.Instant.now;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -6,7 +9,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 
@@ -14,6 +20,7 @@ public class NewPosts extends javax.swing.JFrame {
 
     private InfDB idb;
     private int currentUser;
+    private File currentFile;
         
         public NewPosts(InfDB idb, int id) {
         initComponents();
@@ -34,6 +41,8 @@ public class NewPosts extends javax.swing.JFrame {
         jTitle = new javax.swing.JTextField();
         jlblTitle = new javax.swing.JLabel();
         jCreatePost = new javax.swing.JButton();
+        jFile = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,6 +79,15 @@ public class NewPosts extends javax.swing.JFrame {
             }
         });
 
+        jFile.setText("Open file...");
+        jFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jFileActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("jButton1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -95,11 +113,14 @@ public class NewPosts extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jlblTitle)
                                 .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jFile)
+                        .addGap(40, 40, 40)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jCreatePost)
                         .addContainerGap())))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(152, 152, 152)
-                .addComponent(jCreatePost)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -116,7 +137,10 @@ public class NewPosts extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jCreatePost)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCreatePost)
+                    .addComponent(jFile)
+                    .addComponent(jButton1))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -139,10 +163,12 @@ public class NewPosts extends javax.swing.JFrame {
         
         try {
             String categoryID = idb.fetchSingle(sqlCategoryID);
+            String filePath = GetCurrentFile();
             String id = idb.getAutoIncrement("POST","POST_ID");
-            String insertPost = "INSERT INTO POST (POST_ID,TITLE,CONTENT,POSTDATE,POSTTIME,POSTER_ID,CATEGORY_ID) VALUES ("+id+",'"+title+"','"+content+"','"+currentDate+"','"+tiden+"',"+currentUser+","+categoryID+")";
+            String insertPost = "INSERT INTO POST (POST_ID,TITLE,CONTENT,SEARCHPATH,POSTDATE,POSTTIME,POSTER_ID,CATEGORY_ID) VALUES ("+id+",'"+title+"','"+content+"','"+filePath+"','"+currentDate+"','"+tiden+"',"+currentUser+","+categoryID+")";
             idb.insert(insertPost);
             JOptionPane.showMessageDialog(null, "Nytt inlägg skapat!");
+            
             dispose();
         } catch (InfException ex) {
             Logger.getLogger(NewPosts.class.getName()).log(Level.SEVERE, null, ex);
@@ -159,10 +185,40 @@ public class NewPosts extends javax.swing.JFrame {
        new CreateNewCategory(idb).setVisible(true);
     }//GEN-LAST:event_jNewCategoryActionPerformed
 
+    private void jFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setFileFilter(new FileNameExtensionFilter("*.jpg", "jpg"));
+    if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+        this.currentFile = fileChooser.getSelectedFile();
+    }
+    else {
+        System.out.println("No file choosen!");
+    }   
+        
+        
+    
+
+    }//GEN-LAST:event_jFileActionPerformed
+    private String GetCurrentFile()
+    {
+        String userID = Integer.toString(currentUser);
+        String filename= LocalTime.now().format(DateTimeFormatter.ofPattern("HH-mm-ss")) + userID;
+        String filePath = "c://JFrame/Scrum/files/"+filename+".jpg";
+        try {
+            BufferedImage image = ImageIO.read(currentFile);
+            ImageIO.write((BufferedImage)image, "jpg", new File(filePath));
+        } catch (IOException ex) {
+            System.out.println("Failed to save image!");
+        
+    } 
+    return filePath;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jCategories;
     private javax.swing.JButton jCreatePost;
+    private javax.swing.JButton jFile;
     private javax.swing.JButton jNewCategory;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jText;
