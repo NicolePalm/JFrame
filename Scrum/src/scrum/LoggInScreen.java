@@ -135,9 +135,16 @@ public class LoggInScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_JPassWordActionPerformed
 
     private void JbtnLoggInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbtnLoggInActionPerformed
-     try{
-         String email = JUserName.getText();
-         String pw = JPassWord.getText();
+     
+        String email = JUserName.getText();
+        String pw = JPassWord.getText();
+        if(email.isEmpty()|| pw.isEmpty()){
+        JOptionPane.showMessageDialog(null, "Ange email och lösenord!");
+        }
+        else{
+        
+         
+         try{
          String checkPW = "SELECT USER_PASSWORD from USER1 where EMAIL = '"+email+"'";
          String checkAdmin = "SELECT ADMINSTATUS from USER1 where EMAIL = '"+email+"'";
          String svarPW = idb.fetchSingle(checkPW);
@@ -154,12 +161,14 @@ public class LoggInScreen extends javax.swing.JFrame {
                  dispose();
              }
          }
+         }
+         catch(InfException e){
+          JOptionPane.showMessageDialog(null, "Fel inloggningsuppgifter!");
+          System.out.println(e.getMessage());    
+         }
      }
-     catch(InfException loginFail){
-         JOptionPane.showMessageDialog(null, "Ange ID och lösenord!");
-          System.out.println(loginFail.getMessage());    
-     }
-     
+  
+    
     }//GEN-LAST:event_JbtnLoggInActionPerformed
 
     private void JbtnRegistreraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbtnRegistreraActionPerformed
