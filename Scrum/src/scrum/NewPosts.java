@@ -1,4 +1,11 @@
 package scrum;
+import static java.time.Instant.now;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import oru.inf.InfDB;
 import oru.inf.InfException;
@@ -121,7 +128,25 @@ public class NewPosts extends javax.swing.JFrame {
     }//GEN-LAST:event_jTitleActionPerformed
 
     private void jCreatePostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCreatePostActionPerformed
-
+        String title = jTitle.getText();
+        String content = jText.getText();
+        String category = jCategories.getSelectedItem().toString();
+        String sqlCategoryID = "SELECT CATEGORY_ID FROM CATEGORY WHERE CATEGORYNAME = '"+category+"'";
+        
+        String tiden = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        LocalDate currentDate = LocalDate.now();
+        System.out.print(currentDate);
+        
+        try {
+            String categoryID = idb.fetchSingle(sqlCategoryID);
+            String id = idb.getAutoIncrement("POST","POST_ID");
+            String insertPost = "INSERT INTO POST (POST_ID,TITLE,CONTENT,POSTDATE,POSTTIME,POSTER_ID,CATEGORY_ID) VALUES ("+id+",'"+title+"','"+content+"','"+currentDate+"','"+tiden+"',"+currentUser+","+categoryID+")";
+            idb.insert(insertPost);
+            JOptionPane.showMessageDialog(null, "Nytt inlägg skapat!");
+            dispose();
+        } catch (InfException ex) {
+            Logger.getLogger(NewPosts.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jCreatePostActionPerformed
 
     private void jTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTypeActionPerformed
