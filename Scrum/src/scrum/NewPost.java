@@ -34,7 +34,7 @@ public class NewPost extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jCreatePost = new javax.swing.JButton();
         jType = new javax.swing.JComboBox<>();
         jCategories = new javax.swing.JComboBox<>();
         jNewCategory = new javax.swing.JButton();
@@ -57,7 +57,12 @@ public class NewPost extends javax.swing.JFrame {
 
         jLabel3.setText("Text");
 
-        jButton1.setText("Skapa inlägg");
+        jCreatePost.setText("Skapa inlägg");
+        jCreatePost.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCreatePostActionPerformed(evt);
+            }
+        });
 
         jType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Jobb", "Fritid" }));
         jType.addActionListener(new java.awt.event.ActionListener() {
@@ -101,7 +106,7 @@ public class NewPost extends javax.swing.JFrame {
                                 .addComponent(jLabel3))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(150, 150, 150)
-                                .addComponent(jButton1)))
+                                .addComponent(jCreatePost)))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -134,7 +139,7 @@ public class NewPost extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addComponent(jCreatePost)
                 .addContainerGap())
         );
 
@@ -159,13 +164,29 @@ public class NewPost extends javax.swing.JFrame {
         new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, type);
     }//GEN-LAST:event_jTypeActionPerformed
 
+    private void jCreatePostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCreatePostActionPerformed
+         
+        
+        try{    
+            String id = idb.getAutoIncrement("POST","POST_ID");
+            String sql = "INSERT INTO User1 (user_id, firstname,lastname,email,user_password, adminstatus, blocknotifications) VALUES ("+ id +",'"+ firstname + "','" + lastname + "','" + email + "','" + password + "',0,0)";
+            idb.insert(sql);
+ 
+            }
+            catch(InfException e){
+                JOptionPane.showMessageDialog(null, "Något blev fel!");
+                System.out.println(e.getMessage());
+            }
+    }
+    }//GEN-LAST:event_jCreatePostActionPerformed
+
     /**
      * @param args the command line arguments
      */
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jCategories;
+    private javax.swing.JButton jCreatePost;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
