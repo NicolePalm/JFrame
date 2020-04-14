@@ -1,14 +1,17 @@
 package scrum;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -19,6 +22,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 import org.apache.commons.io.FilenameUtils;
+import org.w3c.dom.Document;
 public class NewPosts extends javax.swing.JFrame {
 
     private InfDB idb;
@@ -165,10 +169,15 @@ public class NewPosts extends javax.swing.JFrame {
         
         try {
             String categoryID = idb.fetchSingle(sqlCategoryID);
+            try{
             String filePath = GetCurrentFile();
             String id = idb.getAutoIncrement("POST","POST_ID");
             String insertPost = "INSERT INTO POST (POST_ID,TITLE,CONTENT,SEARCHPATH,POSTDATE,POSTTIME,POSTER_ID,CATEGORY_ID) VALUES ("+id+",'"+title+"','"+content+"','"+filePath+"','"+currentDate+"','"+tiden+"',"+currentUser+","+categoryID+")";
             idb.insert(insertPost);
+            }
+            catch(IOException e){
+                
+            }
             JOptionPane.showMessageDialog(null, "Nytt inlägg skapat!");
             
             dispose();
@@ -191,7 +200,7 @@ public class NewPosts extends javax.swing.JFrame {
     
     JFileChooser fileChooser = new JFileChooser();
                                                                                           //fileChooser.setFileFilter(new FileNameExtensionFilter("*.jpg", "jpg"));
-    FileFilter docx =  new FileNameExtensionFilter("MS Word file(.docx)", "docx");
+    FileFilter docx = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
     FileFilter doc = new FileNameExtensionFilter("MS Word file(.doc)", "doc");
     FileFilter jpg = new FileNameExtensionFilter("JPG file (.jpg)", "jpg");
     FileFilter png = new FileNameExtensionFilter("PNG file (.png)", "png");
@@ -214,7 +223,7 @@ public class NewPosts extends javax.swing.JFrame {
     }     
     }//GEN-LAST:event_jFileActionPerformed
     
-    private String GetCurrentFile()
+    private String GetCurrentFile() throws IOException
     {
         String fileName = currentFile.getAbsolutePath();
         this.currentExt = getExtensionByApacheCommonLib(fileName);
@@ -231,14 +240,25 @@ public class NewPosts extends javax.swing.JFrame {
             ex.getMessage();
         } 
         } 
-        else if(currentExt.equals("docx") || currentExt.equals("doc")){
+        else if(currentExt.equals("txt") || currentExt.equals("doc")){
             try {
-              FileWriter write = new FileWriter(filePath, )
-
+                BufferedReader br = new BufferedReader(new FileReader(currentFile)); 
+                
+                ArrayList <String> lines = new ArrayList();
+                String st; 
+                
+                while ((st = br.readLine()) != null){
+                lines.add(st);
+                }
+                FileWriter writer = new FileWriter(filePath); 
+                for(String str: lines) {
+                writer.write(str + System.lineSeparator());
+                }
+                writer.close();
                 
                 
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(NewPosts.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println(ex); 
             }
         }
     return filePath;
@@ -246,28 +266,6 @@ public class NewPosts extends javax.swing.JFrame {
     
     public String getExtensionByApacheCommonLib(String filename) {
     return FilenameUtils.getExtension(filename);
-    }
-    private static void writeUsingBufferedWriter(String data, int noOfLines) {
-
-        FileWriter fr = null;
-        BufferedWriter br = null;
-        String dataWithNewLine=data+System.getProperty("line.separator");
-        try{
-            fr = new FileWriter(currentFile);
-            br = new BufferedWriter(fr);
-            for(int i = noOfLines; i>0; i--){
-                br.write(dataWithNewLine);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally{
-            try {
-                br.close();
-                fr.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
