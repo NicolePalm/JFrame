@@ -50,7 +50,7 @@ public class CreateMeeting extends javax.swing.JFrame {
   
   public void FillReciver() {
       cbReciver.removeAllItems();
-      String sqlFraga = "SELECT Lastname from User1";
+      String sqlFraga = "SELECT EMAIL from User1";
         
         try {
             ArrayList<String> names = idb.fetchColumn(sqlFraga);
