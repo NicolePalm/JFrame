@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.commons.io.FilenameUtils;
 
 public class HandleFiles {
     
@@ -48,6 +49,9 @@ public class HandleFiles {
                 writer.write(str + System.lineSeparator());
             }
         }
+    }
+    public static String getExtensionByApacheCommonLib(String filename) {
+    return FilenameUtils.getExtension(filename);
     }
     
     public static void FileExtensions(JFileChooser fileChooser){

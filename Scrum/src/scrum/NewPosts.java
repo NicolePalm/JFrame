@@ -18,7 +18,7 @@ import org.apache.commons.io.FilenameUtils;
 public class NewPosts extends javax.swing.JFrame {
 
     private InfDB idb;
-    private int currentUser;
+    private final int currentUser;
     private File currentFile;
     private String currentExt;
         
@@ -28,7 +28,6 @@ public class NewPosts extends javax.swing.JFrame {
         this.idb = idb;
         this.currentUser = id;
         jTitle.requestFocus();
-        
     }
 
     @SuppressWarnings("unchecked")
@@ -161,15 +160,19 @@ public class NewPosts extends javax.swing.JFrame {
         
         try {
             String categoryID = idb.fetchSingle(sqlCategoryID);
-            try{
-            String filePath = GetCurrentFile();
+            
             String id = idb.getAutoIncrement("POST","POST_ID");
+            
+            if(currentFile == null){
+                String insertPost = "INSERT INTO POST (POST_ID,TITLE,CONTENT,SEARCHPATH,POSTDATE,POSTTIME,POSTER_ID,CATEGORY_ID) VALUES ("+id+",'"+title+"','"+content+"','default','"+currentDate+"','"+tiden+"',"+currentUser+","+categoryID+")";
+                idb.insert(insertPost);
+            }
+            else{
+            String filePath = GetCurrentFile();    
             String insertPost = "INSERT INTO POST (POST_ID,TITLE,CONTENT,SEARCHPATH,POSTDATE,POSTTIME,POSTER_ID,CATEGORY_ID) VALUES ("+id+",'"+title+"','"+content+"','"+filePath+"','"+currentDate+"','"+tiden+"',"+currentUser+","+categoryID+")";
             idb.insert(insertPost);
             }
-            catch(IOException e){
-                System.out.println(e.getMessage());
-            }
+            
             JOptionPane.showMessageDialog(null, "Nytt inlägg skapat!");
             
             dispose();
@@ -204,10 +207,11 @@ public class NewPosts extends javax.swing.JFrame {
     }     
     }//GEN-LAST:event_jFileActionPerformed
     
-    private String GetCurrentFile() throws IOException
+    private String GetCurrentFile() 
     {
+        
         String fileName = currentFile.getAbsolutePath();
-        this.currentExt = getExtensionByApacheCommonLib(fileName);
+        this.currentExt = HandleFiles.getExtensionByApacheCommonLib(fileName);
         String userID = Integer.toString(currentUser);
         String filename= LocalTime.now().format(DateTimeFormatter.ofPattern("HH-mm-ss")) + userID;
         String filePath = "c://JFrame/Scrum/files/"+filename+"."+currentExt;
@@ -216,16 +220,18 @@ public class NewPosts extends javax.swing.JFrame {
             HandleFiles.SaveImage(currentFile, currentExt, filePath);
         } 
         else if(currentExt.equals("txt")){
+            try{
             ArrayList<String> lines = HandleFiles.ReadFile(currentFile);
             HandleFiles.SaveFile(lines, filePath);
             }
-        
+            catch(IOException e){
+                
+            }
+        }
         return filePath;
     }
     
-    public String getExtensionByApacheCommonLib(String filename) {
-    return FilenameUtils.getExtension(filename);
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> jCategories;
