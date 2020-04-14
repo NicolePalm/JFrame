@@ -1,28 +1,20 @@
 package scrum;
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 import org.apache.commons.io.FilenameUtils;
-import org.w3c.dom.Document;
+
+
 public class NewPosts extends javax.swing.JFrame {
 
     private InfDB idb;
@@ -34,7 +26,8 @@ public class NewPosts extends javax.swing.JFrame {
         initComponents();
         new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, "Jobb");
         this.idb = idb;
-        this.currentUser = id;  
+        this.currentUser = id;
+        jTitle.requestFocus();
         
     }
 
@@ -102,32 +95,27 @@ public class NewPosts extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jTitle)
-                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jType, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
-                        .addComponent(jCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jNewCategory)
-                        .addGap(22, 22, 22))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jlblTitle)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())
+                        .addComponent(jlblTitle)
+                        .addContainerGap(465, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jFile)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jFileName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jCreatePost)
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTitle, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jType, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(37, 37, 37)
+                                .addComponent(jCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jNewCategory)))
+                        .addGap(22, 22, 22))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,9 +129,9 @@ public class NewPosts extends javax.swing.JFrame {
                     .addComponent(jCategories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jNewCategory))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCreatePost)
                     .addComponent(jFile)
@@ -161,9 +149,13 @@ public class NewPosts extends javax.swing.JFrame {
     private void jCreatePostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCreatePostActionPerformed
         String title = jTitle.getText();
         String content = jText.getText();
+        if(title.isEmpty() || content.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Fyll i både titel och text!");
+            jTitle.requestFocus();
+        }
+        else{
         String category = jCategories.getSelectedItem().toString();
         String sqlCategoryID = "SELECT CATEGORY_ID FROM CATEGORY WHERE CATEGORYNAME = '"+category+"'";
-        
         String tiden = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         LocalDate currentDate = LocalDate.now();
         
@@ -176,7 +168,7 @@ public class NewPosts extends javax.swing.JFrame {
             idb.insert(insertPost);
             }
             catch(IOException e){
-                
+                System.out.println(e.getMessage());
             }
             JOptionPane.showMessageDialog(null, "Nytt inlägg skapat!");
             
@@ -184,6 +176,7 @@ public class NewPosts extends javax.swing.JFrame {
         } catch (InfException ex) {
             Logger.getLogger(NewPosts.class.getName()).log(Level.SEVERE, null, ex);
         }
+       }
     }//GEN-LAST:event_jCreatePostActionPerformed
 
     private void jTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTypeActionPerformed
@@ -199,19 +192,7 @@ public class NewPosts extends javax.swing.JFrame {
     private void jFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileActionPerformed
     
     JFileChooser fileChooser = new JFileChooser();
-                                                                                          //fileChooser.setFileFilter(new FileNameExtensionFilter("*.jpg", "jpg"));
-    FileFilter docx = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
-    FileFilter doc = new FileNameExtensionFilter("MS Word file(.doc)", "doc");
-    FileFilter jpg = new FileNameExtensionFilter("JPG file (.jpg)", "jpg");
-    FileFilter png = new FileNameExtensionFilter("PNG file (.png)", "png");
-    
-    fileChooser.addChoosableFileFilter(docx);
-    fileChooser.addChoosableFileFilter(doc);
-    fileChooser.addChoosableFileFilter(jpg);
-    fileChooser.addChoosableFileFilter(png);
-    fileChooser.setFileFilter(docx);
-    fileChooser.setAcceptAllFileFilterUsed(false);
-    
+    HandleFiles.FileExtensions(fileChooser);
     
     if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
         this.currentFile = fileChooser.getSelectedFile();  
@@ -232,36 +213,14 @@ public class NewPosts extends javax.swing.JFrame {
         String filePath = "c://JFrame/Scrum/files/"+filename+"."+currentExt;
     
         if(currentExt.equals("png") || currentExt.equals("jpg")){
-        try {
-            BufferedImage image = ImageIO.read(currentFile);
-            ImageIO.write((BufferedImage)image, currentExt, new File(filePath));
-        } catch (IOException ex) {
-            System.out.println("Failed to save image!");
-            ex.getMessage();
+            HandleFiles.SaveImage(currentFile, currentExt, filePath);
         } 
-        } 
-        else if(currentExt.equals("txt") || currentExt.equals("doc")){
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(currentFile)); 
-                
-                ArrayList <String> lines = new ArrayList();
-                String st; 
-                
-                while ((st = br.readLine()) != null){
-                lines.add(st);
-                }
-                FileWriter writer = new FileWriter(filePath); 
-                for(String str: lines) {
-                writer.write(str + System.lineSeparator());
-                }
-                writer.close();
-                
-                
-            } catch (FileNotFoundException ex) {
-                System.out.println(ex); 
+        else if(currentExt.equals("txt")){
+            ArrayList<String> lines = HandleFiles.ReadFile(currentFile);
+            HandleFiles.SaveFile(lines, filePath);
             }
-        }
-    return filePath;
+        
+        return filePath;
     }
     
     public String getExtensionByApacheCommonLib(String filename) {
