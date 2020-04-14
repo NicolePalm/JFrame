@@ -1,13 +1,14 @@
 package scrum;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import static java.time.Instant.now;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -221,19 +222,52 @@ public class NewPosts extends javax.swing.JFrame {
         String filename= LocalTime.now().format(DateTimeFormatter.ofPattern("HH-mm-ss")) + userID;
         String filePath = "c://JFrame/Scrum/files/"+filename+"."+currentExt;
     
-
+        if(currentExt.equals("png") || currentExt.equals("jpg")){
         try {
             BufferedImage image = ImageIO.read(currentFile);
             ImageIO.write((BufferedImage)image, currentExt, new File(filePath));
         } catch (IOException ex) {
-            //System.out.println("Failed to save image!");
-        
-    } 
+            System.out.println("Failed to save image!");
+            ex.getMessage();
+        } 
+        } 
+        else if(currentExt.equals("docx") || currentExt.equals("doc")){
+            try {
+              FileWriter write = new FileWriter(filePath, )
+
+                
+                
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(NewPosts.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     return filePath;
     }
     
     public String getExtensionByApacheCommonLib(String filename) {
     return FilenameUtils.getExtension(filename);
+    }
+    private static void writeUsingBufferedWriter(String data, int noOfLines) {
+
+        FileWriter fr = null;
+        BufferedWriter br = null;
+        String dataWithNewLine=data+System.getProperty("line.separator");
+        try{
+            fr = new FileWriter(currentFile);
+            br = new BufferedWriter(fr);
+            for(int i = noOfLines; i>0; i--){
+                br.write(dataWithNewLine);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                br.close();
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

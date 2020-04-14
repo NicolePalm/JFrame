@@ -49,17 +49,13 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="jNewPost" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="262" max="-2" attributes="0"/>
-                              <Component id="btnCreateMeeting" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jScrollPane1" min="-2" pref="268" max="-2" attributes="0"/>
+                          <Component id="jNewPost" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jScrollPane1" alignment="0" min="-2" pref="291" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="258" max="32767" attributes="0"/>
+              <EmptySpace pref="389" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -73,10 +69,7 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="421" max="-2" attributes="0"/>
               <EmptySpace pref="43" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jNewPost" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnCreateMeeting" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="jNewPost" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -114,14 +107,6 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jNewPostActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnCreateMeeting">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Skapa nytt m&#xf6;te"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCreateMeetingActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
