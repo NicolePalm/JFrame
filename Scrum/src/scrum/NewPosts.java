@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import oru.inf.InfDB;
 import oru.inf.InfException;
@@ -22,12 +23,14 @@ public class NewPosts extends javax.swing.JFrame {
     private InfDB idb;
     private int currentUser;
     private File currentFile;
+    private String currentExt;
         
         public NewPosts(InfDB idb, int id) {
         initComponents();
         new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, "Jobb");
         this.idb = idb;
         this.currentUser = id;  
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -184,33 +187,44 @@ public class NewPosts extends javax.swing.JFrame {
     }//GEN-LAST:event_jNewCategoryActionPerformed
 
     private void jFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setFileFilter(new FileNameExtensionFilter("*.jpg", "jpg"));
+    
+    JFileChooser fileChooser = new JFileChooser();
+                                                                                          //fileChooser.setFileFilter(new FileNameExtensionFilter("*.jpg", "jpg"));
+    FileFilter docx =  new FileNameExtensionFilter("MS Word file(.docx)", "docx");
+    FileFilter doc = new FileNameExtensionFilter("MS Word file(.doc)", "doc");
+    FileFilter jpg = new FileNameExtensionFilter("JPG file (.jpg)", "jpg");
+    FileFilter png = new FileNameExtensionFilter("PNG file (.png)", "png");
+    
+    fileChooser.addChoosableFileFilter(docx);
+    fileChooser.addChoosableFileFilter(doc);
+    fileChooser.addChoosableFileFilter(jpg);
+    fileChooser.addChoosableFileFilter(png);
+    fileChooser.setFileFilter(docx);
+    fileChooser.setAcceptAllFileFilterUsed(false);
+    
+    
     if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
         this.currentFile = fileChooser.getSelectedFile();  
+        String fileName = currentFile.getAbsolutePath();
+        this.jFileName.setText(fileName);
     }
     else {
         System.out.println("No file choosen!");
-    }   
-        
-        
-    
-
+    }     
     }//GEN-LAST:event_jFileActionPerformed
+    
     private String GetCurrentFile()
     {
         String fileName = currentFile.getAbsolutePath();
-        this.jFileName.setText(fileName);
-        String extension = getExtensionByApacheCommonLib(fileName);
-        System.out.print(extension);
+        this.currentExt = getExtensionByApacheCommonLib(fileName);
         String userID = Integer.toString(currentUser);
         String filename= LocalTime.now().format(DateTimeFormatter.ofPattern("HH-mm-ss")) + userID;
-        String filePath = "c://JFrame/Scrum/files/"+filename+"."+extension;
+        String filePath = "c://JFrame/Scrum/files/"+filename+"."+currentExt;
     
 
         try {
             BufferedImage image = ImageIO.read(currentFile);
-            ImageIO.write((BufferedImage)image, "jpg", new File(filePath));
+            ImageIO.write((BufferedImage)image, currentExt, new File(filePath));
         } catch (IOException ex) {
             //System.out.println("Failed to save image!");
         
@@ -235,3 +249,8 @@ public class NewPosts extends javax.swing.JFrame {
     private javax.swing.JLabel jlblTitle;
     // End of variables declaration//GEN-END:variables
 }
+
+
+
+
+
