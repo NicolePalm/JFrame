@@ -20,7 +20,6 @@ public class UserIDParse {
         try{
         String sqlID = "SELECT USER_ID from USER1 where EMAIL = '"+email+"'";
         String checkID = idb.fetchSingle(sqlID);
-        System.out.print(checkID);
         parsedID = Integer.parseInt(checkID);
         
         }
