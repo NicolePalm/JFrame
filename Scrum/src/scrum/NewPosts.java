@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -15,7 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import oru.inf.InfDB;
 import oru.inf.InfException;
-
+import org.apache.commons.io.FilenameUtils;
 public class NewPosts extends javax.swing.JFrame {
 
     private InfDB idb;
@@ -42,7 +43,7 @@ public class NewPosts extends javax.swing.JFrame {
         jlblTitle = new javax.swing.JLabel();
         jCreatePost = new javax.swing.JButton();
         jFile = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jFileName = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -86,8 +87,6 @@ public class NewPosts extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("jButton1");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -116,9 +115,9 @@ public class NewPosts extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jFile)
-                        .addGap(40, 40, 40)
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jFileName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jCreatePost)
                         .addContainerGap())))
         );
@@ -140,7 +139,7 @@ public class NewPosts extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCreatePost)
                     .addComponent(jFile)
-                    .addComponent(jButton1))
+                    .addComponent(jFileName))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -159,7 +158,6 @@ public class NewPosts extends javax.swing.JFrame {
         
         String tiden = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         LocalDate currentDate = LocalDate.now();
-        System.out.print(currentDate);
         
         try {
             String categoryID = idb.fetchSingle(sqlCategoryID);
@@ -189,7 +187,7 @@ public class NewPosts extends javax.swing.JFrame {
         JFileChooser fileChooser = new JFileChooser();
     fileChooser.setFileFilter(new FileNameExtensionFilter("*.jpg", "jpg"));
     if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-        this.currentFile = fileChooser.getSelectedFile();
+        this.currentFile = fileChooser.getSelectedFile();  
     }
     else {
         System.out.println("No file choosen!");
@@ -201,24 +199,34 @@ public class NewPosts extends javax.swing.JFrame {
     }//GEN-LAST:event_jFileActionPerformed
     private String GetCurrentFile()
     {
+        String fileName = currentFile.getAbsolutePath();
+        this.jFileName.setText(fileName);
+        String extension = getExtensionByApacheCommonLib(fileName);
+        System.out.print(extension);
         String userID = Integer.toString(currentUser);
         String filename= LocalTime.now().format(DateTimeFormatter.ofPattern("HH-mm-ss")) + userID;
-        String filePath = "c://JFrame/Scrum/files/"+filename+".jpg";
+        String filePath = "c://JFrame/Scrum/files/"+filename+"."+extension;
+    
+
         try {
             BufferedImage image = ImageIO.read(currentFile);
             ImageIO.write((BufferedImage)image, "jpg", new File(filePath));
         } catch (IOException ex) {
-            System.out.println("Failed to save image!");
+            //System.out.println("Failed to save image!");
         
     } 
     return filePath;
     }
+    
+    public String getExtensionByApacheCommonLib(String filename) {
+    return FilenameUtils.getExtension(filename);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jCategories;
     private javax.swing.JButton jCreatePost;
     private javax.swing.JButton jFile;
+    private javax.swing.JLabel jFileName;
     private javax.swing.JButton jNewCategory;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jText;
