@@ -8,6 +8,7 @@ package scrum;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,21 +23,15 @@ import javax.swing.JTextField;
 public class Validation {
     
     
-    
-    public static boolean checkDate(JTextField tfCheck) {
+    public static boolean CheckDateTwo(String toCheck) {
         boolean result = true;
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-
-        // Input to be parsed should strictly follow the defined date format
-        // above.
-        format.setLenient(false);
-
-        String date = tfCheck.getText();
-        try {
-            format.parse(date);
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, "Datumet " + date + " är inte giltigt " +
-                ((SimpleDateFormat) format).toPattern() + " enligt mönstret.");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+        
+        try{
+            formatter.parse(toCheck);
+        }
+        catch(Exception e) {
+            JOptionPane.showMessageDialog(null, "Fel datum format");
             result = false;
         }
         return result;

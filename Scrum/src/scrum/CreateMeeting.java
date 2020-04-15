@@ -34,7 +34,8 @@ public class CreateMeeting extends javax.swing.JFrame {
     }
 
     public void CreateMeeting() {
-        if(Validation.checkDate(tfDate) && Validation.checkTime(tfTime) && Validation.taHarVarde(taReciver) && Validation.tfHarVarde(tfDescription) && Validation.tfHarVarde(tfRoom)){
+        String dateCheck = tfDate.getText();
+        if(Validation.CheckDateTwo(dateCheck) && Validation.checkTime(tfTime) && Validation.taHarVarde(taReciver) && Validation.tfHarVarde(tfDescription) && Validation.tfHarVarde(tfRoom)){
         try {
             int creator = currentUser;
             String description = tfDescription.getText();
@@ -71,13 +72,17 @@ public class CreateMeeting extends javax.swing.JFrame {
     public void FillReciver() {
         cbReciver.removeAllItems();
         String sqlFraga = "SELECT EMAIL from User1";
+        String sqlMail = "SELECT EMAIL from User1 where User_ID = '" + currentUser + "'";
 
         try {
+            String userEmail = idb.fetchSingle(sqlMail);
             ArrayList<String> names = idb.fetchColumn(sqlFraga);
 
             if (names != null) {
                 for (String n : names) {
-                    cbReciver.addItem(n);
+                    if(!n.equals(userEmail)){
+                        cbReciver.addItem(n);
+                    }
                 }
             }
         } catch (InfException e) {
@@ -107,6 +112,7 @@ public class CreateMeeting extends javax.swing.JFrame {
         taReciver = new javax.swing.JTextArea();
         cbReciver = new javax.swing.JComboBox<>();
         btnResetReciver = new javax.swing.JButton();
+        btnAddReciver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -153,6 +159,13 @@ public class CreateMeeting extends javax.swing.JFrame {
             }
         });
 
+        btnAddReciver.setText("Lägg till");
+        btnAddReciver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddReciverActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -178,7 +191,8 @@ public class CreateMeeting extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cbReciver, 0, 93, Short.MAX_VALUE)
-                            .addComponent(btnResetReciver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnResetReciver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnAddReciver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE))
                     .addComponent(btnCreateMeeting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -211,6 +225,8 @@ public class CreateMeeting extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(cbReciver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAddReciver)
+                        .addGap(18, 18, 18)
                         .addComponent(btnResetReciver))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
@@ -226,6 +242,16 @@ public class CreateMeeting extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCreateMeetingActionPerformed
 
     private void cbReciverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbReciverMouseClicked
+        
+    }//GEN-LAST:event_cbReciverMouseClicked
+
+    private void btnResetReciverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetReciverActionPerformed
+        taReciver.setText("");
+        FillReciver();
+        
+    }//GEN-LAST:event_btnResetReciverActionPerformed
+
+    private void btnAddReciverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddReciverActionPerformed
         System.out.println("Hallå");
         String selectedName;
         selectedName = (String) cbReciver.getSelectedItem();
@@ -240,16 +266,11 @@ public class CreateMeeting extends javax.swing.JFrame {
             System.out.println("HEj1");
         }
         cbReciver.removeItem(selectedName);
-    }//GEN-LAST:event_cbReciverMouseClicked
-
-    private void btnResetReciverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetReciverActionPerformed
-        taReciver.setText("");
-        FillReciver();
-        
-    }//GEN-LAST:event_btnResetReciverActionPerformed
+    }//GEN-LAST:event_btnAddReciverActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddReciver;
     private javax.swing.JButton btnCreateMeeting;
     private javax.swing.JButton btnResetReciver;
     private javax.swing.JComboBox<String> cbReciver;
