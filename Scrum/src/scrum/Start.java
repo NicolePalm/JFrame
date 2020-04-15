@@ -5,15 +5,13 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 import oru.inf.InfDB;
 import oru.inf.InfException;
-import java.util.*;
+
 /**
  *
  * @author nicol
  */
 public class Start {
     private static InfDB idb;
-    
-    
     
      public static void main (String[] args)
     {
