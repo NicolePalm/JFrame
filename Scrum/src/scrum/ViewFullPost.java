@@ -1,25 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package scrum;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 
-/**
- *
- * @author Danie
- */
 public class ViewFullPost extends javax.swing.JFrame {
     private InfDB idb;
     private final String currentUser;
@@ -30,6 +23,7 @@ public class ViewFullPost extends javax.swing.JFrame {
         this.currentPost = Integer.toString(postID);
         this.currentUser = Integer.toString(userID);
         this.idb = idb;
+        jDownload.setVisible(false);
         this.jTitle.setText(GetPostTitle());
         this.jpostDate.setText(GetPostDate());
         this.jAuthor.setText(GetPosterName());
@@ -109,6 +103,8 @@ public void UsePostFile(){
             }
             else if(fileExt.equals("txt")){
                 SetDefaultPicture();
+                jFile.setText(filePath);
+                jDownload.setVisible(true);
             }
             else{
                 SetDefaultPicture();
@@ -118,8 +114,9 @@ public void UsePostFile(){
             Logger.getLogger(ViewFullPost.class.getName()).log(Level.SEVERE, null, ex);
         }
 }
-public void SetDefaultPicture(){
-    BufferedImage myPicture;
+
+        public void SetDefaultPicture(){
+            BufferedImage myPicture;
         try {
             myPicture = ImageIO.read(new File("c://JFrame/Scrum/oru.png"));
             jPicture.setIcon (new ImageIcon(myPicture));
@@ -128,7 +125,6 @@ public void SetDefaultPicture(){
         }
     
 }
-
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -141,6 +137,8 @@ public void SetDefaultPicture(){
         jpostDate = new javax.swing.JLabel();
         jToUserPanel = new javax.swing.JButton();
         jPicture = new javax.swing.JLabel();
+        jDownload = new javax.swing.JButton();
+        jFile = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -148,7 +146,7 @@ public void SetDefaultPicture(){
         jTitle.setText("Title : The post");
 
         jAuthor.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jAuthor.setText("Author : blalalba hihohohaha");
+        jAuthor.setText("Author :");
 
         jPostBody.setEditable(false);
         jPostBody.setColumns(20);
@@ -165,23 +163,34 @@ public void SetDefaultPicture(){
             }
         });
 
+        jDownload.setText("Download file");
+        jDownload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jDownloadActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jToUserPanel)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 788, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPicture, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jAuthor)
-                            .addComponent(jpostDate))))
-                .addContainerGap(26, Short.MAX_VALUE))
+                            .addComponent(jTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jpostDate)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jFile, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(48, 48, 48)
+                                .addComponent(jDownload))))
+                    .addComponent(jScrollPane2))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,15 +198,22 @@ public void SetDefaultPicture(){
                 .addContainerGap()
                 .addComponent(jToUserPanel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPicture, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jTitle)
-                        .addGap(34, 34, 34)
-                        .addComponent(jAuthor)
-                        .addGap(37, 37, 37)
-                        .addComponent(jpostDate))
-                    .addComponent(jPicture, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jAuthor)
+                                .addGap(27, 27, 27)
+                                .addComponent(jpostDate)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jFile, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jDownload, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(18, Short.MAX_VALUE))
         );
@@ -210,9 +226,40 @@ public void SetDefaultPicture(){
         dispose();
     }//GEN-LAST:event_jToUserPanelActionPerformed
 
-
+    private void jDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDownloadActionPerformed
+    String filePath = "";
+    
+    try{
+    filePath = idb.fetchSingle("SELECT SEARCHPATH FROM POST WHERE POST_ID ='"+currentPost+"'");
+    }
+    catch(InfException e){
+        System.out.println(e.getMessage());
+    }
+    
+    try{    
+        File currentFile = new File(filePath);
+        ArrayList<String> lines = HandleFiles.ReadFile(currentFile);
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
+        String newPath = fileChooser.getSelectedFile().getAbsolutePath();
+        newPath = newPath + "/" + jTitle.getText() + "-AttachedFile.txt";
+        HandleFiles.SaveFile(lines, newPath);
+        jFile.setText("File saved");
+        }
+    else{
+        System.out.println("No file choosen!");
+    }    
+    }
+    catch(IOException e){
+        System.out.println(e.getMessage());
+    }   
+    }//GEN-LAST:event_jDownloadActionPerformed
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jAuthor;
+    private javax.swing.JButton jDownload;
+    private javax.swing.JLabel jFile;
     private javax.swing.JLabel jPicture;
     private javax.swing.JTextArea jPostBody;
     private javax.swing.JScrollPane jScrollPane2;

@@ -210,7 +210,6 @@ public class NewPosts extends javax.swing.JFrame {
     }//GEN-LAST:event_jNewCategoryActionPerformed
 
     private void jFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileActionPerformed
-    
     JFileChooser fileChooser = new JFileChooser();
     HandleFiles.FileExtensions(fileChooser);
     
