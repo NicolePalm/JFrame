@@ -35,26 +35,24 @@
                               <Component id="tfRoom" alignment="0" max="32767" attributes="0"/>
                               <Component id="lblDescription" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="lblReciever" alignment="0" min="-2" pref="73" max="-2" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="lblReciever" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btnCreateMeeting" alignment="0" pref="73" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="lblDate" min="-2" pref="55" max="-2" attributes="0"/>
                           <Component id="tfDate" pref="166" max="32767" attributes="0"/>
+                          <Component id="lblTime" min="-2" pref="34" max="-2" attributes="0"/>
                           <Component id="tfTime" alignment="0" max="32767" attributes="0"/>
-                          <Component id="lblTime" alignment="0" min="-2" pref="71" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="cbReciver" pref="93" max="32767" attributes="0"/>
-                          <Component id="btnResetReciver" max="32767" attributes="0"/>
-                          <Component id="btnAddReciver" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="cbReciver" min="-2" pref="93" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jScrollPane3" pref="239" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="btnCreateMeeting" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="207" max="32767" attributes="0"/>
           </Group>
@@ -87,19 +85,13 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="lblReciever" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Component id="cbReciver" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="btnAddReciver" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnResetReciver" min="-2" max="-2" attributes="0"/>
-                  </Group>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="cbReciver" min="-2" max="-2" attributes="0"/>
                   <Component id="jScrollPane3" min="-2" pref="140" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="59" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Component id="btnCreateMeeting" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -134,12 +126,12 @@
     </Component>
     <Component class="javax.swing.JTextField" name="tfDate">
       <Properties>
-        <Property name="text" type="java.lang.String" value="DD/MM/YYYY"/>
+        <Property name="text" type="java.lang.String" value="DD/MM/YY"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblTime">
       <Properties>
-        <Property name="text" type="java.lang.String" value="F&#xf6;resl&#xe5; tid:"/>
+        <Property name="text" type="java.lang.String" value="Tid:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfTime">
@@ -193,22 +185,6 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnResetReciver">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="&#xc5;terst&#xe4;ll"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnResetReciverActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnAddReciver">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="L&#xe4;gg till"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddReciverActionPerformed"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>

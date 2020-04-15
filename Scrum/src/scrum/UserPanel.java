@@ -18,24 +18,24 @@ import javax.swing.event.ListSelectionListener;
 public class UserPanel extends javax.swing.JFrame {
     private int currentUser;
     private InfDB idb;
-
-
+    
+    
     public UserPanel(InfDB idb, int id) {
         this.idb = idb;
         this.currentUser = id;
         initComponents();
         post();
     }
-
+    
     public void post () {
         try {
-
+            
             String category = categoryCbx.getSelectedItem().toString();
             int categoryId;
-
+            
             System.out.println(category);
-
-
+                        
+            
             String postQuery = "SELECT post_id, title, postdate, posttime, post.category_id FROM post, category \n" +
                                 "WHERE post.CATEGORY_ID = category.CATEGORY_ID AND categorytype = '" + category + "' ORDER BY postdate DESC, posttime DESC";
             ArrayList<HashMap<String, String>> posts = idb.fetchRows(postQuery);
@@ -46,7 +46,7 @@ public class UserPanel extends javax.swing.JFrame {
             String queryDate;
             String queryTime;
             DefaultListModel listModel = new DefaultListModel();
-
+            
             for (HashMap<String, String> post : posts){
                 queryId = post.get("POST_ID");
                 queryTitle = post.get("TITLE");
@@ -60,23 +60,23 @@ public class UserPanel extends javax.swing.JFrame {
                 //System.out.println(querySearchpath);
                 //System.out.println(queryDate);
                 //System.out.println("----------------");
-
+                
                 listModel.addElement(queryId + " | " + queryTitle + " | " + queryDate + " | " + queryTime);
 
             }
-
+            
         postList.setModel(listModel);
         }
-
+    
         catch (Exception e) {
             System.out.println("Error");
 
         }
     }
-
-
-
-
+    
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -89,7 +89,9 @@ public class UserPanel extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jNewPost = new javax.swing.JButton();
-        btnCreateMeeting = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        postList = new javax.swing.JList<>();
+        categoryCbx = new javax.swing.JComboBox<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -108,10 +110,38 @@ public class UserPanel extends javax.swing.JFrame {
             }
         });
 
-        btnCreateMeeting.setText("Skapa nytt möte");
-        btnCreateMeeting.addActionListener(new java.awt.event.ActionListener() {
+        postList.setFont(new java.awt.Font("Verdana", 0, 24));
+        postList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        postList.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                postListFocusGained(evt);
+            }
+        });
+        postList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                postListMouseEntered(evt);
+            }
+        });
+        postList.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                postListPropertyChange(evt);
+            }
+        });
+        postList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                postListValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(postList);
+
+        categoryCbx.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Jobb", "Fritid" }));
+        categoryCbx.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCreateMeetingActionPerformed(evt);
+                categoryCbxActionPerformed(evt);
             }
         });
 
@@ -135,13 +165,14 @@ public class UserPanel extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(33, 33, 33)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jNewPost)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 299, Short.MAX_VALUE)
-                                .addComponent(btnCreateMeeting)))))
-                .addGap(221, 221, 221))
+                            .addComponent(jNewPost)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jLabel2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 727, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,11 +184,9 @@ public class UserPanel extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jNewPost)
-                    .addComponent(btnCreateMeeting))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                .addComponent(jNewPost)
                 .addGap(41, 41, 41))
         );
 
@@ -168,17 +197,44 @@ public class UserPanel extends javax.swing.JFrame {
         new NewPosts(idb,currentUser).setVisible(true);
     }//GEN-LAST:event_jNewPostActionPerformed
 
-    private void btnCreateMeetingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateMeetingActionPerformed
-         new CreateMeeting(idb, currentUser).setVisible(true);
-    }//GEN-LAST:event_btnCreateMeetingActionPerformed
+    private void categoryCbxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryCbxActionPerformed
+        post();
+    }//GEN-LAST:event_categoryCbxActionPerformed
+
+    private void postListFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_postListFocusGained
+         
+    }//GEN-LAST:event_postListFocusGained
+
+    private void postListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_postListValueChanged
+        String listItem = postList.getSelectedValue();
+        int postId = 0;
+        System.out.println(listItem);
+        String[] splitItem  = listItem.split(" ");
+        for (String pId : splitItem){
+            postId = Integer.parseInt(pId);
+            break;
+        }
+        
+        System.out.println(postId);
+        new ViewFullPost(idb, currentUser, postId).setVisible(true);
+        dispose();
+    }//GEN-LAST:event_postListValueChanged
+
+    private void postListPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_postListPropertyChange
+        
+    }//GEN-LAST:event_postListPropertyChange
+
+    private void postListMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_postListMouseEntered
+         postList.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_postListMouseEntered
 
     /**
      * @param args the command line arguments
      */
-
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCreateMeeting;
+    private javax.swing.JComboBox<String> categoryCbx;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
