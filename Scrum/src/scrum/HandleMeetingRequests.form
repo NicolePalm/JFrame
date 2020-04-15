@@ -51,19 +51,17 @@
                               <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jlblRequested" min="-2" pref="135" max="-2" attributes="0"/>
-                                  <Component id="jlblRoom" alignment="0" min="-2" pref="135" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jlblRoom" min="-2" pref="135" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jlblTime" min="-2" pref="95" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                               <Component id="jlblDate" min="-2" pref="109" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jlblDescription" min="-2" pref="127" max="-2" attributes="0"/>
-                          <Component id="jScrollPane2" min="-2" pref="372" max="-2" attributes="0"/>
+                          <Component id="jScrollPane2" max="32767" attributes="0"/>
+                          <Component id="jlblRequested" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -130,6 +128,9 @@
               <StringArray count="0"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jlRequestsMouseClicked"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
@@ -176,6 +177,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Decline"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnDeclineActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jlblDescription">
       <Properties>

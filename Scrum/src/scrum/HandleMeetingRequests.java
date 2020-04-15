@@ -23,6 +23,7 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
 
     private InfDB idb;
     private final String currentUser;
+    private String selectedMeeting;
     
     
     public HandleMeetingRequests(InfDB idb, int userID) {
@@ -30,7 +31,7 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         this.currentUser = Integer.toString(userID);
         this.idb = idb;
         FillRequestList();
-        SelectMeeting();
+
     }
  
     public void FillRequestList(){
@@ -48,9 +49,8 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
             String time = idb.fetchSingle("SELECT MEETINGTIME FROM MEETING WHERE MEETING_ID = '" + request + "'");
             String date = idb.fetchSingle("SELECT MEETINGDATE FROM MEETING WHERE MEETING_ID = '" + request + "'");
             String createrid = idb.fetchSingle("SELECT MEETINGCREATER_ID FROM MEETING WHERE MEETING_ID = '" + request + "'");
-            String createrFirstname = idb.fetchSingle("SELECT FIRSTNAME FROM USER1 WHERE USER_ID = '" + createrid + "'");
-            String createrLastname = idb.fetchSingle("SELECT LASTNAME FROM USER1 WHERE USER_ID = '" + createrid + "'");
-            String meetingInfo = createrFirstname + " " + createrLastname + " " + time + " " + date;
+            String createrEmail = idb.fetchSingle("SELECT EMAIL FROM USER1 WHERE USER_ID = '" + createrid + "'");
+            String meetingInfo = createrEmail + " " + time + " " + date;
             demoList.addElement(meetingInfo);
         }
         jlRequests.setModel(demoList);
@@ -74,30 +74,38 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
     
     
     public void SelectMeeting(){
-        int index = jlRequests.getSelectedIndex();
-        String indexet = Integer.toString(index);
         String value = jlRequests.getSelectedValue();
-        String myString = String.valueOf(jlRequests.getSelectedValue());
-        System.out.println(myString);
-        System.out.println(value);
+        String[] requestInfo = value.split(" ");
+        String email = requestInfo[0];
+        String time = requestInfo[1];
+        String date = requestInfo[2];
+        
+        try{
+            String userId = idb.fetchSingle("SELECT user_id FROM USER1 WHERE email = '" + email + "'");
+            String firstName = idb.fetchSingle("SELECT firstname FROM USER1 WHERE user_id = '" + userId + "'");
+            String lastName = idb.fetchSingle("SELECT lastname FROM USER1 WHERE user_id = '" + userId + "'");
+            String meeting = idb.fetchSingle("SELECT meeting_id FROM MEETING WHERE meetingcreater_id = '" + userId + "' AND meetingdate = '" + date + "' AND meetingtime = '" + time + "'");
+            String room = idb.fetchSingle("SELECT roomname FROM meeting WHERE meeting_id = '" + meeting + "'");
+            String description = idb.fetchSingle("SELECT description FROM meeting WHERE meeting_id = '" + meeting + "'");
+            jlblRequested.setText("Requested by: " + firstName + " " + lastName);
+            jlblRoom.setText("Room: " + room);
+            jlblDate.setText("Date: " + date);
+            jlblTime.setText("Time: " + time);
+            jtxtADescription.setText(description);
+            this.selectedMeeting = meeting;
+        }
+        catch(InfException e){
+            System.out.println(e.getMessage());
+        }
     }
     
-    
-     MouseListener mouseListener = new MouseAdapter() {
-      public void mouseClicked(MouseEvent mouseEvent) {
-        JList jlRequests = (JList) mouseEvent.getSource();
-        if (mouseEvent.getClickCount() == 1) {
-          int index = jlRequests.locationToIndex(mouseEvent.getPoint());
-          if (index >= 0) {
-            Object o = jlRequests.getModel().getElementAt(index);
-            System.out.println("Double-clicked on: " + o.toString());
-          }
-        }
-      }
-    };
-    
-
-    
+    public void SetDefaultValues(){
+        jlblRequested.setText("Requested by: ");
+        jlblRoom.setText("Room: ");
+        jlblDate.setText("Date: ");
+        jlblTime.setText("Time: ");
+        jtxtADescription.setText("");
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -121,6 +129,11 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jlRequests.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jlRequestsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jlRequests);
 
         jtxtADescription.setEditable(false);
@@ -137,6 +150,11 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         jbtnAccept.setText("Accept");
 
         jbtnDecline.setText("Decline");
+        jbtnDecline.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnDeclineActionPerformed(evt);
+            }
+        });
 
         jlblDescription.setText("Description");
 
@@ -181,17 +199,16 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                     .addComponent(jScrollPane3))
                                 .addGap(28, 28, 28)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jlblRequested, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jlblRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jlblRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jlblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(27, 27, 27)
                                 .addComponent(jlblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jlblDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane2)
+                            .addComponent(jlblRequested, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(25, 25, 25))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -233,6 +250,21 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jlRequestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlRequestsMouseClicked
+        SelectMeeting();
+    }//GEN-LAST:event_jlRequestsMouseClicked
+
+    private void jbtnDeclineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDeclineActionPerformed
+        try{
+        idb.delete("DELETE FROM meetingrequest WHERE meeting_id = '" + selectedMeeting + "' AND receiver_id = '" + currentUser + "'");
+        SetDefaultValues();
+        }
+        catch(InfException e){
+            
+        }
+        FillRequestList();
+    }//GEN-LAST:event_jbtnDeclineActionPerformed
 
     
 
