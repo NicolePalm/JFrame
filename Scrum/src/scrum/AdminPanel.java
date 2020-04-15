@@ -73,7 +73,7 @@ public class AdminPanel extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jshowpostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jshowpostActionPerformed
-       new ViewFullPost(idb,1,4).setVisible(true);
+       new ViewFullPost(idb,1,5).setVisible(true);
     }//GEN-LAST:event_jshowpostActionPerformed
 
    

@@ -5,6 +5,7 @@
  */
 package scrum;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +13,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 
@@ -104,7 +104,8 @@ public void UsePostFile(){
         try{
         if(fileExt.equals("jpg") || fileExt.equals("png")){
                 BufferedImage myPicture = ImageIO.read(new File(filePath));
-                jPicture.setIcon (new ImageIcon(myPicture));
+                Image dimg = myPicture.getScaledInstance(jPicture.getWidth(), jPicture.getHeight(),Image.SCALE_SMOOTH);
+                jPicture.setIcon (new ImageIcon(dimg));
             }
             else if(fileExt.equals("txt")){
                 SetDefaultPicture();
