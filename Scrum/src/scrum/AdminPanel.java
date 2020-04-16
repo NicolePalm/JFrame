@@ -32,6 +32,7 @@ public class AdminPanel extends javax.swing.JFrame {
         jshowpost = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jPendingRequests = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -53,22 +54,30 @@ public class AdminPanel extends javax.swing.JFrame {
 
         jPendingRequests.setText("jLabel2");
 
+        jButton2.setText("Kalender");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
-                    .addComponent(jshowpost))
-                .addContainerGap(391, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addGap(229, 229, 229)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
                 .addComponent(jPendingRequests)
                 .addGap(59, 59, 59))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2)
+                    .addComponent(jButton1)
+                    .addComponent(jshowpost))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -84,7 +93,9 @@ public class AdminPanel extends javax.swing.JFrame {
                 .addComponent(jshowpost)
                 .addGap(28, 28, 28)
                 .addComponent(jButton1)
-                .addContainerGap(178, Short.MAX_VALUE))
+                .addGap(37, 37, 37)
+                .addComponent(jButton2)
+                .addContainerGap(69, Short.MAX_VALUE))
         );
 
         pack();
@@ -97,6 +108,11 @@ public class AdminPanel extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
      new HandleMeetingRequests(idb, currentUser).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        
+        new Calendar(idb, currentUser).setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
  public void SetRequests(){
     
      String currentRequests = PendingRequests.currentRequests(idb, currentUser);
@@ -107,6 +123,7 @@ public class AdminPanel extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jPendingRequests;
     private javax.swing.JButton jshowpost;
