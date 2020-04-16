@@ -31,6 +31,7 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         this.currentUser = Integer.toString(userID);
         this.idb = idb;
         FillRequestList();
+        FillAcceptedList();
 
     }
  
@@ -38,7 +39,7 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         ArrayList<String> requests = new ArrayList();
         DefaultListModel demoList = new DefaultListModel();
         try{
-        requests = idb.fetchColumn("SELECT MEETING_ID FROM MEETINGREQUEST WHERE RECEIVER_ID = '" + currentUser + "'");
+        requests = idb.fetchColumn("SELECT MEETING_ID FROM MEETINGREQUEST WHERE RECEIVER_ID = '" + currentUser + "' AND status = 0");
         }
         catch(InfException e){
             System.out.println(e.getMessage());
@@ -53,12 +54,15 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
             String meetingInfo = createrEmail + " " + time + " " + date;
             demoList.addElement(meetingInfo);
         }
-        jlRequests.setModel(demoList);
         }
         catch(InfException e){
                 System.out.println(e.getMessage());
         }
         }
+        else{
+            demoList.addElement("No meetingrequests");
+        }
+        jlRequests.setModel(demoList);
     }
     
     public Boolean ContainsAllNulls(ArrayList arrList)
@@ -75,6 +79,7 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
     
     public void SelectMeeting(){
         String value = jlRequests.getSelectedValue();
+        if(!value.equals("No meetingrequests")){
         String[] requestInfo = value.split(" ");
         String email = requestInfo[0];
         String time = requestInfo[1];
@@ -96,6 +101,71 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         }
         catch(InfException e){
             System.out.println(e.getMessage());
+        } 
+    }
+        else{
+            this.selectedMeeting = "";
+        }
+    }
+    
+    public void FillAcceptedList(){
+        ArrayList<String> acceptedRequests = new ArrayList();
+        DefaultListModel demoList = new DefaultListModel();
+        try{
+        acceptedRequests = idb.fetchColumn("SELECT MEETING_ID FROM MEETINGREQUEST WHERE RECEIVER_ID = '" + currentUser + "' AND STATUS = 1");
+        }
+        catch(InfException e){
+            System.out.println(e.getMessage());
+        }
+        if(ContainsAllNulls(acceptedRequests)==false){
+        try{ 
+        for(String request : acceptedRequests){
+            String time = idb.fetchSingle("SELECT MEETINGTIME FROM MEETING WHERE MEETING_ID = '" + request + "'");
+            String date = idb.fetchSingle("SELECT MEETINGDATE FROM MEETING WHERE MEETING_ID = '" + request + "'");
+            String createrid = idb.fetchSingle("SELECT MEETINGCREATER_ID FROM MEETING WHERE MEETING_ID = '" + request + "'");
+            String createrEmail = idb.fetchSingle("SELECT EMAIL FROM USER1 WHERE USER_ID = '" + createrid + "'");
+            String meetingInfo = createrEmail + " " + time + " " + date;
+            demoList.addElement(meetingInfo);
+        }
+        }
+        catch(InfException e){
+                System.out.println(e.getMessage());
+        }
+        }
+        else{
+            demoList.addElement("No accepted meetings");
+        }
+        jlAccepted.setModel(demoList);
+    }
+    
+    public void SelectAcceptedMeeting(){
+        String value = jlAccepted.getSelectedValue();
+        if(!value.equals("No accepted meetings")){
+        String[] requestInfo = value.split(" ");
+        String email = requestInfo[0];
+        String time = requestInfo[1];
+        String date = requestInfo[2];
+        
+        try{
+            String userId = idb.fetchSingle("SELECT user_id FROM USER1 WHERE email = '" + email + "'");
+            String firstName = idb.fetchSingle("SELECT firstname FROM USER1 WHERE user_id = '" + userId + "'");
+            String lastName = idb.fetchSingle("SELECT lastname FROM USER1 WHERE user_id = '" + userId + "'");
+            String meeting = idb.fetchSingle("SELECT meeting_id FROM MEETING WHERE meetingcreater_id = '" + userId + "' AND meetingdate = '" + date + "' AND meetingtime = '" + time + "'");
+            String room = idb.fetchSingle("SELECT roomname FROM meeting WHERE meeting_id = '" + meeting + "'");
+            String description = idb.fetchSingle("SELECT description FROM meeting WHERE meeting_id = '" + meeting + "'");
+            jlblRequested.setText("Requested by: " + firstName + " " + lastName);
+            jlblRoom.setText("Room: " + room);
+            jlblDate.setText("Date: " + date);
+            jlblTime.setText("Time: " + time);
+            jtxtADescription.setText(description);
+            this.selectedMeeting = meeting;
+        }
+        catch(InfException e){
+            System.out.println(e.getMessage());
+        }
+    }
+        else{
+            this.selectedMeeting = "";
         }
     }
     
@@ -148,6 +218,11 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         jlblRequested.setText("Requested by:");
 
         jbtnAccept.setText("Accept");
+        jbtnAccept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnAcceptActionPerformed(evt);
+            }
+        });
 
         jbtnDecline.setText("Decline");
         jbtnDecline.addActionListener(new java.awt.event.ActionListener() {
@@ -158,10 +233,10 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
 
         jlblDescription.setText("Description");
 
-        jlAccepted.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        jlAccepted.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jlAcceptedMouseClicked(evt);
+            }
         });
         jScrollPane3.setViewportView(jlAccepted);
 
@@ -178,37 +253,34 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(361, 361, 361)
-                        .addComponent(jbtnAccept)
-                        .addGap(72, 72, 72)
-                        .addComponent(jbtnDecline)
-                        .addGap(84, 84, 84))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jlblAcceptedMeeting, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jlblMeetingRequests, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane3))
-                                .addGap(28, 28, 28)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jlblRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jlblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)
-                                .addComponent(jlblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jlblDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane2)
-                            .addComponent(jlblRequested, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jlblAcceptedMeeting, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 137, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jlblMeetingRequests, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGap(28, 28, 28)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jlblRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jlblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(jlblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jlblDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jbtnAccept)
+                        .addGap(41, 41, 41)
+                        .addComponent(jbtnDecline))
+                    .addComponent(jScrollPane2)
+                    .addComponent(jlblRequested, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(25, 25, 25))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -237,21 +309,22 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(jlblDescription)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(25, 25, 25)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jlblDescription)
                             .addComponent(jbtnAccept)
-                            .addComponent(jbtnDecline))))
-                .addContainerGap())
+                            .addComponent(jbtnDecline))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(49, 49, 49))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jlRequestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlRequestsMouseClicked
+        jbtnAccept.setVisible(true);
+        jbtnDecline.setVisible(true);
         SelectMeeting();
     }//GEN-LAST:event_jlRequestsMouseClicked
 
@@ -259,12 +332,32 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         try{
         idb.delete("DELETE FROM meetingrequest WHERE meeting_id = '" + selectedMeeting + "' AND receiver_id = '" + currentUser + "'");
         SetDefaultValues();
+        this.selectedMeeting = "";
         }
         catch(InfException e){
             
         }
         FillRequestList();
     }//GEN-LAST:event_jbtnDeclineActionPerformed
+
+    private void jbtnAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAcceptActionPerformed
+
+        try{
+            idb.update("UPDATE meetingrequest SET status = 1 WHERE receiver_id = '" + currentUser + "' AND meeting_id = '" + selectedMeeting + "'");
+        }
+        catch(InfException e){
+            
+        }
+        this.selectedMeeting = "";
+        FillAcceptedList();
+        FillRequestList();
+    }//GEN-LAST:event_jbtnAcceptActionPerformed
+
+    private void jlAcceptedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlAcceptedMouseClicked
+        jbtnAccept.setVisible(false);
+        jbtnDecline.setVisible(false);
+        SelectAcceptedMeeting();
+    }//GEN-LAST:event_jlAcceptedMouseClicked
 
     
 
