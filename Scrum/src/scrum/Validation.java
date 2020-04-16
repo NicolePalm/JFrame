@@ -19,9 +19,11 @@ public class Validation {
     public static boolean CheckDateTwo(String toCheck) {
         boolean passedDate = true;
         String currentDate = LocalDate.now().toString();
-        if(toCheck.compareTo(currentDate) > 0){
-            JOptionPane.showMessageDialog(null, "This date has already passed");
+        if(toCheck.compareTo(currentDate) >= 0){
             passedDate = false;
+        }
+        else{
+         JOptionPane.showMessageDialog(null, "This date has already passed");
         }
         return passedDate; 
     }

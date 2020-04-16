@@ -47,7 +47,7 @@ public class CreateMeeting extends javax.swing.JFrame {
             String mID = idb.getAutoIncrement("MEETING", "MEETING_ID");
             String sql = "insert into MEETING values(" + idb.getAutoIncrement("MEETING", "MEETING_ID") + "," + creator + ",'" + description + "','" + date + "','" + time + "','" + room + "')";
             String checkDateTimeSql = "Select MEETING_ID FROM MEETING WHERE MEETINGDATE = '"+date+"' and MEETINGTIME = '"+time+"' and MEETINGCREATER_ID = "+currentUser+";";
-            SelfInviteToMeeting(mID);
+            
             String checkDateTime = idb.fetchSingle(checkDateTimeSql);
             if(checkDateTime == null) {
                 idb.insert(sql);
@@ -62,7 +62,8 @@ public class CreateMeeting extends javax.swing.JFrame {
                         idb.insert(sqlInsert);
                         System.out.println((i+1)+"."+splited[i]);
                     }
-                
+                String sqlInsertSelf = "INSERT INTO MEETINGREQUEST VALUES ("+mID+","+currentUser+", 1)";
+                idb.insert(sqlInsertSelf);    
             JOptionPane.showMessageDialog(null, "Mötet har lagts till"); 
             }
             else {
@@ -100,15 +101,9 @@ public class CreateMeeting extends javax.swing.JFrame {
         }
     }
 
-    public void SelfInviteToMeeting(String meetingId){
-        try{
-            idb.insert("INSERT INTO meetingrequest VALUES ('" + meetingId + "', '" + currentUser + "', 1");
-        }
-        catch(InfException e){
-            
-        }
+    
 
-    }
+    
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -210,7 +205,7 @@ public class CreateMeeting extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE))
                     .addComponent(btnCreateMeeting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,7 +241,7 @@ public class CreateMeeting extends javax.swing.JFrame {
                         .addGap(37, 37, 37)
                         .addComponent(btnCreateMeeting))
                     .addComponent(jDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
