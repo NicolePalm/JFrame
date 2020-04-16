@@ -10,6 +10,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import static java.util.Collections.list;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import oru.inf.InfDB;
@@ -32,9 +34,11 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         this.idb = idb;
         FillRequestList();
         FillAcceptedList();
-
+        SetDefaultValues();
     }
  
+    
+    
     public void FillRequestList(){
         ArrayList<String> requests = new ArrayList();
         DefaultListModel demoList = new DefaultListModel();
@@ -44,7 +48,7 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         catch(InfException e){
             System.out.println(e.getMessage());
         }
-        if(ContainsAllNulls(requests)==false){
+        if(PendingRequests.ContainsAllNulls(requests)==false){
         try{ 
         for(String request : requests){
             String time = idb.fetchSingle("SELECT MEETINGTIME FROM MEETING WHERE MEETING_ID = '" + request + "'");
@@ -64,17 +68,9 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         }
         jlRequests.setModel(demoList);
     }
+   
     
-    public Boolean ContainsAllNulls(ArrayList arrList)
-    {
-    if(arrList != null)
-    {
-    if (!arrList.stream().noneMatch((a) -> (a != null))) {
-            return false;
-    }
-    }
-    return true;
-    }
+    
     
     
     public void SelectMeeting(){
@@ -105,6 +101,7 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
     }
         else{
             this.selectedMeeting = "";
+            SetDefaultValues();
         }
     }
     
@@ -117,7 +114,7 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         catch(InfException e){
             System.out.println(e.getMessage());
         }
-        if(ContainsAllNulls(acceptedRequests)==false){
+        if(PendingRequests.ContainsAllNulls(acceptedRequests)==false){
         try{ 
         for(String request : acceptedRequests){
             String time = idb.fetchSingle("SELECT MEETINGTIME FROM MEETING WHERE MEETING_ID = '" + request + "'");
@@ -165,16 +162,21 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         }
     }
         else{
-            this.selectedMeeting = "";
+            SetDefaultValues();
+            
         }
     }
     
     public void SetDefaultValues(){
+        this.selectedMeeting = "";
         jlblRequested.setText("Requested by: ");
         jlblRoom.setText("Room: ");
         jlblDate.setText("Date: ");
         jlblTime.setText("Time: ");
         jtxtADescription.setText("");
+        jbtnAccept.setVisible(false);
+        jbtnDecline.setVisible(false);
+        
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -247,6 +249,11 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         jlblDate.setText("Date:");
 
         jbtnBack.setText("Back");
+        jbtnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -257,7 +264,7 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jlblAcceptedMeeting, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 137, Short.MAX_VALUE))
+                        .addGap(0, 222, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jlblMeetingRequests, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10))
@@ -275,9 +282,9 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
                         .addComponent(jlblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jlblDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(54, 54, 54)
                         .addComponent(jbtnAccept)
-                        .addGap(41, 41, 41)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jbtnDecline))
                     .addComponent(jScrollPane2)
                     .addComponent(jlblRequested, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -300,23 +307,26 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
                     .addComponent(jlblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jlblDate)
                     .addComponent(jlblMeetingRequests))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jlblAcceptedMeeting)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlblDescription)
-                            .addComponent(jbtnAccept)
-                            .addComponent(jbtnDecline))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jlblDescription)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jbtnAccept)
+                                    .addComponent(jbtnDecline))
+                                .addGap(14, 14, 14)))
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(49, 49, 49))
+                .addGap(21, 21, 21))
         );
 
         pack();
@@ -337,6 +347,7 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         catch(InfException e){
             
         }
+        SetDefaultValues();
         FillRequestList();
     }//GEN-LAST:event_jbtnDeclineActionPerformed
 
@@ -348,7 +359,7 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         catch(InfException e){
             
         }
-        this.selectedMeeting = "";
+        SetDefaultValues();
         FillAcceptedList();
         FillRequestList();
     }//GEN-LAST:event_jbtnAcceptActionPerformed
@@ -358,6 +369,11 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         jbtnDecline.setVisible(false);
         SelectAcceptedMeeting();
     }//GEN-LAST:event_jlAcceptedMouseClicked
+
+    private void jbtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnBackActionPerformed
+        ReturnToHome.CreateHomeScreen(idb, currentUser);
+        dispose();
+    }//GEN-LAST:event_jbtnBackActionPerformed
 
     
 

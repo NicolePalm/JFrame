@@ -20,6 +20,8 @@ public class AdminPanel extends javax.swing.JFrame {
         this.idb = idb;
         this.currentUser = id;
         initComponents();
+        SetRequests();
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -29,6 +31,7 @@ public class AdminPanel extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jshowpost = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jPendingRequests = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -48,28 +51,36 @@ public class AdminPanel extends javax.swing.JFrame {
             }
         });
 
+        jPendingRequests.setText("jLabel2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(229, 229, 229)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
-                            .addComponent(jshowpost))))
-                .addContainerGap(252, Short.MAX_VALUE))
+                    .addComponent(jButton1)
+                    .addComponent(jshowpost))
+                .addContainerGap(391, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(229, 229, 229)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPendingRequests)
+                .addGap(59, 59, 59))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(48, 48, 48)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(jPendingRequests)))
+                .addGap(36, 36, 36)
                 .addComponent(jshowpost)
                 .addGap(28, 28, 28)
                 .addComponent(jButton1)
@@ -84,14 +95,20 @@ public class AdminPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_jshowpostActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-     new HandleMeetingRequests(idb, 2).setVisible(true);
+     new HandleMeetingRequests(idb, currentUser).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
-
+ public void SetRequests(){
+    
+     String currentRequests = PendingRequests.currentRequests(idb, currentUser);
+     jPendingRequests.setText("Current pending requests: "+currentRequests);
+    
+    }
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jPendingRequests;
     private javax.swing.JButton jshowpost;
     // End of variables declaration//GEN-END:variables
 }
