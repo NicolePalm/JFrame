@@ -44,21 +44,27 @@ public class CreateMeeting extends javax.swing.JFrame {
             String room = tfRoom.getText();
             String mID = idb.getAutoIncrement("MEETING", "MEETING_ID");
             String sql = "insert into MEETING values(" + idb.getAutoIncrement("MEETING", "MEETING_ID") + "," + creator + ",'" + description + "','" + date + "','" + time + "','" + room + "')";
-            
-            idb.insert(sql);
+            String checkDateTimeSql = "Select MEETING_ID FROM MEETING WHERE MEETINGDATE = '"+date+"' and MEETINGTIME = '"+time+"' and MEETINGCREATER_ID = "+currentUser+";";
+            String checkDateTime = idb.fetchSingle(checkDateTimeSql);
+            if(checkDateTime == null) {
+                idb.insert(sql);
            
-            String reciver = taReciver.getText();
-            String[] splited = reciver.split("\\s+");
-                for(int i=0;i<splited.length;i++){
-                    String sqlQ = "SELECT USER_ID FROM USER1 WHERE EMAIL ='" +splited[i]+"'";
-                    String reciverID = idb.fetchSingle(sqlQ);
-                    System.out.println(reciverID);
-                    String sqlInsert = "INSERT INTO MEETINGREQUEST VALUES ("+mID+","+reciverID+", 0)";
-                    idb.insert(sqlInsert);
-                    System.out.println((i+1)+"."+splited[i]);
-                }
+                String reciver = taReciver.getText();
+                String[] splited = reciver.split("\\s+");
+                    for(int i=0;i<splited.length;i++){
+                        String sqlQ = "SELECT USER_ID FROM USER1 WHERE EMAIL ='" +splited[i]+"'";
+                        String reciverID = idb.fetchSingle(sqlQ);
+                        System.out.println(reciverID);
+                        String sqlInsert = "INSERT INTO MEETINGREQUEST VALUES ("+mID+","+reciverID+", 0)";
+                        idb.insert(sqlInsert);
+                        System.out.println((i+1)+"."+splited[i]);
+                    }
                 
             JOptionPane.showMessageDialog(null, "Mötet har lagts till"); 
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Du har redan lagt till ett möte den tiden och dagen");
+            }
             
         } catch (InfException e) {
 
