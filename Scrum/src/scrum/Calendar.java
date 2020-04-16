@@ -22,6 +22,14 @@ public class Calendar extends javax.swing.JFrame {
         initComponents();
         this.idb = idb;
         this.currentUser = Integer.toString(userID);
+        SetMeetingListDefault();
+        
+    }
+    
+    private void SetMeetingListDefault(){
+        DefaultListModel demoList = new DefaultListModel();
+        demoList.addElement("No meetings on selected day!");
+        jMeetingList.setModel(demoList);
     }
 
     @SuppressWarnings("unchecked")
@@ -191,8 +199,7 @@ public class Calendar extends javax.swing.JFrame {
             demoList.addElement("No meetings on selected day!");
         }
         jMeetingList.setModel(demoList);
- 
-       
+    
        
     }//GEN-LAST:event_jShowMeetingsActionPerformed
 
@@ -212,7 +219,6 @@ public class Calendar extends javax.swing.JFrame {
         
         if(!value.equals("No meetings on selected day!")){
         String[] requestInfo = value.split(" ");
-
         String meetingID = requestInfo[2];
         System.out.print(meetingID);
         
@@ -226,7 +232,7 @@ public class Calendar extends javax.swing.JFrame {
             demoList.addElement(fullName);
             }
             String description = idb.fetchSingle("SELECT description FROM meeting WHERE meeting_id = '" + meetingID + "'");
-
+            jAttendants.setModel(demoList);
             jDescription.setText(description);
 
         }
@@ -235,11 +241,8 @@ public class Calendar extends javax.swing.JFrame {
         } 
     }
         else{
-            
-            
             SetDefaultValues();
         }
-        jAttendants.setModel(demoList);
     }
     public void SetDefaultValues(){
     

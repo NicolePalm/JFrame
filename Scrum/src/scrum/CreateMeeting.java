@@ -45,6 +45,7 @@ public class CreateMeeting extends javax.swing.JFrame {
             String mID = idb.getAutoIncrement("MEETING", "MEETING_ID");
             String sql = "insert into MEETING values(" + idb.getAutoIncrement("MEETING", "MEETING_ID") + "," + creator + ",'" + description + "','" + date + "','" + time + "','" + room + "')";
             String checkDateTimeSql = "Select MEETING_ID FROM MEETING WHERE MEETINGDATE = '"+date+"' and MEETINGTIME = '"+time+"' and MEETINGCREATER_ID = "+currentUser+";";
+            //SelfInviteToMeeting(mID);
             String checkDateTime = idb.fetchSingle(checkDateTimeSql);
             if(checkDateTime == null) {
                 idb.insert(sql);
@@ -96,7 +97,13 @@ public class CreateMeeting extends javax.swing.JFrame {
         }
     }
 
-    public void MeetingRequest() {
+    public void SelfInviteToMeeting(String meetingId){
+        try{
+            idb.insert("INSERT INTO meetingrequest VALUES ('" + meetingId + "', '" + currentUser + "', 1");
+        }
+        catch(InfException e){
+            
+        }
 
     }
 
