@@ -1,15 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package scrum;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
+
+import com.toedter.calendar.JDateChooser;
+import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -24,18 +17,26 @@ public class Validation {
     
     
     public static boolean CheckDateTwo(String toCheck) {
-        boolean result = true;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
-        
-        try{
-            formatter.parse(toCheck);
+        boolean passedDate = true;
+        String currentDate = LocalDate.now().toString();
+        if(toCheck.compareTo(currentDate) > 0){
+            JOptionPane.showMessageDialog(null, "This date has already passed");
+            passedDate = false;
         }
-        catch(Exception e) {
-            JOptionPane.showMessageDialog(null, "Fel datum format");
-            result = false;
-        }
-        return result;
+        return passedDate; 
     }
+    
+    public static boolean checkIfDateNull(JDateChooser dateToCheck){
+         
+         boolean resultat = false;
+         
+         if(dateToCheck.getDate()==null){ 
+             JOptionPane.showMessageDialog(null, "Select a date");
+             resultat = true;
+             dateToCheck.requestFocus();
+         }
+         return resultat;
+     }
     
     public static boolean checkTime(JTextField toCheck) {
         boolean result = true;
@@ -45,6 +46,7 @@ public class Validation {
             if(!m.matches())
             {
                 JOptionPane.showMessageDialog(null, "Tiden måste vara i formatet 00:00");
+                toCheck.requestFocus();
                 result = false;
             }             
       

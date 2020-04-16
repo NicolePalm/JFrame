@@ -16,12 +16,18 @@ public class AdminPanel extends javax.swing.JFrame {
     
     private int currentUser;
     private InfDB idb;
+    
     public AdminPanel(InfDB idb, int id) {
         this.idb = idb;
         this.currentUser = id;
         initComponents();
+        updateMeeting();
         SetRequests();
-        
+    }
+    
+    private void updateMeeting(){
+        UpdateMeetings update = new UpdateMeetings(idb, currentUser);
+        update.deletePassedMeetings();
     }
 
     @SuppressWarnings("unchecked")
