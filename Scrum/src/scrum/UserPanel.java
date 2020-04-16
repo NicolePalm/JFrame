@@ -4,10 +4,13 @@
  * and open the template in the editor.
  */
 package scrum;
+import java.awt.Cursor;
 import javax.swing.JOptionPane;
 import oru.inf.InfDB;
 import oru.inf.InfException;
-import java.util.ArrayList;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.event.ListSelectionListener;
 /**
  *
  * @author Danie
@@ -15,13 +18,64 @@ import java.util.ArrayList;
 public class UserPanel extends javax.swing.JFrame {
     private int currentUser;
     private InfDB idb;
-    
-    
+
+
     public UserPanel(InfDB idb, int id) {
         this.idb = idb;
         this.currentUser = id;
         initComponents();
+        post();
     }
+
+    public void post () {
+        try {
+
+            String category = categoryCbx.getSelectedItem().toString();
+            int categoryId;
+
+            System.out.println(category);
+
+
+            String postQuery = "SELECT post_id, title, postdate, posttime, post.category_id FROM post, category \n" +
+                                "WHERE post.CATEGORY_ID = category.CATEGORY_ID AND categorytype = '" + category + "' ORDER BY postdate DESC, posttime DESC";
+            ArrayList<HashMap<String, String>> posts = idb.fetchRows(postQuery);
+            String queryId;
+            String queryTitle;
+            String queryContent;
+            String querySearchpath;
+            String queryDate;
+            String queryTime;
+            DefaultListModel listModel = new DefaultListModel();
+
+            for (HashMap<String, String> post : posts){
+                queryId = post.get("POST_ID");
+                queryTitle = post.get("TITLE");
+                queryContent = post.get("CONTENT");
+                querySearchpath = post.get("SEARCHPATH");
+                queryDate = post.get("POSTDATE");
+                queryTime = post.get("POSTTIME");
+
+                //System.out.println(queryTitle);
+                //System.out.println(queryContent);
+                //System.out.println(querySearchpath);
+                //System.out.println(queryDate);
+                //System.out.println("----------------");
+
+                listModel.addElement(queryId + " | " + queryTitle + " | " + queryDate + " | " + queryTime);
+
+            }
+
+        postList.setModel(listModel);
+        }
+
+        catch (Exception e) {
+            System.out.println("Error");
+
+        }
+    }
+
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,8 +87,6 @@ public class UserPanel extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
         jNewPost = new javax.swing.JButton();
         btnCreateMeeting = new javax.swing.JButton();
@@ -43,12 +95,9 @@ public class UserPanel extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setText("User Panel");
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
 
         jLabel2.setText("Senaste Inlägg");
 
@@ -99,8 +148,10 @@ public class UserPanel extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(24, 24, 24)
-                .addComponent(jLabel2)
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
@@ -124,7 +175,7 @@ public class UserPanel extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateMeeting;
@@ -135,6 +186,6 @@ public class UserPanel extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JButton jNewPost;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JList<String> postList;
     // End of variables declaration//GEN-END:variables
 }
