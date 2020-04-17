@@ -25,7 +25,9 @@ public class UserPanel extends javax.swing.JFrame {
         this.idb = idb;
         this.currentUser = id;
         initComponents();
-       uppdateraUnderKategori();
+        updateMeeting();
+        SetRequests();
+        uppdateraUnderKategori();
     }
     
     
@@ -98,9 +100,9 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
         btnCreateMeeting = new javax.swing.JButton();
         jUnderKategori = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        jShowCalendar = new javax.swing.JButton();
+        jShowRequests = new javax.swing.JButton();
+        jPendingRequests = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -165,13 +167,21 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
             }
         });
 
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
+        jShowCalendar.setText("Calendar");
+        jShowCalendar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jShowCalendarActionPerformed(evt);
+            }
+        });
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        jShowRequests.setText("Show meeting requests");
+        jShowRequests.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jShowRequestsActionPerformed(evt);
+            }
+        });
 
-        setJMenuBar(jMenuBar1);
+        jPendingRequests.setText("jLabel3");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -179,26 +189,32 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(33, 33, 33)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addComponent(jPendingRequests)
+                        .addGap(268, 268, 268)
+                        .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
-                        .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 729, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton1)
+                        .addGap(72, 72, 72))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jNewPost)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCreateMeeting, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(191, 191, 191)))
-                .addContainerGap(37, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(335, 335, 335)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(72, 72, 72))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(27, 27, 27)
+                                .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 729, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jNewPost)
+                                .addGap(26, 26, 26)
+                                .addComponent(btnCreateMeeting, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jShowCalendar)
+                                .addGap(18, 18, 18)
+                                .addComponent(jShowRequests)))
+                        .addContainerGap(37, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,7 +222,9 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jPendingRequests))
                         .addGap(21, 21, 21))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton1)
@@ -216,12 +234,14 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
                     .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jNewPost)
-                    .addComponent(btnCreateMeeting))
-                .addGap(41, 41, 41))
+                    .addComponent(btnCreateMeeting)
+                    .addComponent(jShowCalendar)
+                    .addComponent(jShowRequests))
+                .addContainerGap())
         );
 
         pack();
@@ -272,6 +292,10 @@ uppdateraUnderKategori();
         String type = categoryCbx.getSelectedItem().toString();
         new FillComboBoxFromDb(idb).fillComboboxCategories(jUnderKategori, type);       
     }
+    private void updateMeeting(){
+        UpdateMeetings update = new UpdateMeetings(idb, currentUser);
+        update.deletePassedMeetings();
+    }
     
     
     
@@ -299,10 +323,21 @@ post();
     private void jUnderKategoriMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jUnderKategoriMouseClicked
 post();        // TODO add your handling code here:
     }//GEN-LAST:event_jUnderKategoriMouseClicked
+
+    private void jShowRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jShowRequestsActionPerformed
+       new HandleMeetingRequests(idb, currentUser).setVisible(true);
+    }//GEN-LAST:event_jShowRequestsActionPerformed
+
+    private void jShowCalendarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jShowCalendarActionPerformed
+        new Calendar(idb, currentUser).setVisible(true);
+    }//GEN-LAST:event_jShowCalendarActionPerformed
  
-    /**
-     * @param args the command line arguments
-     */
+    public void SetRequests(){
+    
+     String currentRequests = PendingRequests.currentRequests(idb, currentUser);
+     jPendingRequests.setText("Current pending requests: "+currentRequests);
+    
+    }
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -312,11 +347,11 @@ post();        // TODO add your handling code here:
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JButton jNewPost;
+    private javax.swing.JLabel jPendingRequests;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton jShowCalendar;
+    private javax.swing.JButton jShowRequests;
     private javax.swing.JComboBox<String> jUnderKategori;
     private javax.swing.JList<String> postList;
     // End of variables declaration//GEN-END:variables
