@@ -3,6 +3,7 @@ package scrum;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -17,13 +18,45 @@ public class MyPosts extends javax.swing.JFrame {
         initComponents();
         this.idb = idb;
         this.currentUser = Integer.toString(userID);
+        fillLists(jPublishedPosts, 1);
+        fillLists(jUnPublishedPosts, 0);
     }
     
-    public void fillLists(JList theList,int publishStatus){
-        
+    
+    public void fillLists (JList theList, int publishStatus){
+        ArrayList<String> posts = new ArrayList();
+        DefaultListModel demoList = new DefaultListModel();
+        try{
+        posts = idb.fetchColumn("SELECT POST_ID FROM POST WHERE POSTER_ID ='" + currentUser +"' AND POSTSTATUS = '" + publishStatus + "'");
+        }
+        catch(InfException e){
+            System.out.println(e.getMessage());
+        }
+        if(PendingRequests.ContainsAllNulls(posts)==false){
+        try{ 
+        for(String post : posts){
+            String time = idb.fetchSingle("SELECT POSTTIME FROM POST WHERE POST_ID = '" + post + "'");
+            String date = idb.fetchSingle("SELECT POSTDATE FROM POST WHERE POST_ID = '" + post + "'");
+            String title = idb.fetchSingle("SELECT TITLE FROM POST WHERE POST_ID = '" + post + "'");
+            String postInfo = "Post nr: "+ post+" "+ "Title: " + title +" - "+time+" "+ date;
+            demoList.addElement(postInfo);
+        }
+        }
+        catch(InfException e){
+                System.out.println(e.getMessage());
+        }
+        }
+        else{
+            demoList.addElement("No posts!");
+        }
+        theList.setModel(demoList);
     }
     
-
+    public String GetPostId(String selectedPost){
+        String[] post = selectedPost.split(" ");
+        String id = post[2];
+        return id;
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -72,6 +105,11 @@ public class MyPosts extends javax.swing.JFrame {
         jLabel3.setText("My unpublished posts");
 
         jUnPublish.setText("Unpublish");
+        jUnPublish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jUnPublishActionPerformed(evt);
+            }
+        });
 
         jEditPost.setText("Edit Post");
 
@@ -109,14 +147,11 @@ public class MyPosts extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel3))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jUnPublish)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel3))
+                            .addComponent(jUnPublish, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -130,6 +165,18 @@ public class MyPosts extends javax.swing.JFrame {
     private void jPublishedPostsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPublishedPostsMouseClicked
         
     }//GEN-LAST:event_jPublishedPostsMouseClicked
+
+    private void jUnPublishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUnPublishActionPerformed
+        String id = GetPostId(jPublishedPosts.getSelectedValue());
+        try{
+            idb.update("UPDATE POST SET POSTSTATUS = 0 WHERE POST_ID = '" + id + "'");
+            fillLists(jPublishedPosts, 1);
+            fillLists(jUnPublishedPosts, 0);
+        }
+        catch(InfException e){
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_jUnPublishActionPerformed
 
     
     

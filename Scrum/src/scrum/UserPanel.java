@@ -362,7 +362,7 @@ post();        // TODO add your handling code here:
     }//GEN-LAST:event_jShowCalendarActionPerformed
 
     private void jShowMyPostsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jShowMyPostsActionPerformed
-        // TODO add your handling code here:
+        new MyPosts(idb, currentUser).setVisible(true);
     }//GEN-LAST:event_jShowMyPostsActionPerformed
  
     public void SetRequests(){
