@@ -245,6 +245,7 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jNewPostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNewPostActionPerformed
