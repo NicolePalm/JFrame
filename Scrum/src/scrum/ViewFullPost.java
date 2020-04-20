@@ -130,92 +130,103 @@ public void UsePostFile(){
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTitle = new javax.swing.JLabel();
-        jAuthor = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jToUserPanel = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPostBody = new javax.swing.JTextArea();
+        jTitle = new javax.swing.JLabel();
+        jAuthor = new javax.swing.JLabel();
         jpostDate = new javax.swing.JLabel();
-        jToUserPanel = new javax.swing.JButton();
-        jPicture = new javax.swing.JLabel();
         jDownload = new javax.swing.JButton();
-        jFile = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTitle.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jTitle.setText("Title : The post");
-
-        jAuthor.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jAuthor.setText("Author :");
-
-        jPostBody.setEditable(false);
-        jPostBody.setColumns(20);
-        jPostBody.setRows(5);
-        jScrollPane2.setViewportView(jPostBody);
-
-        jpostDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jpostDate.setText("Date");
+        jPanel1.setBackground(new java.awt.Color(0, 51, 51));
 
         jToUserPanel.setText("Back");
+        jToUserPanel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jToUserPanel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToUserPanelActionPerformed(evt);
             }
         });
 
+        jPostBody.setEditable(false);
+        jPostBody.setColumns(20);
+        jPostBody.setRows(5);
+        jScrollPane2.setViewportView(jPostBody);
+
+        jTitle.setBackground(new java.awt.Color(255, 255, 255));
+        jTitle.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jTitle.setForeground(new java.awt.Color(255, 255, 255));
+        jTitle.setText("Title : The post");
+
+        jAuthor.setFont(new java.awt.Font("Verdana", 1, 24)); // NOI18N
+        jAuthor.setForeground(new java.awt.Color(255, 255, 255));
+        jAuthor.setText("Author :");
+
+        jpostDate.setBackground(new java.awt.Color(255, 255, 255));
+        jpostDate.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        jpostDate.setForeground(new java.awt.Color(255, 255, 255));
+        jpostDate.setText("Date");
+
         jDownload.setText("Download file");
+        jDownload.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jDownload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jDownloadActionPerformed(evt);
             }
         });
 
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jToUserPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(68, 68, 68)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jAuthor)
+                            .addComponent(jTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jpostDate))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jDownload, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTitle)
+                    .addComponent(jToUserPanel))
+                .addGap(18, 18, 18)
+                .addComponent(jAuthor)
+                .addGap(18, 18, 18)
+                .addComponent(jpostDate)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jDownload)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jToUserPanel)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPicture, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jAuthor)
-                            .addComponent(jTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jpostDate)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jFile, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(48, 48, 48)
-                                .addComponent(jDownload))))
-                    .addComponent(jScrollPane2))
-                .addContainerGap(22, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jToUserPanel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPicture, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTitle)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jAuthor)
-                                .addGap(27, 27, 27)
-                                .addComponent(jpostDate)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jFile, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jDownload, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -259,8 +270,7 @@ public void UsePostFile(){
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jAuthor;
     private javax.swing.JButton jDownload;
-    private javax.swing.JLabel jFile;
-    private javax.swing.JLabel jPicture;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JTextArea jPostBody;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel jTitle;
