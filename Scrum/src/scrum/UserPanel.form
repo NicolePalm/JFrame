@@ -49,8 +49,12 @@
                                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace min="212" pref="212" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace pref="400" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jButton1" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jUnderKategori" min="-2" max="-2" attributes="0"/>
@@ -60,14 +64,13 @@
                                   <Component id="jseconddate" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="jfirstdate" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
+                          <Component id="jScrollPane2" min="-2" pref="729" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace pref="33" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="jScrollPane2" alignment="0" min="-2" pref="729" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="194" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -82,23 +85,24 @@
                           <Component id="jPendingRequests" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                              <Component id="categoryCbx" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jUnderKategori" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jseconddate" min="-2" max="-2" attributes="0"/>
+                          <Component id="jfirstdate" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="categoryCbx" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jUnderKategori" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="jseconddate" min="-2" max="-2" attributes="0"/>
-                  <Component id="jfirstdate" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jScrollPane2" pref="431" max="32767" attributes="0"/>
+              <Component id="jScrollPane2" pref="434" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jNewPost" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -146,7 +150,7 @@
               <StringArray count="0"/>
             </Property>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-              <Color id="Standardmark&#xf6;r"/>
+              <Color id="Default Cursor"/>
             </Property>
           </Properties>
           <Events>
