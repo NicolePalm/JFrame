@@ -4,7 +4,9 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -29,6 +31,10 @@ public class ViewFullPost extends javax.swing.JFrame {
         this.jAuthor.setText(GetPosterName());
         this.jPostBody.setText(GetPostContent());
         UsePostFile();
+        jComment.setLineWrap(true);
+        jPostBody.setLineWrap(true);
+        jViewComments.setLineWrap(true);
+        ShowComments();
         
     }
 public String GetPostTitle(){
@@ -125,6 +131,42 @@ public void UsePostFile(){
         }
     
 }
+        public void ShowComments(){
+            try{
+            ArrayList <HashMap <String, String>> comments = idb.fetchRows("SELECT COMMENTER_ID, COMMENT FROM COMMENT WHERE POST_ID = '" + currentPost + "'");
+            if(!PendingRequests.ContainsAllNulls(comments)){
+            for(HashMap <String, String> comment : comments){
+            String commenter = comment.get("COMMENTER_ID");
+            String postedComment = comment.get("COMMENT");
+            String date = idb.fetchSingle("SELECT COMMENTDATE FROM COMMENT WHERE COMMENTER_ID = '" + commenter + "' AND POST_ID = '" + currentPost + "' AND COMMENT = '" + postedComment +"'");
+            String firstName = idb.fetchSingle("SELECT FIRSTNAME FROM USER1 WHERE USER_ID = '" + commenter + "'");
+            String lastName = idb.fetchSingle("SELECT LASTNAME FROM USER1 WHERE USER_ID = '" + commenter + "'");
+            jViewComments.append(postedComment + "\n" + "-" + firstName + " " + lastName + " " + date + "\n" + "\n");
+            }
+            }
+            else{
+           // jViewComments.setText("No comments yet");
+            }
+            }
+            catch (InfException ex) {
+            System.out.println(ex.getMessage());
+        }
+        }
+        
+        public void ShowNewComment(){
+            String comment = jComment.getText();
+            LocalDate currentDate = LocalDate.now();
+            try{
+            String firstName = idb.fetchSingle("SELECT FIRSTNAME FROM USER1 WHERE USER_ID = '" + currentUser + "'");
+            String lastName = idb.fetchSingle("SELECT LASTNAME FROM USER1 WHERE USER_ID = '" + currentUser + "'");
+            jViewComments.append(comment + "\n" + "-" + firstName + " " + lastName + " " + currentDate + "\n" + "\n");
+            }
+            catch(InfException ex){
+                System.out.println(ex.getMessage());
+            }
+            
+            
+        }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -139,6 +181,13 @@ public void UsePostFile(){
         jPicture = new javax.swing.JLabel();
         jDownload = new javax.swing.JButton();
         jFile = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jComment = new javax.swing.JTextArea();
+        jLeaveComment = new javax.swing.JLabel();
+        jSend = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jViewComments = new javax.swing.JTextArea();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -170,52 +219,108 @@ public void UsePostFile(){
             }
         });
 
+        jComment.setColumns(20);
+        jComment.setRows(5);
+        jComment.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jCommentKeyTyped(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jComment);
+
+        jLeaveComment.setText("Please leave a comment");
+
+        jSend.setText("Send");
+        jSend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jSendActionPerformed(evt);
+            }
+        });
+
+        jViewComments.setEditable(false);
+        jViewComments.setColumns(20);
+        jViewComments.setRows(5);
+        jScrollPane3.setViewportView(jViewComments);
+
+        jLabel2.setText("Comments");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jToUserPanel)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPicture, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
+                        .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jAuthor)
-                            .addComponent(jTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jpostDate)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jFile, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(48, 48, 48)
-                                .addComponent(jDownload))))
-                    .addComponent(jScrollPane2))
-                .addContainerGap(22, Short.MAX_VALUE))
+                                .addComponent(jToUserPanel)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPicture, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(37, 37, 37)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jAuthor)
+                                    .addComponent(jTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jpostDate))
+                                .addGap(0, 21, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jFile, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(jDownload)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLeaveComment, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jSend)))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jToUserPanel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPicture, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTitle)
+                        .addGap(84, 84, 84)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLeaveComment)
+                            .addComponent(jSend))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jToUserPanel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jAuthor)
-                                .addGap(27, 27, 27)
-                                .addComponent(jpostDate)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPicture, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jTitle)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jAuthor)
+                                        .addGap(27, 27, 27)
+                                        .addComponent(jpostDate)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jFile, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jDownload, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                                .addComponent(jDownload))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jFile, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         pack();
@@ -255,16 +360,52 @@ public void UsePostFile(){
         System.out.println(e.getMessage());
     }   
     }//GEN-LAST:event_jDownloadActionPerformed
+
+    private void jSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSendActionPerformed
+         String comment = jComment.getText();
+        LocalDate currentDate = LocalDate.now();
+        if(comment != null && !comment.equals("")){
+            if(comment.length()+1 <= 250){
+        try{
+            idb.insert("INSERT INTO Comment (COMMENTER_ID, POST_ID, COMMENTDATE, COMMENT) VALUES ('" + currentUser + "', '" + currentPost + "','" + currentDate + "', '" + comment + "')");
+            ShowNewComment();
+            jComment.setText("");
+            jLeaveComment.setText("Thanks for commenting");
+        }
+        catch(InfException e){
+            System.out.println(e.getMessage());
+        }
+        }
+            else{
+                jLeaveComment.setText("Too many characters!");
+            }
+      }
+         else{
+                jLeaveComment.setText("Can't publish an empty comment!");
+            }
+    }//GEN-LAST:event_jSendActionPerformed
+
+    private void jCommentKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jCommentKeyTyped
+        int countChar = jComment.getText().length() + 1;
+        jLeaveComment.setText(countChar + "/250");
+    }//GEN-LAST:event_jCommentKeyTyped
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jAuthor;
+    private javax.swing.JTextArea jComment;
     private javax.swing.JButton jDownload;
     private javax.swing.JLabel jFile;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLeaveComment;
     private javax.swing.JLabel jPicture;
     private javax.swing.JTextArea jPostBody;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JButton jSend;
     private javax.swing.JLabel jTitle;
     private javax.swing.JButton jToUserPanel;
+    private javax.swing.JTextArea jViewComments;
     private javax.swing.JLabel jpostDate;
     // End of variables declaration//GEN-END:variables
 }
