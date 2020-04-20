@@ -22,7 +22,6 @@ public class LoggInScreen extends javax.swing.JFrame {
         public LoggInScreen(InfDB idb) {
         initComponents();
         this.idb = idb;
-        
     }
 
     
@@ -125,7 +124,6 @@ public class LoggInScreen extends javax.swing.JFrame {
         );
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void JUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JUserNameActionPerformed
