@@ -182,6 +182,11 @@ public class NewPosts extends javax.swing.JFrame {
     return boxStatusInt;
     }
     
+    private void recreatePost(){
+    
+    
+    }
+    
     private void jCreatePostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCreatePostActionPerformed
         String title = jTitle.getText();
         String content = jText.getText();
