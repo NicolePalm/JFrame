@@ -6,12 +6,15 @@
 package scrum;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.text.SimpleDateFormat;
 import javax.swing.*;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import javax.swing.DefaultListModel;
+import static scrum.Calendar.ConvertDate;
 /**
  *
  * @author Danie
@@ -28,6 +31,7 @@ public class UserPanel extends javax.swing.JFrame {
         updateMeeting();
         SetRequests();
         uppdateraUnderKategori();
+        sokDatum();
     }
     
     
@@ -45,10 +49,17 @@ public class UserPanel extends javax.swing.JFrame {
             svaret = idb.fetchSingle(fraga);
             int sver = Integer.parseInt(svaret);
 
-            System.out.println(1);
-            String postQuery = "SELECT post_id, title, postdate, posttime, post.category_id FROM post, category \n" +
-                                "WHERE post.CATEGORY_ID = category.CATEGORY_ID AND categorytype = '" + category + "' and post.CATEGORY_ID = " + sver + " ORDER BY postdate DESC, posttime DESC";
+           Date firsta = jfirstdate.getDate();
+           Date seconda = jseconddate.getDate();
            
+            String second = ConvertDate(seconda);
+            String first = ConvertDate(firsta);
+            
+             System.out.println(first);
+             System.out.println(second);
+            String postQuery = "SELECT post_id, title, postdate, posttime, post.category_id FROM post, category \n"
+                    + "WHERE post.CATEGORY_ID = category.CATEGORY_ID AND categorytype = '"+category+"' and post.CATEGORY_ID = "+sver+" AND POSTDATE BETWEEN '"+second+"' and '"+first+"' ORDER BY postdate DESC, posttime DESC";
+                    
             ArrayList<HashMap<String, String>> posts = idb.fetchRows(postQuery);
             String queryId;
             String queryTitle;
@@ -103,6 +114,8 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
         jShowCalendar = new javax.swing.JButton();
         jShowRequests = new javax.swing.JButton();
         jPendingRequests = new javax.swing.JLabel();
+        jseconddate = new com.toedter.calendar.JDateChooser();
+        jfirstdate = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -190,31 +203,36 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
             .addGroup(layout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPendingRequests)
-                        .addGap(268, 268, 268)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(72, 72, 72))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jNewPost)
+                            .addGap(26, 26, 26)
+                            .addComponent(btnCreateMeeting, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(jShowCalendar)
+                            .addGap(18, 18, 18)
+                            .addComponent(jShowRequests))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)
-                                .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 729, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jNewPost)
-                                .addGap(26, 26, 26)
-                                .addComponent(btnCreateMeeting, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jShowCalendar)
-                                .addGap(18, 18, 18)
-                                .addComponent(jShowRequests)))
-                        .addContainerGap(37, Short.MAX_VALUE))))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jPendingRequests)
+                                    .addGap(268, 268, 268)
+                                    .addComponent(jLabel1)))
+                            .addGap(212, 212, 212)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(27, 27, 27)
+                                    .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jseconddate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jfirstdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(0, 0, Short.MAX_VALUE)))))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 729, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(194, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -229,10 +247,13 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jseconddate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jfirstdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -340,6 +361,18 @@ post();        // TODO add your handling code here:
     }
     
 
+    private void sokDatum(){
+    
+                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd");
+Date date = new Date();
+System.out.println(dateFormat.format(date));
+jfirstdate.setDate(date);
+Date dat = new Date();
+dat.setDate(-40);
+System.out.println(dateFormat.format(dat));
+jseconddate.setDate(dat);
+
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateMeeting;
     private javax.swing.JComboBox<String> categoryCbx;
@@ -353,6 +386,8 @@ post();        // TODO add your handling code here:
     private javax.swing.JButton jShowCalendar;
     private javax.swing.JButton jShowRequests;
     private javax.swing.JComboBox<String> jUnderKategori;
+    private com.toedter.calendar.JDateChooser jfirstdate;
+    private com.toedter.calendar.JDateChooser jseconddate;
     private javax.swing.JList<String> postList;
     // End of variables declaration//GEN-END:variables
 }
