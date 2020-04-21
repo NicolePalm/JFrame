@@ -17,10 +17,9 @@ public class ReturnToHome{
     String checkAdmin = "SELECT ADMINSTATUS from USER1 where USER_ID = '"+currentUser+"'";
        try {
            
-           int currentUser_ = Integer.parseInt(currentUser);
            String svarAdmin = idb.fetchSingle(checkAdmin);
        
-                 new UserPanel(idb,currentUser_,svarAdmin).setVisible(true);
+                 new UserPanel(idb,currentUser,svarAdmin).setVisible(true);
 
            
        } catch (InfException ex) {

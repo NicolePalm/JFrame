@@ -57,7 +57,7 @@
                           <Component id="cbReciver" max="32767" attributes="0"/>
                           <Component id="btnResetReciver" max="32767" attributes="0"/>
                           <Component id="btnAddReciver" max="32767" attributes="0"/>
-                          <Component id="jButton2" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jDelete" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jScrollPane3" pref="239" max="32767" attributes="0"/>
@@ -102,7 +102,7 @@
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="btnAddReciver" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                              <Component id="jDelete" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jScrollPane3" min="-2" pref="140" max="-2" attributes="0"/>
                       </Group>
@@ -219,7 +219,7 @@
     </Component>
     <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser">
     </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="jDelete">
       <Properties>
         <Property name="text" type="java.lang.String" value="Delete meeting"/>
       </Properties>

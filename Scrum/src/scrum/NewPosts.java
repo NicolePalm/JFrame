@@ -18,19 +18,18 @@ import org.apache.commons.io.FilenameUtils;
 public class NewPosts extends javax.swing.JFrame {
 
     private InfDB idb;
-    private final int currentUser;
+    private final String currentUser;
     private File currentFile;
     private String currentExt;
     private String currentPost;
         
-        public NewPosts(InfDB idb, int id) {
+        public NewPosts(InfDB idb, String id) {
         initComponents();
         new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, "Jobb");
         this.idb = idb;
         this.currentUser = id;
         jTitle.requestFocus();
         jValue.setVisible(false);
-        System.out.println(jSetPublish.isSelected());
     }
 
     @SuppressWarnings("unchecked")
@@ -197,7 +196,6 @@ public class NewPosts extends javax.swing.JFrame {
         String file;
         try{
             content = idb.fetchSingle("SELECT CONTENT FROM POST WHERE POST_ID ='"+postId+"'");
-            //time = idb.fetchSingle("SELECT POSTTIME FROM POST WHERE POST_ID ='"+postId+"'");
             categoryId = idb.fetchSingle("SELECT CATEGORY_ID FROM POST WHERE POST_ID ='"+postId+"'");
             categoryName = idb.fetchSingle("SELECT CATEGORYNAME FROM CATEGORY WHERE CATEGORY_ID = '" + categoryId + "'");
             categoryType = idb.fetchSingle("SELECT CATEGORYTYPE FROM CATEGORY WHERE CATEGORY_ID = '" + categoryId + "'");
@@ -349,8 +347,7 @@ public class NewPosts extends javax.swing.JFrame {
         
         String fileName = currentFile.getAbsolutePath();
         this.currentExt = HandleFiles.getExtensionByApacheCommonLib(fileName);
-        String userID = Integer.toString(currentUser);
-        String filename= LocalTime.now().format(DateTimeFormatter.ofPattern("HH-mm-ss")) + userID;
+        String filename= LocalTime.now().format(DateTimeFormatter.ofPattern("HH-mm-ss")) + currentUser;
         String filePath = "c://JFrame/Scrum/files/"+filename+"."+currentExt;
     
         if(currentExt.equals("png") || currentExt.equals("jpg")){

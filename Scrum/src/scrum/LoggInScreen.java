@@ -151,7 +151,7 @@ public class LoggInScreen extends javax.swing.JFrame {
          try{
          String svarPW = idb.fetchSingle(checkPW);
          String svarAdmin = idb.fetchSingle(checkAdmin);
-         int userID = UserIDParse.ReturnIDFromEmail(email, idb);
+         String userID = UserIDParse.ReturnIDFromEmail(email, idb);
          if(svarPW.equals(pw)){
             
                  new UserPanel(idb,userID,svarAdmin).setVisible(true);

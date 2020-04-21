@@ -12,9 +12,9 @@ import oru.inf.InfException;
  */
 public class UpdateMeetings {
     private InfDB idb;
-    private int currentUser;
+    private String currentUser;
     
-     public UpdateMeetings(InfDB idb, int id) {
+     public UpdateMeetings(InfDB idb, String id) {
         this.idb = idb;
         this.currentUser = id;
     }

@@ -28,9 +28,9 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
     private String selectedMeeting;
     
     
-    public HandleMeetingRequests(InfDB idb, int userID) {
+    public HandleMeetingRequests(InfDB idb, String userID) {
         initComponents();
-        this.currentUser = Integer.toString(userID);
+        this.currentUser = userID;
         this.idb = idb;
         FillRequestList();
         FillAcceptedList();

@@ -17,9 +17,9 @@ import oru.inf.InfException;
 public class UpdatePersonalInfo extends javax.swing.JFrame {
 
     private InfDB idb;
-    private int currentUser;
+    private String currentUser;
     
-    public UpdatePersonalInfo(InfDB idb, int id) {
+    public UpdatePersonalInfo(InfDB idb, String id) {
         initComponents();
         this.idb = idb;
         this.currentUser = id;

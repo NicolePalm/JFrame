@@ -20,10 +20,10 @@ public class ViewFullPost extends javax.swing.JFrame {
     private final String currentUser;
     private final String currentPost;
     
-    public ViewFullPost(InfDB idb, int userID, int postID) {
+    public ViewFullPost(InfDB idb, String userID, int postID) {
         initComponents();
         this.currentPost = Integer.toString(postID);
-        this.currentUser = Integer.toString(userID);
+        this.currentUser = userID;
         this.idb = idb;
         jDownload.setVisible(false);
         this.jTitle.setText(GetPostTitle());

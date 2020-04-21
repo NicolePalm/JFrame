@@ -13,12 +13,11 @@ import oru.inf.InfException;
 public class MyPosts extends javax.swing.JFrame {
     private InfDB idb;
     private final String currentUser;
-    //private String postToEdit;
     
-    public MyPosts(InfDB idb, int userID) {
+    public MyPosts(InfDB idb, String userID) {
         initComponents();
         this.idb = idb;
-        this.currentUser = Integer.toString(userID);
+        this.currentUser = userID;
         fillLists(jPublishedPosts, 1);
         fillLists(jUnPublishedPosts, 0);
     }
@@ -165,10 +164,9 @@ public class MyPosts extends javax.swing.JFrame {
     private void jUnPublishedPostsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jUnPublishedPostsMouseClicked
         String selectedValue= jUnPublishedPosts.getSelectedValue();
         if(!selectedValue.equals("No posts!")){
-        int userId = Integer.parseInt(currentUser);
         String postToEdit = jUnPublishedPosts.getSelectedValue();
         String [] value = postToEdit.split(" ");
-        NewPosts posts = new NewPosts(idb, userId);
+        NewPosts posts = new NewPosts(idb, currentUser);
         posts.setVisible(true);
         posts.RecreatePost(value[2]);
         dispose();

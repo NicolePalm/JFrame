@@ -27,32 +27,38 @@ import oru.inf.InfException;
 public class CreateMeeting extends javax.swing.JFrame {
 
     private InfDB idb;
-    private int currentUser;
+    private String currentUser;
     private boolean editorMode;
 
     /**
      * Creates new form CreateMeeting
      */
-    public CreateMeeting(InfDB idb, int id, boolean edit) {
+    public CreateMeeting(InfDB idb, String id, boolean edit) {
         initComponents();
         this.idb = idb;
         this.currentUser = id;
         FillReciver();
         this.editorMode = edit;
+        jDelete.setVisible(false);
     }
 
+    private void EnterEditorMode(){
+        jDelete.setVisible(true);
+        btnCreateMeeting.setText("Update meeting");
+    }
+    
     public void CreateMeeting() {
         if(Validation.checkIfDateNull(jDateChooser)==false){
         Date dateChoosed = jDateChooser.getDate();
         String date = Calendar.ConvertDate(dateChoosed);
         if(!Validation.CheckDateTwo(date) && Validation.checkTime(tfTime) && Validation.taHarVarde(taReciver) && Validation.tfHarVarde(tfDescription) && Validation.tfHarVarde(tfRoom)){
         try {
-            int creator = currentUser;
+            String creator = currentUser;
             String description = tfDescription.getText();
             String time = tfTime.getText();
             String room = tfRoom.getText();
             String mID = idb.getAutoIncrement("MEETING", "MEETING_ID");
-            String sql = "insert into MEETING values(" + idb.getAutoIncrement("MEETING", "MEETING_ID") + "," + creator + ",'" + description + "','" + date + "','" + time + "','" + room + "')";
+            String sql = "insert into MEETING values(" + idb.getAutoIncrement("MEETING", "MEETING_ID") + ",'" + creator + "','" + description + "','" + date + "','" + time + "','" + room + "')";
             String checkDateTimeSql = "Select MEETING_ID FROM MEETING WHERE MEETINGDATE = '"+date+"' and MEETINGTIME = '"+time+"' and MEETINGCREATER_ID = "+currentUser+";";
             
             String checkDateTime = idb.fetchSingle(checkDateTimeSql);
@@ -69,7 +75,7 @@ public class CreateMeeting extends javax.swing.JFrame {
                         idb.insert(sqlInsert);
                         System.out.println((i+1)+"."+splited[i]);
                     }
-                String sqlInsertSelf = "INSERT INTO MEETINGREQUEST VALUES ("+mID+","+currentUser+", 1)";
+                String sqlInsertSelf = "INSERT INTO MEETINGREQUEST VALUES ("+mID+",'"+currentUser+"', 1)";
                 idb.insert(sqlInsertSelf);    
             JOptionPane.showMessageDialog(null, "Mötet har lagts till"); 
             }
@@ -162,7 +168,7 @@ public class CreateMeeting extends javax.swing.JFrame {
         btnResetReciver = new javax.swing.JButton();
         btnAddReciver = new javax.swing.JButton();
         jDateChooser = new com.toedter.calendar.JDateChooser();
-        jButton2 = new javax.swing.JButton();
+        jDelete = new javax.swing.JButton();
 
         jButton1.setText("jButton1");
 
@@ -216,7 +222,7 @@ public class CreateMeeting extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Delete meeting");
+        jDelete.setText("Delete meeting");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -245,7 +251,7 @@ public class CreateMeeting extends javax.swing.JFrame {
                             .addComponent(cbReciver, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnResetReciver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnAddReciver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(jDelete, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE))
                     .addComponent(btnCreateMeeting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -282,7 +288,7 @@ public class CreateMeeting extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnAddReciver)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton2))
+                                .addComponent(jDelete))
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(37, 37, 37)
                         .addComponent(btnCreateMeeting))
@@ -329,8 +335,8 @@ public class CreateMeeting extends javax.swing.JFrame {
     private javax.swing.JButton btnResetReciver;
     private javax.swing.JComboBox<String> cbReciver;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private com.toedter.calendar.JDateChooser jDateChooser;
+    private javax.swing.JButton jDelete;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblDescription;

@@ -20,12 +20,12 @@ import static scrum.Calendar.ConvertDate;
  * @author Danie
  */
 public class UserPanel extends javax.swing.JFrame {
-    private final int currentUser;
+    private final String currentUser;
     private InfDB idb;
     private final String admin;
     
     
-    public UserPanel(InfDB idb, int id, String status) {
+    public UserPanel(InfDB idb, String id, String status) {
         this.idb = idb;
         this.currentUser = id;
         this.admin = status;
@@ -310,8 +310,6 @@ uppdateraUnderKategori();
             break;
         }
         int postId = Integer.parseInt(pId);
-        
-        //System.out.println(postId + 100);
         
         new ViewFullPost(idb, currentUser, postId).setVisible(true);
         
