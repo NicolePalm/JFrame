@@ -21,6 +21,7 @@ public class NewPosts extends javax.swing.JFrame {
     private final int currentUser;
     private File currentFile;
     private String currentExt;
+    private String currentPost;
         
         public NewPosts(InfDB idb, int id) {
         initComponents();
@@ -28,6 +29,8 @@ public class NewPosts extends javax.swing.JFrame {
         this.idb = idb;
         this.currentUser = id;
         jTitle.requestFocus();
+        jValue.setVisible(false);
+        System.out.println(jSetPublish.isSelected());
     }
 
     @SuppressWarnings("unchecked")
@@ -46,6 +49,7 @@ public class NewPosts extends javax.swing.JFrame {
         jFileName = new javax.swing.JLabel();
         jHome = new javax.swing.JButton();
         jSetPublish = new javax.swing.JCheckBox();
+        jValue = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -103,6 +107,8 @@ public class NewPosts extends javax.swing.JFrame {
             }
         });
 
+        jValue.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -111,42 +117,40 @@ public class NewPosts extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jHome)
+                        .addGap(37, 37, 37)
+                        .addComponent(jValue, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jlblTitle)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 455, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jFile)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jCreatePost))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTitle, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jType, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(37, 37, 37)
-                                        .addComponent(jCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jSetPublish)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jNewCategory)))
-                                .addGap(12, 12, 12)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jFileName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jHome)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                .addComponent(jFile)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jFileName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jCreatePost))
+                            .addComponent(jScrollPane1)
+                            .addComponent(jTitle)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jType, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(37, 37, 37)
+                                .addComponent(jCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jSetPublish)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                                .addComponent(jNewCategory)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(474, 474, 474)
-                .addComponent(jFileName)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jHome)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jlblTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -160,9 +164,11 @@ public class NewPosts extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCreatePost)
-                    .addComponent(jFile))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jCreatePost)
+                        .addComponent(jFile))
+                    .addComponent(jFileName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -176,18 +182,87 @@ public class NewPosts extends javax.swing.JFrame {
     private int GetCheckBoxStatus(){
     boolean boxStatus = jSetPublish.isSelected();
     int boxStatusInt = 0;
-    if(boxStatus = true){
+    if(boxStatus == true){
        boxStatusInt = 1;
     }
     return boxStatusInt;
     }
     
-    private void recreatePost(){
-    
+    public void RecreatePost(String postId){
+        String content;
+        String categoryId;
+        String categoryName;
+        String categoryType;
+        String title;
+        String file;
+        try{
+            content = idb.fetchSingle("SELECT CONTENT FROM POST WHERE POST_ID ='"+postId+"'");
+            //time = idb.fetchSingle("SELECT POSTTIME FROM POST WHERE POST_ID ='"+postId+"'");
+            categoryId = idb.fetchSingle("SELECT CATEGORY_ID FROM POST WHERE POST_ID ='"+postId+"'");
+            categoryName = idb.fetchSingle("SELECT CATEGORYNAME FROM CATEGORY WHERE CATEGORY_ID = '" + categoryId + "'");
+            categoryType = idb.fetchSingle("SELECT CATEGORYTYPE FROM CATEGORY WHERE CATEGORY_ID = '" + categoryId + "'");
+            title = idb.fetchSingle("SELECT TITLE FROM POST WHERE POST_ID ='" + postId + "'");
+            file = idb.fetchSingle("SELECT SEARCHPATH FROM POST WHERE POST_ID = '" + postId + "'");
+            jTitle.setText(title);
+            jText.setText(content);
+            jValue.setText("1");
+            this.currentPost = postId;
+            jType.setSelectedItem(categoryType);
+            jCategories.setSelectedItem(categoryName);
+            
+            if(!file.equals("default")){
+                jFileName.setText(file);
+            }
+            }
+        catch(InfException e){
+            System.out.println(e.getMessage());
+        }
     
     }
     
-    private void jCreatePostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCreatePostActionPerformed
+    private void UpdatePost(){
+        String title = jTitle.getText();
+        String content = jText.getText();
+        int publishStatus = GetCheckBoxStatus();
+        System.out.println(jSetPublish.isSelected());
+        System.out.println(publishStatus);
+        String filePath = "default";
+        String fileName = jFileName.getText();
+        
+        if(title.isEmpty() || content.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Fyll i både titel och text!");
+            jTitle.requestFocus();
+        }
+        
+        else{
+        String category = jCategories.getSelectedItem().toString();
+        String sqlCategoryID = "SELECT CATEGORY_ID FROM CATEGORY WHERE CATEGORYNAME = '"+category+"'";
+        String tiden = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        LocalDate currentDate = LocalDate.now();
+        if(currentFile == null){
+            if(!fileName.equals("")){
+                filePath = fileName;
+            }
+        }
+        else{
+            filePath = GetCurrentFile();
+            jFileName.setText(filePath);
+        }
+        
+        try{
+            String categoryID = idb.fetchSingle(sqlCategoryID);
+            idb.update("UPDATE POST SET TITLE = '" + title + "', CONTENT= '" + content + "', SEARCHPATH = '" + filePath + "', POSTDATE = '" + currentDate + "', POSTTIME = '" + tiden + "', CATEGORY_ID = " + categoryID + ", POSTSTATUS = " + publishStatus + " WHERE POST_ID = '" + currentPost + "'");
+            JOptionPane.showMessageDialog(null, "The post is updated!");
+            dispose();
+        }
+        catch(InfException e){
+            System.out.println(e.getMessage());
+        }
+        
+        }
+    }
+    
+    private void CreatePost(){
         String title = jTitle.getText();
         String content = jText.getText();
         int publishStatus = GetCheckBoxStatus();
@@ -213,7 +288,7 @@ public class NewPosts extends javax.swing.JFrame {
             }
             else{
             String filePath = GetCurrentFile();    
-            String insertPost = "INSERT INTO POST (POST_ID,TITLE,CONTENT,SEARCHPATH,POSTDATE,POSTTIME,POSTER_ID,CATEGORY_ID) VALUES ("+id+",'"+title+"','"+content+"','"+filePath+"','"+currentDate+"','"+tiden+"',"+currentUser+","+categoryID+")";
+            String insertPost = "INSERT INTO POST (POST_ID,TITLE,CONTENT,SEARCHPATH,POSTDATE,POSTTIME,POSTER_ID,CATEGORY_ID, POSTSTATUS) VALUES ("+id+",'"+title+"','"+content+"','"+filePath+"','"+currentDate+"','"+tiden+"',"+currentUser+","+categoryID+"," + publishStatus + ")";
             idb.insert(insertPost);
             }
             
@@ -224,6 +299,15 @@ public class NewPosts extends javax.swing.JFrame {
             Logger.getLogger(NewPosts.class.getName()).log(Level.SEVERE, null, ex);
         }
        }
+    }
+    
+    private void jCreatePostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCreatePostActionPerformed
+        if(jValue.getText().equals("1")){
+        UpdatePost();
+        }
+        else{
+        CreatePost();
+        }
     }//GEN-LAST:event_jCreatePostActionPerformed
 
     private void jTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTypeActionPerformed
@@ -298,6 +382,7 @@ public class NewPosts extends javax.swing.JFrame {
     private javax.swing.JTextArea jText;
     private javax.swing.JTextField jTitle;
     private javax.swing.JComboBox<String> jType;
+    private javax.swing.JLabel jValue;
     private javax.swing.JLabel jlblTitle;
     // End of variables declaration//GEN-END:variables
 }
