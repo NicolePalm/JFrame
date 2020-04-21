@@ -20,13 +20,15 @@ import static scrum.Calendar.ConvertDate;
  * @author Danie
  */
 public class UserPanel extends javax.swing.JFrame {
-    private int currentUser;
+    private final int currentUser;
     private InfDB idb;
+    private final String admin;
     
     
-    public UserPanel(InfDB idb, int id) {
+    public UserPanel(InfDB idb, int id,String status) {
         this.idb = idb;
         this.currentUser = id;
+        admin = status;
         initComponents();
         updateMeeting();
         SetRequests();
@@ -344,7 +346,7 @@ uppdateraUnderKategori();
     }//GEN-LAST:event_postListMouseEntered
 
     private void btnCreateMeetingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateMeetingActionPerformed
-        new CreateMeeting(idb,currentUser).setVisible(true);
+        new CreateMeeting(idb,currentUser, false).setVisible(true);
     }//GEN-LAST:event_btnCreateMeetingActionPerformed
 
     private void jUnderKategoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUnderKategoriActionPerformed

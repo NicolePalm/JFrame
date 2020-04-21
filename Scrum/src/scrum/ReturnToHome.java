@@ -19,13 +19,9 @@ public class ReturnToHome{
            
            int currentUser_ = Integer.parseInt(currentUser);
            String svarAdmin = idb.fetchSingle(checkAdmin);
-           int admin = Integer.parseInt(svarAdmin);
-           if(admin == 1){
-               new AdminPanel(idb,currentUser_).setVisible(true);
-             }
-             else{
-                 new UserPanel(idb,currentUser_).setVisible(true);
-             }
+ 
+                 new UserPanel(idb,currentUser_,checkAdmin).setVisible(true);
+
            
        } catch (InfException ex) {
            Logger.getLogger(ReturnToHome.class.getName()).log(Level.SEVERE, null, ex);
