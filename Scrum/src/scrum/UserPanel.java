@@ -58,7 +58,7 @@ public class UserPanel extends javax.swing.JFrame {
              System.out.println(first);
              System.out.println(second);
             String postQuery = "SELECT post_id, title, postdate, posttime, post.category_id FROM post, category \n"
-                    + "WHERE post.CATEGORY_ID = category.CATEGORY_ID AND categorytype = '"+category+"' and post.CATEGORY_ID = "+sver+" AND POSTDATE BETWEEN '"+second+"' and '"+first+"' ORDER BY postdate DESC, posttime DESC";
+                    + "WHERE post.CATEGORY_ID = category.CATEGORY_ID AND categorytype = '"+category+"' and post.CATEGORY_ID = "+sver+" AND POSTSTATUS = 1 AND POSTDATE BETWEEN '"+second+"' and '"+first+"' ORDER BY postdate DESC, posttime DESC";
                     
             ArrayList<HashMap<String, String>> posts = idb.fetchRows(postQuery);
             String queryId;
