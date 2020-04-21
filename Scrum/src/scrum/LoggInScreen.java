@@ -154,14 +154,10 @@ public class LoggInScreen extends javax.swing.JFrame {
          int admin = Integer.parseInt(svarAdmin);
          int userID = UserIDParse.ReturnIDFromEmail(email, idb);
          if(svarPW.equals(pw)){
-             if(admin == 1){
-               new AdminPanel(idb,userID).setVisible(true);
-               dispose();  
-             }
-             else{
-                 new UserPanel(idb,userID).setVisible(true);
+            
+                 new UserPanel(idb,userID,admin).setVisible(true);
                  dispose();
-             }
+             
          }
          }
          catch(NumberFormatException e){

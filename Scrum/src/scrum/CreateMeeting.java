@@ -6,10 +6,15 @@
 package scrum;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 import oru.inf.InfDB;
@@ -23,15 +28,17 @@ public class CreateMeeting extends javax.swing.JFrame {
 
     private InfDB idb;
     private int currentUser;
+    private boolean editorMode;
 
     /**
      * Creates new form CreateMeeting
      */
-    public CreateMeeting(InfDB idb, int id) {
+    public CreateMeeting(InfDB idb, int id, boolean edit) {
         initComponents();
         this.idb = idb;
         this.currentUser = id;
         FillReciver();
+        this.editorMode = edit;
     }
 
     public void CreateMeeting() {
@@ -100,6 +107,36 @@ public class CreateMeeting extends javax.swing.JFrame {
             System.out.println(e.getMessage());
         }
     }
+    
+    public void RecreateMeeting(String meeting, String meetingCreator){
+ 
+            String creator = meetingCreator;
+            String meetingID = meeting;
+            String description;
+            String time;
+            String room;
+            String date_;
+            Date date;
+            
+        try {
+            description = idb.fetchSingle("SELECT DESCRIPTION FROM MEETING WHERE MEETING_ID ='"+meetingID+"'");
+            time = idb.fetchSingle("SELECT MEETINGTIME FROM MEETING WHERE MEETING_ID ='"+meetingID+"'");
+            room = idb.fetchSingle("SELECT ROOMNAME FROM MEETING WHERE MEETING_ID ='"+meetingID+"'");
+            date_ = idb.fetchSingle("SELECT DATE FROM MEETING WHERE MEETING_ID ='"+meetingID+"'");
+            date = new SimpleDateFormat("yyyy-mm-dd").parse(date_);
+
+            tfDescription.setText(description);
+            tfTime.setText(time);
+            tfRoom.setText(room);
+            jDateChooser.setDate(date);
+            
+        } catch (InfException | ParseException ex) {
+            Logger.getLogger(CreateMeeting.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+    
+    
+    }
 
     
 
@@ -108,6 +145,7 @@ public class CreateMeeting extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
         lblRubrik = new javax.swing.JLabel();
         lblDescription = new javax.swing.JLabel();
         tfDescription = new javax.swing.JTextField();
@@ -124,6 +162,9 @@ public class CreateMeeting extends javax.swing.JFrame {
         btnResetReciver = new javax.swing.JButton();
         btnAddReciver = new javax.swing.JButton();
         jDateChooser = new com.toedter.calendar.JDateChooser();
+        jButton2 = new javax.swing.JButton();
+
+        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -175,6 +216,8 @@ public class CreateMeeting extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("Delete meeting");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -199,13 +242,14 @@ public class CreateMeeting extends javax.swing.JFrame {
                             .addComponent(jDateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cbReciver, 0, 93, Short.MAX_VALUE)
+                            .addComponent(cbReciver, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnResetReciver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnAddReciver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnAddReciver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE))
                     .addComponent(btnCreateMeeting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -233,10 +277,12 @@ public class CreateMeeting extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(cbReciver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnResetReciver)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnAddReciver)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnResetReciver))
+                                .addComponent(jButton2))
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(37, 37, 37)
                         .addComponent(btnCreateMeeting))
@@ -282,6 +328,8 @@ public class CreateMeeting extends javax.swing.JFrame {
     private javax.swing.JButton btnCreateMeeting;
     private javax.swing.JButton btnResetReciver;
     private javax.swing.JComboBox<String> cbReciver;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private com.toedter.calendar.JDateChooser jDateChooser;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblDate;
