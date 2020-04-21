@@ -290,7 +290,10 @@ public class Calendar extends javax.swing.JFrame {
                  catch(InfException e){
                  System.out.println(e.getMessage());
                  }
-             }  
+             }
+             else{
+                 jCountWords.setText("1-250 characters");
+             }
         }
     }//GEN-LAST:event_jSaveNoteActionPerformed
 
