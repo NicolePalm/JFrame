@@ -9,6 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import oru.inf.InfDB;
 import oru.inf.InfException;
@@ -17,12 +19,17 @@ import oru.inf.InfException;
 public class Calendar extends javax.swing.JFrame {
     private InfDB idb;
     private final String currentUser;
+    private String selectedMeeting;
+    private boolean savedNote;
 
     public Calendar(InfDB idb, int userID) {
+
         initComponents();
         this.idb = idb;
         this.currentUser = Integer.toString(userID);
         SetMeetingListDefault();
+        this.savedNote = false;
+       
         
     }
     
@@ -54,6 +61,10 @@ public class Calendar extends javax.swing.JFrame {
         jBackButton = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         jDescription = new javax.swing.JTextArea();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jNotes = new javax.swing.JTextArea();
+        jCountWords = new javax.swing.JLabel();
+        jSaveNote = new javax.swing.JButton();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -107,6 +118,24 @@ public class Calendar extends javax.swing.JFrame {
         jDescription.setRows(5);
         jScrollPane4.setViewportView(jDescription);
 
+        jNotes.setColumns(20);
+        jNotes.setRows(5);
+        jNotes.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jNotesKeyTyped(evt);
+            }
+        });
+        jScrollPane5.setViewportView(jNotes);
+
+        jCountWords.setText("Peronal note ");
+
+        jSaveNote.setText("Save Note");
+        jSaveNote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jSaveNoteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -117,7 +146,7 @@ public class Calendar extends javax.swing.JFrame {
                         .addGap(20, 20, 20)
                         .addComponent(jCalendar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(63, 63, 63)
+                        .addGap(29, 29, 29)
                         .addComponent(jShowMeetings))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
@@ -134,7 +163,14 @@ public class Calendar extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jCountWords)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jSaveNote))
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,7 +179,7 @@ public class Calendar extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jBackButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                         .addComponent(jCalendar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jShowMeetings))
@@ -151,13 +187,16 @@ public class Calendar extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel4))
+                            .addComponent(jLabel4)
+                            .addComponent(jCountWords)
+                            .addComponent(jSaveNote))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane3)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
-                            .addComponent(jScrollPane4))))
-                .addContainerGap(20, Short.MAX_VALUE))
+                            .addComponent(jScrollPane4)
+                            .addComponent(jScrollPane5))))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
@@ -166,7 +205,26 @@ public class Calendar extends javax.swing.JFrame {
     private void jCalendar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCalendar1MouseClicked
        
     }//GEN-LAST:event_jCalendar1MouseClicked
+    
+    private void findNote(){
+    
+        ArrayList<String> notes = new ArrayList();
+        try {
+            notes = idb.fetchColumn("SELECT NOTE FROM MEETINGNOTES WHERE MEETINGID ='"+selectedMeeting+"' AND USERID ='"+currentUser+"'");
+        } catch (InfException ex) {
+            Logger.getLogger(Calendar.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
+        if(PendingRequests.ContainsAllNulls(notes)==false){
+        jNotes.setText(notes.get(0));
+        System.out.print(notes.get(0));
+        savedNote = true;
+        }
+        
+    }
+    
+    
+    
     private void jShowMeetingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jShowMeetingsActionPerformed
        Date datum =  jCalendar1.getDate();
        String currentDate = ConvertDate(datum);
@@ -197,10 +255,9 @@ public class Calendar extends javax.swing.JFrame {
         }
         else{
             demoList.addElement("No meetings on selected day!");
+            SetDefaultValues();
         }
         jMeetingList.setModel(demoList);
-    
-       
     }//GEN-LAST:event_jShowMeetingsActionPerformed
 
     private void jBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBackButtonActionPerformed
@@ -212,6 +269,41 @@ public class Calendar extends javax.swing.JFrame {
         SelectMeeting();
     }//GEN-LAST:event_jMeetingListMouseClicked
 
+    private void jSaveNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSaveNoteActionPerformed
+        if(selectedMeeting != null && !selectedMeeting.equals("")){
+        
+             String note = jNotes.getText();
+             int noteLength = note.length();
+             if(noteLength >0 && noteLength <= 250){
+             
+                 try{
+                     
+                 if(savedNote == false){
+                 idb.insert("INSERT INTO MEETINGNOTES (MEETINGID, USERID, NOTE)VALUES('"+selectedMeeting+"','"+currentUser+"','"+note+"')"); 
+                 jCountWords.setText("Note saved!");
+                 }
+                 else{
+                 idb.update("UPDATE MEETINGNOTES SET NOTE ='"+note+"' WHERE MEETINGID ='"+selectedMeeting+"' AND USERID ='"+currentUser+"'");    
+                 jCountWords.setText("Note saved!");
+                 }
+                 }
+                 catch(InfException e){
+                 System.out.println(e.getMessage());
+                 }
+             }
+             else{
+                 jCountWords.setText("1-250 characters");
+             }
+        }
+    }//GEN-LAST:event_jSaveNoteActionPerformed
+
+    private void jNotesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jNotesKeyTyped
+        int countChar = jNotes.getText().length() + 1;
+        jCountWords.setText(countChar + "/250");
+    }//GEN-LAST:event_jNotesKeyTyped
+    
+   
+    
     public void SelectMeeting(){
         String value = jMeetingList.getSelectedValue();
         ArrayList<String> attendants = new ArrayList();
@@ -219,11 +311,11 @@ public class Calendar extends javax.swing.JFrame {
         
         if(!value.equals("No meetings on selected day!")){
         String[] requestInfo = value.split(" ");
-        String meetingID = requestInfo[2];
-        System.out.print(meetingID);
+        this.selectedMeeting = requestInfo[2];
+
         
         try{
-            attendants = idb.fetchColumn("SELECT RECEIVER_ID FROM MEETINGREQUEST WHERE MEETING_ID = '"+meetingID+"' AND status = 1");
+            attendants = idb.fetchColumn("SELECT RECEIVER_ID FROM MEETINGREQUEST WHERE MEETING_ID = '"+selectedMeeting+"' AND status = 1");
             
             for(String attending : attendants){
             String firstName = idb.fetchSingle("SELECT firstname FROM USER1 WHERE user_id = '" + attending + "'");
@@ -231,9 +323,10 @@ public class Calendar extends javax.swing.JFrame {
             String fullName = firstName+ " "+ lastName;
             demoList.addElement(fullName);
             }
-            String description = idb.fetchSingle("SELECT description FROM meeting WHERE meeting_id = '" + meetingID + "'");
+            String description = idb.fetchSingle("SELECT description FROM meeting WHERE meeting_id = '" + selectedMeeting + "'");
             jAttendants.setModel(demoList);
             jDescription.setText(description);
+            findNote();
 
         }
         catch(InfException e){
@@ -245,9 +338,17 @@ public class Calendar extends javax.swing.JFrame {
         }
     }
     public void SetDefaultValues(){
-    
-        jDescription.setText("");
         
+        
+        DefaultListModel demoList = new DefaultListModel();
+        demoList.addElement("");
+               
+        this.selectedMeeting=null;
+        this.savedNote = false;
+        jDescription.setText("");
+        jNotes.setText("");
+        jAttendants.setModel(demoList);
+     
     }
     public static String ConvertDate(Date selectedDate){
     
@@ -263,6 +364,7 @@ public class Calendar extends javax.swing.JFrame {
     private javax.swing.JList<String> jAttendants;
     private javax.swing.JButton jBackButton;
     private com.toedter.calendar.JCalendar jCalendar1;
+    private javax.swing.JLabel jCountWords;
     private org.jdatepicker.util.JDatePickerUtil jDatePickerUtil1;
     private org.jdatepicker.util.JDatePickerUtil jDatePickerUtil2;
     private org.jdatepicker.util.JDatePickerUtil jDatePickerUtil3;
@@ -273,10 +375,13 @@ public class Calendar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JList<String> jList1;
     private javax.swing.JList<String> jMeetingList;
+    private javax.swing.JTextArea jNotes;
+    private javax.swing.JButton jSaveNote;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JButton jShowMeetings;
     // End of variables declaration//GEN-END:variables
 }
