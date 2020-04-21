@@ -29,6 +29,7 @@ public class CreateMeeting extends javax.swing.JFrame {
     private InfDB idb;
     private String currentUser;
     private boolean editorMode;
+    private String meetingToEdit;
 
     /**
      * Creates new form CreateMeeting
@@ -40,11 +41,15 @@ public class CreateMeeting extends javax.swing.JFrame {
         FillReciver();
         this.editorMode = edit;
         jDelete.setVisible(false);
+
     }
 
-    private void EnterEditorMode(){
+    public void EnterEditorMode(String meetingId){
+        if(editorMode == true){
         jDelete.setVisible(true);
         btnCreateMeeting.setText("Update meeting");
+        this.meetingToEdit = meetingId;
+        }
     }
     
     public void CreateMeeting() {
@@ -114,22 +119,24 @@ public class CreateMeeting extends javax.swing.JFrame {
         }
     }
     
-    public void RecreateMeeting(String meeting, String meetingCreator){
+    public void RecreateMeeting(String email){
  
-            String creator = meetingCreator;
-            String meetingID = meeting;
+            String creator;
             String description;
             String time;
             String room;
             String date_;
-            Date date;
+
             
         try {
-            description = idb.fetchSingle("SELECT DESCRIPTION FROM MEETING WHERE MEETING_ID ='"+meetingID+"'");
-            time = idb.fetchSingle("SELECT MEETINGTIME FROM MEETING WHERE MEETING_ID ='"+meetingID+"'");
-            room = idb.fetchSingle("SELECT ROOMNAME FROM MEETING WHERE MEETING_ID ='"+meetingID+"'");
-            date_ = idb.fetchSingle("SELECT DATE FROM MEETING WHERE MEETING_ID ='"+meetingID+"'");
-            date = new SimpleDateFormat("yyyy-mm-dd").parse(date_);
+            creator =idb.fetchSingle("SELECT USER_ID from USER1 where EMAIL = '"+email+"'");
+            description = idb.fetchSingle("SELECT DESCRIPTION FROM MEETING WHERE MEETING_ID ='"+meetingToEdit+"'");
+            time = idb.fetchSingle("SELECT MEETINGTIME FROM MEETING WHERE MEETING_ID ='"+meetingToEdit+"'");
+            room = idb.fetchSingle("SELECT ROOMNAME FROM MEETING WHERE MEETING_ID ='"+meetingToEdit+"'");
+            date_ = idb.fetchSingle("SELECT MEETINGDATE FROM MEETING WHERE MEETING_ID ='"+meetingToEdit+"'");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = dateFormat.parse(date_);
+
 
             tfDescription.setText(description);
             tfTime.setText(time);

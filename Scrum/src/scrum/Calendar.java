@@ -255,9 +255,9 @@ public class Calendar extends javax.swing.JFrame {
             String time = idb.fetchSingle("SELECT MEETINGTIME FROM MEETING WHERE MEETING_ID = '" +meeting+ "'");
             String roomName = idb.fetchSingle("SELECT ROOMNAME FROM MEETING WHERE MEETING_ID = '" +meeting+ "'");
             String meetingCreater = idb.fetchSingle("SELECT MEETINGCREATER_ID FROM MEETING WHERE MEETING_ID ='"+meeting+"'");
-            String firstName = idb.fetchSingle("SELECT FIRSTNAME FROM USER1 WHERE USER_ID = '" +meetingCreater+ "'");
-            String lastName = idb.fetchSingle("SELECT LASTNAME FROM USER1 WHERE USER_ID = '" +meetingCreater+ "'");
-            String meetingInfo = "Meeting nr: "+meeting+" "+"Created by: "+firstName+" "+lastName+" "+" "+time+" In room: "+roomName;
+            String email = idb.fetchSingle("SELECT EMAIL FROM USER1 WHERE USER_ID = '" +meetingCreater+ "'");
+            //String lastName = idb.fetchSingle("SELECT LASTNAME FROM USER1 WHERE USER_ID = '" +meetingCreater+ "'");
+            String meetingInfo = "Meeting nr: "+meeting+" "+"Created by: "+ email + " " + time+" In room: " + roomName;
             demoList.addElement(meetingInfo);
         }
         }
@@ -315,7 +315,16 @@ public class Calendar extends javax.swing.JFrame {
     }//GEN-LAST:event_jNotesKeyTyped
 
     private void jEditMeetingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEditMeetingActionPerformed
+        if(selectedMeeting != null || !selectedMeeting.equals("")){
+        String value = jMeetingList.getSelectedValue();
+        String[] meetingInfo = value.split(" ");
+        String email = meetingInfo[5];
+        
         CreateMeeting createMeeting = new CreateMeeting(idb, currentUser, true);
+        createMeeting.setVisible(true);
+        createMeeting.EnterEditorMode(selectedMeeting);
+        createMeeting.RecreateMeeting(email);
+      }
     }//GEN-LAST:event_jEditMeetingActionPerformed
     
    

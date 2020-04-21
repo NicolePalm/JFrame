@@ -78,13 +78,6 @@ public class UserPanel extends javax.swing.JFrame {
                 querySearchpath = post.get("SEARCHPATH");
                 queryDate = post.get("POSTDATE");
                 queryTime = post.get("POSTTIME");
-
-                //System.out.println(queryTitle);
-                //System.out.println(queryContent);
-                //System.out.println(querySearchpath);
-                //System.out.println(queryDate);
-                //System.out.println("----------------");
-
                 listModel.addElement(queryId + " | " + queryTitle + " | " + queryDate + " | " + queryTime);
 
             }
