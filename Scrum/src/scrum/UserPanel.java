@@ -117,6 +117,7 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
         jseconddate = new com.toedter.calendar.JDateChooser();
         jfirstdate = new com.toedter.calendar.JDateChooser();
         jShowMyPosts = new javax.swing.JButton();
+        btnUpPersonalInfo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -204,6 +205,13 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
             }
         });
 
+        btnUpPersonalInfo.setText("Update info");
+        btnUpPersonalInfo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpPersonalInfoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -211,6 +219,11 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
             .addGroup(layout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPendingRequests)
+                        .addGap(268, 268, 268)
+                        .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jNewPost)
                         .addGap(26, 26, 26)
@@ -220,12 +233,9 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
                         .addGap(18, 18, 18)
                         .addComponent(jShowRequests)
                         .addGap(18, 18, 18)
-                        .addComponent(jShowMyPosts))
-                    .addComponent(jLabel2)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPendingRequests)
-                        .addGap(268, 268, 268)
-                        .addComponent(jLabel1))
+                        .addComponent(jShowMyPosts)
+                        .addGap(24, 24, 24)
+                        .addComponent(btnUpPersonalInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -238,7 +248,7 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
                                 .addGap(18, 18, 18)
                                 .addComponent(jfirstdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 729, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -269,7 +279,8 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
                     .addComponent(btnCreateMeeting)
                     .addComponent(jShowCalendar)
                     .addComponent(jShowRequests)
-                    .addComponent(jShowMyPosts))
+                    .addComponent(jShowMyPosts)
+                    .addComponent(btnUpPersonalInfo))
                 .addContainerGap())
         );
 
@@ -364,6 +375,10 @@ post();        // TODO add your handling code here:
     private void jShowMyPostsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jShowMyPostsActionPerformed
         new MyPosts(idb, currentUser).setVisible(true);
     }//GEN-LAST:event_jShowMyPostsActionPerformed
+
+    private void btnUpPersonalInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpPersonalInfoActionPerformed
+        new UpdatePersonalInfo(idb, currentUser).setVisible(true);
+    }//GEN-LAST:event_btnUpPersonalInfoActionPerformed
  
     public void SetRequests(){
     
@@ -387,6 +402,7 @@ jseconddate.setDate(dat);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateMeeting;
+    private javax.swing.JButton btnUpPersonalInfo;
     private javax.swing.JComboBox<String> categoryCbx;
     private org.jdatepicker.impl.DateComponentFormatter dateComponentFormatter1;
     private javax.swing.JButton jButton1;

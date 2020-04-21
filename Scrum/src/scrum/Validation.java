@@ -3,6 +3,7 @@ package scrum;
 
 import com.toedter.calendar.JDateChooser;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -81,4 +82,25 @@ public class Validation {
         
         return resultat;
     }
+    
+    public static boolean validEmail(String email, String currentEmail, ArrayList<String> emails){
+            boolean result = true;
+            
+                for(String m : emails) {
+                    if(m.equals(currentEmail)) {
+                        emails.remove(m);
+                        System.out.println(m);
+                    }
+                }
+                
+                
+                for(String mail : emails){
+                    if(email.equals(mail)){
+                        result = false;
+                        JOptionPane.showMessageDialog(null, "That email is already registred");
+                    } 
+                }
+           
+            return result;
+        }
 }
