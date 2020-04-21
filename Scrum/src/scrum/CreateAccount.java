@@ -45,7 +45,7 @@ public class CreateAccount extends javax.swing.JFrame {
             if(test = true){
             JOptionPane.showMessageDialog(null, "Välkommen "+Firstname+"!");
             int userID = UserIDParse.ReturnIDFromEmail(Email, idb);
-            new UserPanel(idb,userID,"0").setVisible(true);
+            new UserPanel(idb,userID).setVisible(true);
             dispose();
             }
            }

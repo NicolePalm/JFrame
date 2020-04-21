@@ -151,10 +151,11 @@ public class LoggInScreen extends javax.swing.JFrame {
          try{
          String svarPW = idb.fetchSingle(checkPW);
          String svarAdmin = idb.fetchSingle(checkAdmin);
+         int admin = Integer.parseInt(svarAdmin);
          int userID = UserIDParse.ReturnIDFromEmail(email, idb);
          if(svarPW.equals(pw)){
             
-                 new UserPanel(idb,userID,svarAdmin).setVisible(true);
+                 new UserPanel(idb,userID,admin).setVisible(true);
                  dispose();
              
          }
