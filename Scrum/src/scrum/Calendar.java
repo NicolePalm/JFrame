@@ -26,6 +26,7 @@ public class Calendar extends javax.swing.JFrame {
         SetMeetingListDefault();
         this.savedNote = false;
         this.admin = admin;
+        jNotes.setLineWrap(true);
         jEditMeeting.setVisible(false);
         
     }
@@ -149,14 +150,14 @@ public class Calendar extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jBackButton))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addComponent(jCalendar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(jShowMeetings))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jBackButton)))
+                        .addGap(70, 70, 70)
+                        .addComponent(jShowMeetings)))
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
@@ -187,12 +188,12 @@ public class Calendar extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jBackButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(jCalendar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jShowMeetings))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -212,6 +213,7 @@ public class Calendar extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCalendar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCalendar1MouseClicked
@@ -238,6 +240,7 @@ public class Calendar extends javax.swing.JFrame {
     
     //finds all meetings on a specific day, picked from the Calendar
     private void jShowMeetingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jShowMeetingsActionPerformed
+       SetDefaultValues();
        jEditMeeting.setVisible(false);
        Date datum =  jCalendar1.getDate();
        String currentDate = ConvertDate(datum);
@@ -326,6 +329,7 @@ public class Calendar extends javax.swing.JFrame {
         
         CreateMeeting createMeeting = new CreateMeeting(idb, currentUser, true);
         createMeeting.setVisible(true);
+        dispose();
         createMeeting.EnterEditorMode(selectedMeeting);
         createMeeting.RecreateMeeting(email);
       }
@@ -380,6 +384,7 @@ public class Calendar extends javax.swing.JFrame {
         jDescription.setText("");
         jNotes.setText("");
         jAttendants.setModel(demoList);
+        jCountWords.setText("Personal note");
      
     }
     

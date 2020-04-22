@@ -48,7 +48,7 @@ public class Validation {
         Matcher m = p.matcher(toCheck.getText());
             if(!m.matches())
             {
-                JOptionPane.showMessageDialog(null, "Tiden måste vara i formatet 00:00");
+                JOptionPane.showMessageDialog(null, "Time must be in the format HH:MM");
                 toCheck.requestFocus();
                 result = false;
             }             
@@ -70,12 +70,25 @@ public class Validation {
         return resultat;
     }
     
+      public static boolean descriptionValues(JTextArea rutaAttKolla)
+    {
+        boolean resultat = true;
+        
+        if(rutaAttKolla.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Enter a description of the meeting");
+            resultat = false;
+            rutaAttKolla.requestFocus();
+        }       
+        
+        return resultat;
+    }
+    
     public static boolean tfHarVarde(JTextField rutaAttKolla)
     {
         boolean resultat = true;
         
         if(rutaAttKolla.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null, "Beskrivning eller rum är tomt");
+            JOptionPane.showMessageDialog(null, "Enter a room where the meeting will take place");
             resultat = false;
             rutaAttKolla.requestFocus();
         }       
