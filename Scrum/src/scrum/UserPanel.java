@@ -97,8 +97,7 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
     private void initComponents() {
 
         dateComponentFormatter1 = new org.jdatepicker.impl.DateComponentFormatter();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jLatestPosts = new javax.swing.JLabel();
         jNewPost = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         postList = new javax.swing.JList<>();
@@ -116,11 +115,9 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("User Panel");
+        jLatestPosts.setText("Latest posts");
 
-        jLabel2.setText("Senaste Inlägg");
-
-        jNewPost.setText("Skriv nytt inlägg");
+        jNewPost.setText("New post");
         jNewPost.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jNewPostActionPerformed(evt);
@@ -148,7 +145,7 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
             }
         });
 
-        btnCreateMeeting.setText("Skapa nytt möte");
+        btnCreateMeeting.setText("Create meeting");
         btnCreateMeeting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCreateMeetingActionPerformed(evt);
@@ -170,7 +167,7 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
             }
         });
 
-        jButton1.setText("Uppdatera");
+        jButton1.setText("Update");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -184,16 +181,16 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
             }
         });
 
-        jShowRequests.setText("Show meeting requests");
+        jShowRequests.setText("Meetingrequests");
         jShowRequests.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jShowRequestsActionPerformed(evt);
             }
         });
 
-        jPendingRequests.setText("jLabel3");
+        jPendingRequests.setText("Pending requests");
 
-        jShowMyPosts.setText("Show my post");
+        jShowMyPosts.setText("My posts");
         jShowMyPosts.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jShowMyPostsActionPerformed(evt);
@@ -214,14 +211,9 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
             .addGroup(layout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPendingRequests)
-                        .addGap(268, 268, 268)
-                        .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jNewPost)
-                        .addGap(26, 26, 26)
+                        .addGap(18, 18, 18)
                         .addComponent(btnCreateMeeting, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jShowCalendar)
@@ -229,21 +221,25 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
                         .addComponent(jShowRequests)
                         .addGap(18, 18, 18)
                         .addComponent(jShowMyPosts)
-                        .addGap(24, 24, 24)
-                        .addComponent(btnUpPersonalInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)
-                                .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jseconddate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jfirstdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnUpPersonalInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPendingRequests)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLatestPosts)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(27, 27, 27)
+                                    .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jseconddate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jfirstdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 729, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,12 +247,9 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jPendingRequests))
-                        .addGap(21, 21, 21)
-                        .addComponent(jLabel2)
-                        .addGap(21, 21, 21))
+                        .addComponent(jPendingRequests)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                        .addComponent(jLatestPosts))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -265,9 +258,9 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
                                 .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jseconddate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jfirstdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)))
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
+                            .addComponent(jfirstdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jNewPost)
@@ -280,6 +273,7 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jNewPostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNewPostActionPerformed
@@ -399,8 +393,7 @@ jseconddate.setDate(dat);
     private javax.swing.JComboBox<String> categoryCbx;
     private org.jdatepicker.impl.DateComponentFormatter dateComponentFormatter1;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLatestPosts;
     private javax.swing.JButton jNewPost;
     private javax.swing.JLabel jPendingRequests;
     private javax.swing.JScrollPane jScrollPane2;

@@ -1,10 +1,6 @@
 package scrum;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import oru.inf.InfDB;
@@ -144,6 +140,7 @@ public class MyPosts extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jPublishedPostsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPublishedPostsMouseClicked
