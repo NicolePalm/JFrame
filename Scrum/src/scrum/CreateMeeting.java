@@ -1,29 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package scrum;
-
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 
-/**
- *
- * @author marvi
- */
+
 public class CreateMeeting extends javax.swing.JFrame {
 
     private InfDB idb;
@@ -31,9 +18,7 @@ public class CreateMeeting extends javax.swing.JFrame {
     private boolean editorMode;
     private String meetingToEdit;
 
-    /**
-     * Creates new form CreateMeeting
-     */
+    
     public CreateMeeting(InfDB idb, String id, boolean edit) {
         initComponents();
         this.idb = idb;
@@ -120,7 +105,6 @@ public class CreateMeeting extends javax.swing.JFrame {
     }
     
     public void RecreateMeeting(String email){
- 
             String creator;
             String description;
             String time;
@@ -137,18 +121,36 @@ public class CreateMeeting extends javax.swing.JFrame {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = dateFormat.parse(date_);
 
-
             tfDescription.setText(description);
             tfTime.setText(time);
             tfRoom.setText(room);
             jDateChooser.setDate(date);
+            FillRecieverToMeeting();
             
         } catch (InfException | ParseException ex) {
             Logger.getLogger(CreateMeeting.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+    }
+    
+    private void FillRecieverToMeeting(){
+        ArrayList <String> recieverId = new ArrayList();
+        ArrayList <String> recieverEmail = new ArrayList();
+        
+        try{
+            recieverId = idb.fetchColumn("SELECT RECEIVER_ID FROM MEETINGREQUEST WHERE MEETING_ID = '" + meetingToEdit + "'");
+            for(String id : recieverId){
+                String email = idb.fetchSingle("SELECT EMAIL FROM USER1 WHERE USER_ID = '" + id + "'");
+                recieverEmail.add(email);
+                }
+                for(String e : recieverEmail){
+                taReciver.append(e);
+                taReciver.append("\n");
+                cbReciver.removeItem(e);
+            }
         }
-            
-    
-    
+        catch(InfException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     

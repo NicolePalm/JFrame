@@ -341,12 +341,12 @@ uppdateraUnderKategori();
     }//GEN-LAST:event_btnCreateMeetingActionPerformed
 
     private void jUnderKategoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUnderKategoriActionPerformed
-         // TODO add your handling code here:
+ 
     }//GEN-LAST:event_jUnderKategoriActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-post(); 
-// TODO add your handling code here:
+    post(); 
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jUnderKategoriMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jUnderKategoriMouseReleased
@@ -354,7 +354,7 @@ post();
     }//GEN-LAST:event_jUnderKategoriMouseReleased
 
     private void jUnderKategoriMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jUnderKategoriMouseClicked
-post();        // TODO add your handling code here:
+    post();  
     }//GEN-LAST:event_jUnderKategoriMouseClicked
 
     private void jShowRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jShowRequestsActionPerformed
@@ -362,7 +362,7 @@ post();        // TODO add your handling code here:
     }//GEN-LAST:event_jShowRequestsActionPerformed
 
     private void jShowCalendarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jShowCalendarActionPerformed
-        new Calendar(idb, currentUser).setVisible(true);
+        new Calendar(idb, currentUser, admin).setVisible(true);
     }//GEN-LAST:event_jShowCalendarActionPerformed
 
     private void jShowMyPostsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jShowMyPostsActionPerformed

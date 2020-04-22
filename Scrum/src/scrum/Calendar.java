@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package scrum;
 
 import java.text.SimpleDateFormat;
@@ -21,18 +16,21 @@ public class Calendar extends javax.swing.JFrame {
     private final String currentUser;
     private String selectedMeeting;
     private boolean savedNote;
+    private String admin;
 
-    public Calendar(InfDB idb, String userID) {
-
+    
+        public Calendar(InfDB idb, String userID, String admin) {
         initComponents();
         this.idb = idb;
         this.currentUser = userID;
         SetMeetingListDefault();
         this.savedNote = false;
-       
+        this.admin = admin;
+        jEditMeeting.setVisible(false);
         
     }
     
+    //sets the defaultvalues in jMeetingList
     private void SetMeetingListDefault(){
         DefaultListModel demoList = new DefaultListModel();
         demoList.addElement("No meetings on selected day!");
@@ -128,7 +126,7 @@ public class Calendar extends javax.swing.JFrame {
         });
         jScrollPane5.setViewportView(jNotes);
 
-        jCountWords.setText("Peronal note ");
+        jCountWords.setText("Personal note ");
 
         jSaveNote.setText("Save Note");
         jSaveNote.addActionListener(new java.awt.event.ActionListener() {
@@ -161,12 +159,14 @@ public class Calendar extends javax.swing.JFrame {
                         .addComponent(jBackButton)))
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jEditMeeting)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jEditMeeting)
+                        .addGap(20, 20, 20)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -218,6 +218,7 @@ public class Calendar extends javax.swing.JFrame {
        
     }//GEN-LAST:event_jCalendar1MouseClicked
     
+    //finds the current user's personal note for a specific meeting, if one exists
     private void findNote(){
     
         ArrayList<String> notes = new ArrayList();
@@ -235,9 +236,9 @@ public class Calendar extends javax.swing.JFrame {
         
     }
     
-    
-    
+    //finds all meetings on a specific day, picked from the Calendar
     private void jShowMeetingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jShowMeetingsActionPerformed
+       jEditMeeting.setVisible(false);
        Date datum =  jCalendar1.getDate();
        String currentDate = ConvertDate(datum);
        
@@ -256,7 +257,6 @@ public class Calendar extends javax.swing.JFrame {
             String roomName = idb.fetchSingle("SELECT ROOMNAME FROM MEETING WHERE MEETING_ID = '" +meeting+ "'");
             String meetingCreater = idb.fetchSingle("SELECT MEETINGCREATER_ID FROM MEETING WHERE MEETING_ID ='"+meeting+"'");
             String email = idb.fetchSingle("SELECT EMAIL FROM USER1 WHERE USER_ID = '" +meetingCreater+ "'");
-            //String lastName = idb.fetchSingle("SELECT LASTNAME FROM USER1 WHERE USER_ID = '" +meetingCreater+ "'");
             String meetingInfo = "Meeting nr: "+meeting+" "+"Created by: "+ email + " " + time+" In room: " + roomName;
             demoList.addElement(meetingInfo);
         }
@@ -271,12 +271,14 @@ public class Calendar extends javax.swing.JFrame {
         }
         jMeetingList.setModel(demoList);
     }//GEN-LAST:event_jShowMeetingsActionPerformed
-
+    
+    //returns to userpanel
     private void jBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBackButtonActionPerformed
         ReturnToHome.CreateHomeScreen(idb, currentUser);
         dispose();
     }//GEN-LAST:event_jBackButtonActionPerformed
-
+    
+    //calls another method when jMeetingList is clicked
     private void jMeetingListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMeetingListMouseClicked
         SelectMeeting();
     }//GEN-LAST:event_jMeetingListMouseClicked
@@ -309,11 +311,13 @@ public class Calendar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jSaveNoteActionPerformed
 
+    //counts the characters in the textarea jNotes and displays it in a label jCountWords
     private void jNotesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jNotesKeyTyped
         int countChar = jNotes.getText().length() + 1;
         jCountWords.setText(countChar + "/250");
     }//GEN-LAST:event_jNotesKeyTyped
-
+    
+    //opens the create meeting-panel, if the user's admin equals "1"
     private void jEditMeetingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEditMeetingActionPerformed
         if(selectedMeeting != null || !selectedMeeting.equals("")){
         String value = jMeetingList.getSelectedValue();
@@ -328,7 +332,7 @@ public class Calendar extends javax.swing.JFrame {
     }//GEN-LAST:event_jEditMeetingActionPerformed
     
    
-    
+    //selects meeting, and finds its description, attendants and personal note
     public void SelectMeeting(){
         String value = jMeetingList.getSelectedValue();
         ArrayList<String> attendants = new ArrayList();
@@ -352,6 +356,9 @@ public class Calendar extends javax.swing.JFrame {
             jAttendants.setModel(demoList);
             jDescription.setText(description);
             findNote();
+            if(admin.equals("1")){
+            jEditMeeting.setVisible(true);
+        }
 
         }
         catch(InfException e){
@@ -362,9 +369,9 @@ public class Calendar extends javax.swing.JFrame {
             SetDefaultValues();
         }
     }
+    
+    //sets the defaultvalues, so that the lists and textareas are blank
     public void SetDefaultValues(){
-        
-        
         DefaultListModel demoList = new DefaultListModel();
         demoList.addElement("");
                
@@ -375,8 +382,9 @@ public class Calendar extends javax.swing.JFrame {
         jAttendants.setModel(demoList);
      
     }
-    public static String ConvertDate(Date selectedDate){
     
+    //converts the selected date from the Calender to a String in a specific format
+    public static String ConvertDate(Date selectedDate){
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.ENGLISH);
         String date = simpleDateFormat.format(selectedDate);
