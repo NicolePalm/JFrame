@@ -145,6 +145,7 @@ public class LoggInScreen extends javax.swing.JFrame {
         }
         else{
         try{
+            if(Validation.emailValidator(email)){
          String checkPW = "SELECT USER_PASSWORD from USER1 where EMAIL = '"+email+"'";
          String checkAdmin = "SELECT ADMINSTATUS from USER1 where EMAIL = '"+email+"'";
          
@@ -164,6 +165,7 @@ public class LoggInScreen extends javax.swing.JFrame {
           System.out.println(e.getMessage());  
           JUserName.requestFocus();
          }
+            }
          }
          catch(InfException loginFail){
          JOptionPane.showMessageDialog(null, "Ange email och lösenord!");
