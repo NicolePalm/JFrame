@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 
@@ -20,11 +21,11 @@ public class ViewFullPost extends javax.swing.JFrame {
     private final String currentUser;
     private final String currentPost;
     
-    public ViewFullPost(InfDB idb, String userID, int postID) {
+    public ViewFullPost(InfDB idb, String currentUser, String currentPost) {
         initComponents();
-        this.currentPost = Integer.toString(postID);
-        this.currentUser = userID;
         this.idb = idb;
+        this.currentUser = currentUser;
+        this.currentPost = currentPost;
         jDownload.setVisible(false);
         this.jTitle.setText(GetPostTitle());
         this.jpostDate.setText(GetPostDate());
@@ -35,8 +36,28 @@ public class ViewFullPost extends javax.swing.JFrame {
         jPostBody.setLineWrap(true);
         jViewComments.setLineWrap(true);
         ShowComments();
-        
+        controlAdminStatus();
+      
+     
     }
+    
+    private void controlAdminStatus(){
+        
+    int currentUs = Integer.parseInt(currentUser);
+    try{String fraga = "Select adminstatus from user1 where user_id ="+currentUs+";";
+    String svar = idb.fetchSingle(fraga);
+    if(svar.equals("1")){
+      btnRemove.setVisible(true);
+      btnEdit.setVisible(true);
+    }else{
+      btnRemove.setVisible(false);
+        btnEdit.setVisible(false);
+    }
+    
+    }catch(InfException e){
+        System.out.print("Error");
+    }}
+    
 public String GetPostTitle(){
         String title = "";
         try {
@@ -188,6 +209,8 @@ public void UsePostFile(){
         jScrollPane3 = new javax.swing.JScrollPane();
         jViewComments = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
+        btnRemove = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -245,6 +268,20 @@ public void UsePostFile(){
 
         jLabel2.setText("Comments");
 
+        btnRemove.setText("Remove");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
+
+        btnEdit.setText("Edit");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -280,15 +317,20 @@ public void UsePostFile(){
                             .addComponent(jLeaveComment, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(jSend)))
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(13, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(btnRemove)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEdit)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(jToUserPanel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -306,7 +348,11 @@ public void UsePostFile(){
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(72, 72, 72)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnRemove)
+                            .addComponent(btnEdit))
+                        .addGap(28, 28, 28)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -385,8 +431,32 @@ public void UsePostFile(){
         int countChar = jComment.getText().length() + 1;
         jLeaveComment.setText(countChar + "/250");
     }//GEN-LAST:event_jCommentKeyTyped
+
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+       int janej = JOptionPane.showConfirmDialog(null, "Are you sure?");
+        if (janej==0){
+        try{ String fraga = "Delete from post where post_id = "+currentPost+";";
+     
+        idb.delete(fraga);
+    System.out.print("Deleted");
+    ReturnToHome.CreateHomeScreen(idb, currentUser);
+        dispose();
+    }catch(InfException e){
+         System.out.print("Delete Failed");
+     }
+}else {System.out.print("Cancel");}
+    }//GEN-LAST:event_btnRemoveActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        int userId = Integer.parseInt(currentUser);
+        NewPosts posts = new NewPosts(idb, currentUser);
+        posts.setVisible(true);
+        posts.RecreatePost(currentPost);
+    }//GEN-LAST:event_btnEditActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnRemove;
     private javax.swing.JLabel jAuthor;
     private javax.swing.JTextArea jComment;
     private javax.swing.JButton jDownload;

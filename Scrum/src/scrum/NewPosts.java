@@ -30,6 +30,7 @@ public class NewPosts extends javax.swing.JFrame {
         this.currentUser = id;
         jTitle.requestFocus();
         jValue.setVisible(false);
+        jSetPublish.doClick();
     }
 
     @SuppressWarnings("unchecked")

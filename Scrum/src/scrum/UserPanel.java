@@ -304,7 +304,7 @@ uppdateraUnderKategori();
         }
         int postId = Integer.parseInt(pId);
         
-        new ViewFullPost(idb, currentUser, postId).setVisible(true);
+        new ViewFullPost(idb, currentUser, pId).setVisible(true);
         
         dispose();
         }
