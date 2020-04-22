@@ -83,6 +83,18 @@ public class Validation {
         return resultat;
     }
     
+    public static boolean emailValidator(String email) {
+        String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+ 
+        Pattern pattern = Pattern.compile(regex);
+        
+        Matcher matcher = pattern.matcher(email);
+        if(matcher.matches() == false) {
+            JOptionPane.showMessageDialog(null, "Invalid email!");
+        }
+        return matcher.matches();
+    }
+    
     public static boolean validEmail(String email, String currentEmail, ArrayList<String> emails){
             boolean result = true;
             

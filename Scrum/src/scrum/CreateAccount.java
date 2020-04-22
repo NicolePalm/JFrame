@@ -38,7 +38,7 @@ public class CreateAccount extends javax.swing.JFrame {
             
             if(emptyFields == false){
             boolean InvalidEmail = validEmail(Email);
-            
+            if(Validation.emailValidator(Email)) {
             if(Password.equals(PasswordIgen) && InvalidEmail == false){ 
             boolean test = NewUser.InsertNewUser(Firstname, Lastname, Email, Password,idb);
             
@@ -51,7 +51,8 @@ public class CreateAccount extends javax.swing.JFrame {
            }
             else{ 
             JOptionPane.showMessageDialog(null, "Lösenord matchar inte eller email redan tagen");
-            }   
+            }  
+            }
             }
         }
         

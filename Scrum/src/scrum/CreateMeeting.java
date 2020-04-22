@@ -36,7 +36,8 @@ public class CreateMeeting extends javax.swing.JFrame {
         this.meetingToEdit = meetingId;
         }
     }
-    
+  
+    //NYA VERSIONEN
     public void CreateMeeting() {
         if(Validation.checkIfDateNull(jDateChooser)==false){
         Date dateChoosed = jDateChooser.getDate();
@@ -48,29 +49,49 @@ public class CreateMeeting extends javax.swing.JFrame {
             String time = tfTime.getText();
             String room = tfRoom.getText();
             String mID = idb.getAutoIncrement("MEETING", "MEETING_ID");
-            String sql = "insert into MEETING values(" + idb.getAutoIncrement("MEETING", "MEETING_ID") + ",'" + creator + "','" + description + "','" + date + "','" + time + "','" + room + "')";
+            String sql = "insert into MEETING values(" + idb.getAutoIncrement("MEETING", "MEETING_ID") + "," + creator + ",'" + description + "','" + date + "','" + time + "','" + room + "')";
+            String ifTableEmptySql = "insert into MEETING values(1,"+ creator + ",'" + description + "','" + date + "','" + time + "','" + room + "')";
             String checkDateTimeSql = "Select MEETING_ID FROM MEETING WHERE MEETINGDATE = '"+date+"' and MEETINGTIME = '"+time+"' and MEETINGCREATER_ID = "+currentUser+";";
-            
+            String emptyTableSql = "SELECT FIRST 1 MEETING_ID FROM MEETING";
+            String checkIfEmpty = idb.fetchSingle(emptyTableSql);
             String checkDateTime = idb.fetchSingle(checkDateTimeSql);
-            if(checkDateTime == null) {
-                idb.insert(sql);
+            
+            if(checkIfEmpty == null) { 
+                if(checkDateTime == null) {
+                    idb.insert(ifTableEmptySql);
            
-                String reciver = taReciver.getText();
-                String[] splited = reciver.split("\\s+");
+                    String reciver = taReciver.getText();
+                    String[] splited = reciver.split("\\s+");
                     for(int i=0;i<splited.length;i++){
                         String sqlQ = "SELECT USER_ID FROM USER1 WHERE EMAIL ='" +splited[i]+"'";
                         String reciverID = idb.fetchSingle(sqlQ);
-                        System.out.println(reciverID);
-                        String sqlInsert = "INSERT INTO MEETINGREQUEST VALUES ("+mID+","+reciverID+", 0)";
+                        String sqlInsert = "INSERT INTO MEETINGREQUEST VALUES (1,"+reciverID+", 0)";
                         idb.insert(sqlInsert);
-                        System.out.println((i+1)+"."+splited[i]);
                     }
-                String sqlInsertSelf = "INSERT INTO MEETINGREQUEST VALUES ("+mID+",'"+currentUser+"', 1)";
-                idb.insert(sqlInsertSelf);    
-            JOptionPane.showMessageDialog(null, "Mötet har lagts till"); 
+                    String sqlInsertSelf = "INSERT INTO MEETINGREQUEST VALUES (1,"+currentUser+", 1)";
+                    idb.insert(sqlInsertSelf);    
+                    JOptionPane.showMessageDialog(null, "Mötet har lagts till"); 
+                }
             }
             else {
-                JOptionPane.showMessageDialog(null, "Du har redan lagt till ett möte den tiden och dagen");
+                if(checkDateTime == null) {
+                    idb.insert(sql);
+           
+                    String reciver = taReciver.getText();
+                    String[] splited = reciver.split("\\s+");
+                    for(int i=0;i<splited.length;i++){
+                        String sqlQ = "SELECT USER_ID FROM USER1 WHERE EMAIL ='" +splited[i]+"'";
+                        String reciverID = idb.fetchSingle(sqlQ);
+                        String sqlInsert = "INSERT INTO MEETINGREQUEST VALUES ("+mID+","+reciverID+", 0)";
+                        idb.insert(sqlInsert);
+                    }
+                    String sqlInsertSelf = "INSERT INTO MEETINGREQUEST VALUES ("+mID+","+currentUser+", 1)";
+                    idb.insert(sqlInsertSelf);    
+                    JOptionPane.showMessageDialog(null, "Mötet har lagts till"); 
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Du har redan lagt till ett möte den tiden och dagen");
+                }
             }
             
         } catch (InfException e) {
@@ -80,7 +101,6 @@ public class CreateMeeting extends javax.swing.JFrame {
         
         }
         }
-
     }
 
     public void FillReciver() {
