@@ -1,4 +1,5 @@
 package scrum;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import oru.inf.InfDB;
 
@@ -18,6 +19,7 @@ import oru.inf.InfException;
 public class LoggInScreen extends javax.swing.JFrame {
 
         private InfDB idb;
+        
         
         public LoggInScreen(InfDB idb) {
         initComponents();
@@ -61,6 +63,11 @@ public class LoggInScreen extends javax.swing.JFrame {
         JPassWord.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JPassWordActionPerformed(evt);
+            }
+        });
+        JPassWord.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                JPassWordKeyPressed(evt);
             }
         });
 
@@ -145,6 +152,7 @@ public class LoggInScreen extends javax.swing.JFrame {
         }
         else{
         try{
+            if(Validation.emailValidator(email)){
          String checkPW = "SELECT USER_PASSWORD from USER1 where EMAIL = '"+email+"'";
          String checkAdmin = "SELECT ADMINSTATUS from USER1 where EMAIL = '"+email+"'";
          
@@ -164,6 +172,7 @@ public class LoggInScreen extends javax.swing.JFrame {
           System.out.println(e.getMessage());  
           JUserName.requestFocus();
          }
+            }
          }
          catch(InfException loginFail){
          JOptionPane.showMessageDialog(null, "Ange email och lösenord!");
@@ -176,6 +185,11 @@ public class LoggInScreen extends javax.swing.JFrame {
         new CreateAccount(idb).setVisible(true);
         dispose();
     }//GEN-LAST:event_JbtnRegistreraActionPerformed
+
+    private void JPassWordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JPassWordKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER)        
+        JbtnLoggIn.doClick();
+    }//GEN-LAST:event_JPassWordKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
