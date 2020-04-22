@@ -82,6 +82,7 @@ public class CreateMeeting extends javax.swing.JFrame {
         }
 
     }
+    
 
     public void FillReciver() {
         cbReciver.removeAllItems();
@@ -138,6 +139,7 @@ public class CreateMeeting extends javax.swing.JFrame {
         
         try{
             recieverId = idb.fetchColumn("SELECT RECEIVER_ID FROM MEETINGREQUEST WHERE MEETING_ID = '" + meetingToEdit + "'");
+            recieverId.remove(currentUser);
             for(String id : recieverId){
                 String email = idb.fetchSingle("SELECT EMAIL FROM USER1 WHERE USER_ID = '" + id + "'");
                 recieverEmail.add(email);
@@ -153,7 +155,36 @@ public class CreateMeeting extends javax.swing.JFrame {
         }
     }
 
-    
+    public void UpdateMeeting(){
+        if(Validation.checkIfDateNull(jDateChooser)==false){
+        Date dateChoosed = jDateChooser.getDate();
+        String date = Calendar.ConvertDate(dateChoosed);
+        if(!Validation.CheckDateTwo(date) && Validation.checkTime(tfTime) && Validation.taHarVarde(taReciver) && Validation.tfHarVarde(tfDescription) && Validation.tfHarVarde(tfRoom)){
+        
+            try{
+                String description = tfDescription.getText();
+                String time = tfTime.getText();
+                String room = tfRoom.getText();
+                idb.update("UPDATE MEETING SET description = '" + description + "', meetingdate = '" + date + "', meetingtime = '" + time + "', roomname = '" + room + "' WHERE meeting_id = '" + meetingToEdit + "'");
+                String creator = idb.fetchSingle("SELECT MEETINGCREATER_ID FROM MEETING WHERE MEETING_ID = '" + meetingToEdit + "'");
+                idb.delete("DELETE FROM MEETINGREQUEST WHERE RECEIVER_ID NOT IN ('" + creator + "') AND MEETING_ID = '" + meetingToEdit + "'");
+                
+                String reciver = taReciver.getText();
+                String[] splited = reciver.split("\\s+");
+                    for(int i=0;i<splited.length;i++){
+                        String sqlQ = "SELECT USER_ID FROM USER1 WHERE EMAIL ='" +splited[i]+"'";
+                        String reciverID = idb.fetchSingle(sqlQ);
+                        System.out.println(reciverID);
+                        idb.insert("INSERT INTO MEETINGREQUEST VALUES ("+meetingToEdit+","+reciverID+", 0)");
+                    }
+                dispose();
+            }
+            catch(InfException e){
+                System.out.println(e.getMessage());
+            }
+         }
+    }
+    }
 
     
 
@@ -232,6 +263,11 @@ public class CreateMeeting extends javax.swing.JFrame {
         });
 
         jDelete.setText("Delete meeting");
+        jDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jDeleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -289,17 +325,17 @@ public class CreateMeeting extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblReciever)
                         .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(cbReciver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnResetReciver)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
                                 .addComponent(btnAddReciver)
                                 .addGap(18, 18, 18)
                                 .addComponent(jDelete))
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(37, 37, 37)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(26, 26, 26)
                         .addComponent(btnCreateMeeting))
                     .addComponent(jDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(20, Short.MAX_VALUE))
@@ -309,7 +345,12 @@ public class CreateMeeting extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCreateMeetingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateMeetingActionPerformed
+        if(editorMode == true){
+        UpdateMeeting();
+        }
+        else{
         CreateMeeting();
+        }
     }//GEN-LAST:event_btnCreateMeetingActionPerformed
 
     private void cbReciverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbReciverMouseClicked
@@ -324,18 +365,22 @@ public class CreateMeeting extends javax.swing.JFrame {
     private void btnAddReciverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddReciverActionPerformed
         String selectedName;
         selectedName = (String) cbReciver.getSelectedItem();
-        String texten = taReciver.getText().trim();
 
-        if (!texten.equals("")) {
+            taReciver.append(selectedName);
             taReciver.append("\n");
-            taReciver.append(selectedName);
-            System.out.println("HEj2");
-        } else {
-            taReciver.append(selectedName);
-            System.out.println("HEj1");
-        }
-        cbReciver.removeItem(selectedName);
+            cbReciver.removeItem(selectedName);
     }//GEN-LAST:event_btnAddReciverActionPerformed
+
+    private void jDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDeleteActionPerformed
+        try{
+            idb.delete("DELETE FROM MEETINGREQUEST WHERE MEETING_ID = '" + meetingToEdit + "'");
+            idb.delete("DELETE FROM MEETING WHERE MEETING_ID = '" + meetingToEdit + "'");
+            dispose();
+        }
+        catch(InfException e){
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_jDeleteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
