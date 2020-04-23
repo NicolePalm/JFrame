@@ -1,73 +1,99 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package scrum;
 
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 
-/**
- *
- * @author marvi
- */
+
 public class CreateMeeting extends javax.swing.JFrame {
 
     private InfDB idb;
-    private int currentUser;
+    private String currentUser;
+    private boolean editorMode;
+    private String meetingToEdit;
 
-    /**
-     * Creates new form CreateMeeting
-     */
-    public CreateMeeting(InfDB idb, int id) {
+    
+    public CreateMeeting(InfDB idb, String id, boolean edit) {
         initComponents();
         this.idb = idb;
         this.currentUser = id;
         FillReciver();
+        this.editorMode = edit;
+        jDelete.setVisible(false);
+        taReciver.setLineWrap(true);
+        tfDescription.setLineWrap(true);
+
     }
 
+    public void EnterEditorMode(String meetingId){
+        if(editorMode == true){
+        jDelete.setVisible(true);
+        btnCreateMeeting.setText("Update meeting");
+        this.meetingToEdit = meetingId;
+        }
+    }
+  
+    //NYA VERSIONEN
     public void CreateMeeting() {
         if(Validation.checkIfDateNull(jDateChooser)==false){
         Date dateChoosed = jDateChooser.getDate();
         String date = Calendar.ConvertDate(dateChoosed);
-        if(!Validation.CheckDateTwo(date) && Validation.checkTime(tfTime) && Validation.taHarVarde(taReciver) && Validation.tfHarVarde(tfDescription) && Validation.tfHarVarde(tfRoom)){
+        if(!Validation.CheckDateTwo(date) && Validation.checkTime(tfTime) && Validation.taHarVarde(taReciver) && Validation.descriptionValues(tfDescription) && Validation.tfHarVarde(tfRoom)){
         try {
-            int creator = currentUser;
+            String creator = currentUser;
             String description = tfDescription.getText();
             String time = tfTime.getText();
             String room = tfRoom.getText();
             String mID = idb.getAutoIncrement("MEETING", "MEETING_ID");
             String sql = "insert into MEETING values(" + idb.getAutoIncrement("MEETING", "MEETING_ID") + "," + creator + ",'" + description + "','" + date + "','" + time + "','" + room + "')";
+            String ifTableEmptySql = "insert into MEETING values(1,"+ creator + ",'" + description + "','" + date + "','" + time + "','" + room + "')";
             String checkDateTimeSql = "Select MEETING_ID FROM MEETING WHERE MEETINGDATE = '"+date+"' and MEETINGTIME = '"+time+"' and MEETINGCREATER_ID = "+currentUser+";";
-            
+            String emptyTableSql = "SELECT FIRST 1 MEETING_ID FROM MEETING";
+            String checkIfEmpty = idb.fetchSingle(emptyTableSql);
             String checkDateTime = idb.fetchSingle(checkDateTimeSql);
-            if(checkDateTime == null) {
-                idb.insert(sql);
+            
+            if(checkIfEmpty == null) { 
+                if(checkDateTime == null) {
+                    idb.insert(ifTableEmptySql);
            
-                String reciver = taReciver.getText();
-                String[] splited = reciver.split("\\s+");
+                    String reciver = taReciver.getText();
+                    String[] splited = reciver.split("\\s+");
                     for(int i=0;i<splited.length;i++){
                         String sqlQ = "SELECT USER_ID FROM USER1 WHERE EMAIL ='" +splited[i]+"'";
                         String reciverID = idb.fetchSingle(sqlQ);
-                        System.out.println(reciverID);
-                        String sqlInsert = "INSERT INTO MEETINGREQUEST VALUES ("+mID+","+reciverID+", 0)";
+                        String sqlInsert = "INSERT INTO MEETINGREQUEST VALUES (1,"+reciverID+", 0)";
                         idb.insert(sqlInsert);
-                        System.out.println((i+1)+"."+splited[i]);
                     }
-                String sqlInsertSelf = "INSERT INTO MEETINGREQUEST VALUES ("+mID+","+currentUser+", 1)";
-                idb.insert(sqlInsertSelf);    
-            JOptionPane.showMessageDialog(null, "Mötet har lagts till"); 
+                    String sqlInsertSelf = "INSERT INTO MEETINGREQUEST VALUES (1,"+currentUser+", 1)";
+                    idb.insert(sqlInsertSelf);    
+                    JOptionPane.showMessageDialog(null, "The meeting has been created"); 
+                }
             }
             else {
-                JOptionPane.showMessageDialog(null, "Du har redan lagt till ett möte den tiden och dagen");
+                if(checkDateTime == null) {
+                    idb.insert(sql);
+           
+                    String reciver = taReciver.getText();
+                    String[] splited = reciver.split("\\s+");
+                    for(int i=0;i<splited.length;i++){
+                        String sqlQ = "SELECT USER_ID FROM USER1 WHERE EMAIL ='" +splited[i]+"'";
+                        String reciverID = idb.fetchSingle(sqlQ);
+                        String sqlInsert = "INSERT INTO MEETINGREQUEST VALUES ("+mID+","+reciverID+", 0)";
+                        idb.insert(sqlInsert);
+                    }
+                    String sqlInsertSelf = "INSERT INTO MEETINGREQUEST VALUES ("+mID+","+currentUser+", 1)";
+                    idb.insert(sqlInsertSelf);    
+                    JOptionPane.showMessageDialog(null, "The meeting has been created"); 
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "You have already added a meeting on exactly that day and time");
+                }
             }
             
         } catch (InfException e) {
@@ -77,8 +103,8 @@ public class CreateMeeting extends javax.swing.JFrame {
         
         }
         }
-
     }
+    
 
     public void FillReciver() {
         cbReciver.removeAllItems();
@@ -100,196 +126,273 @@ public class CreateMeeting extends javax.swing.JFrame {
             System.out.println(e.getMessage());
         }
     }
-
     
+    public void RecreateMeeting(String email){
+            String creator;
+            String description;
+            String time;
+            String room;
+            String date_;
+
+            
+        try {
+            creator =idb.fetchSingle("SELECT USER_ID from USER1 where EMAIL = '"+email+"'");
+            description = idb.fetchSingle("SELECT DESCRIPTION FROM MEETING WHERE MEETING_ID ='"+meetingToEdit+"'");
+            time = idb.fetchSingle("SELECT MEETINGTIME FROM MEETING WHERE MEETING_ID ='"+meetingToEdit+"'");
+            room = idb.fetchSingle("SELECT ROOMNAME FROM MEETING WHERE MEETING_ID ='"+meetingToEdit+"'");
+            date_ = idb.fetchSingle("SELECT MEETINGDATE FROM MEETING WHERE MEETING_ID ='"+meetingToEdit+"'");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = dateFormat.parse(date_);
+            String timeFormat = time.substring(0,5);
+
+            tfDescription.setText(description);
+            tfTime.setText(timeFormat);
+            tfRoom.setText(room);
+            jDateChooser.setDate(date);
+            FillRecieverToMeeting();
+            
+        } catch (InfException | ParseException ex) {
+            Logger.getLogger(CreateMeeting.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+    }
+    
+    private void FillRecieverToMeeting(){
+        ArrayList <String> recieverId = new ArrayList();
+        ArrayList <String> recieverEmail = new ArrayList();
+        
+        try{
+            recieverId = idb.fetchColumn("SELECT RECEIVER_ID FROM MEETINGREQUEST WHERE MEETING_ID = '" + meetingToEdit + "'");
+            recieverId.remove(currentUser);
+            for(String id : recieverId){
+                String email = idb.fetchSingle("SELECT EMAIL FROM USER1 WHERE USER_ID = '" + id + "'");
+                recieverEmail.add(email);
+                }
+                for(String e : recieverEmail){
+                taReciver.append(e);
+                taReciver.append("\n");
+                cbReciver.removeItem(e);
+            }
+        }
+        catch(InfException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void UpdateMeeting(){
+        if(Validation.checkIfDateNull(jDateChooser)==false){
+        Date dateChoosed = jDateChooser.getDate();
+        String date = Calendar.ConvertDate(dateChoosed);
+        if(!Validation.CheckDateTwo(date) && Validation.checkTime(tfTime) && Validation.taHarVarde(taReciver) && Validation.descriptionValues(tfDescription) && Validation.tfHarVarde(tfRoom)){
+        
+            try{
+                String description = tfDescription.getText();
+                String time = tfTime.getText();
+                String room = tfRoom.getText();
+                idb.update("UPDATE MEETING SET description = '" + description + "', meetingdate = '" + date + "', meetingtime = '" + time + "', roomname = '" + room + "' WHERE meeting_id = '" + meetingToEdit + "'");
+                String creator = idb.fetchSingle("SELECT MEETINGCREATER_ID FROM MEETING WHERE MEETING_ID = '" + meetingToEdit + "'");
+                idb.delete("DELETE FROM MEETINGREQUEST WHERE RECEIVER_ID NOT IN ('" + creator + "') AND MEETING_ID = '" + meetingToEdit + "'");
+                
+                String reciver = taReciver.getText();
+                String[] splited = reciver.split("\\s+");
+                    for(int i=0;i<splited.length;i++){
+                        String sqlQ = "SELECT USER_ID FROM USER1 WHERE EMAIL ='" +splited[i]+"'";
+                        String reciverID = idb.fetchSingle(sqlQ);
+                        System.out.println(reciverID);
+                        idb.insert("INSERT INTO MEETINGREQUEST VALUES ("+meetingToEdit+","+reciverID+", 0)");
+                    }
+                dispose();
+                new Calendar(idb, currentUser, "1").setVisible(true);
+            }
+            catch(InfException e){
+                System.out.println(e.getMessage());
+            }
+         }
+    }
+    }
 
     
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         lblRubrik = new javax.swing.JLabel();
         lblDescription = new javax.swing.JLabel();
-        tfDescription = new javax.swing.JTextField();
-        lblRoom = new javax.swing.JLabel();
         tfRoom = new javax.swing.JTextField();
-        lblReciever = new javax.swing.JLabel();
-        cbReciver = new javax.swing.JComboBox<>();
-        btnAddReciver = new javax.swing.JButton();
-        btnResetReciver = new javax.swing.JButton();
-        btnCreateMeeting = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        taReciver = new javax.swing.JTextArea();
+        lblRoom = new javax.swing.JLabel();
         lblDate = new javax.swing.JLabel();
-        jDateChooser = new com.toedter.calendar.JDateChooser();
         lblTime = new javax.swing.JLabel();
         tfTime = new javax.swing.JTextField();
+        btnCreateMeeting = new javax.swing.JButton();
+        lblReciever = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        taReciver = new javax.swing.JTextArea();
+        cbReciver = new javax.swing.JComboBox<>();
+        btnResetReciver = new javax.swing.JButton();
+        btnAddReciver = new javax.swing.JButton();
+        jDateChooser = new com.toedter.calendar.JDateChooser();
+        jDelete = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tfDescription = new javax.swing.JTextArea();
+
+        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(0, 51, 51));
+        lblRubrik.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblRubrik.setText("Create meeting");
 
-        lblRubrik.setFont(new java.awt.Font("Verdana", 1, 24)); // NOI18N
-        lblRubrik.setForeground(new java.awt.Color(255, 255, 255));
-        lblRubrik.setText("Skapa möte");
+        lblDescription.setText("Description:");
 
-        lblDescription.setFont(new java.awt.Font("Verdana", 1, 11)); // NOI18N
-        lblDescription.setForeground(new java.awt.Color(255, 255, 255));
-        lblDescription.setText("Beskrivning:");
+        lblRoom.setText("Room:");
 
-        lblRoom.setFont(new java.awt.Font("Verdana", 1, 11)); // NOI18N
-        lblRoom.setForeground(new java.awt.Color(255, 255, 255));
-        lblRoom.setText("Rum:");
+        lblDate.setText("Date:");
 
-        lblReciever.setFont(new java.awt.Font("Verdana", 1, 11)); // NOI18N
-        lblReciever.setForeground(new java.awt.Color(255, 255, 255));
-        lblReciever.setText("Mottagare:");
+        lblTime.setText("Time:");
 
-        cbReciver.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbReciver.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        cbReciver.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cbReciverMouseClicked(evt);
-            }
-        });
-
-        btnAddReciver.setText("Lägg till");
-        btnAddReciver.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnAddReciver.addActionListener(new java.awt.event.ActionListener() {
+        tfTime.setText("15:00");
+        tfTime.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddReciverActionPerformed(evt);
+                tfTimeActionPerformed(evt);
             }
         });
 
-        btnResetReciver.setText("Återställ");
-        btnResetReciver.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnResetReciver.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnResetReciverActionPerformed(evt);
-            }
-        });
-
-        btnCreateMeeting.setText("Skapa");
-        btnCreateMeeting.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnCreateMeeting.setText("Create");
         btnCreateMeeting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCreateMeetingActionPerformed(evt);
             }
         });
 
+        lblReciever.setText("Receiver:");
+
         taReciver.setEditable(false);
         taReciver.setColumns(20);
         taReciver.setRows(5);
         jScrollPane3.setViewportView(taReciver);
 
-        lblDate.setFont(new java.awt.Font("Verdana", 1, 11)); // NOI18N
-        lblDate.setForeground(new java.awt.Color(255, 255, 255));
-        lblDate.setText("Datum:");
+        cbReciver.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbReciver.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cbReciverMouseClicked(evt);
+            }
+        });
 
-        lblTime.setFont(new java.awt.Font("Verdana", 1, 11)); // NOI18N
-        lblTime.setForeground(new java.awt.Color(255, 255, 255));
-        lblTime.setText("Tid:");
+        btnResetReciver.setText("Reset receiver");
+        btnResetReciver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetReciverActionPerformed(evt);
+            }
+        });
 
-        tfTime.setText("15:00");
+        btnAddReciver.setText("Add receiver");
+        btnAddReciver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddReciverActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(352, 352, 352))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cbReciver, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnAddReciver, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnResetReciver, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(45, 45, 45)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tfRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblReciever, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(151, 151, 151)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblRubrik)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(31, 31, 31)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(tfTime, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                        .addContainerGap(62, Short.MAX_VALUE))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(279, 279, 279)
-                .addComponent(btnCreateMeeting, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(lblRubrik, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
-                .addComponent(lblDescription)
-                .addGap(18, 18, 18)
-                .addComponent(tfDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRoom)
-                    .addComponent(lblDate)
-                    .addComponent(lblTime))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfRoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                        .addComponent(lblReciever))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(tfTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(cbReciver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAddReciver)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnResetReciver))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addComponent(btnCreateMeeting)
-                .addGap(25, 25, 25))
-        );
+        jDelete.setText("Delete meeting");
+        jDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jDeleteActionPerformed(evt);
+            }
+        });
+
+        btnBack.setText("Back");
+
+        tfDescription.setColumns(20);
+        tfDescription.setRows(5);
+        jScrollPane1.setViewportView(tfDescription);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnCreateMeeting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblReciever, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1)
+                            .addComponent(cbReciver, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnResetReciver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jDelete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnAddReciver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(tfTime)
+                            .addComponent(lblDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblTime, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jDateChooser, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                            .addComponent(tfRoom)
+                            .addComponent(lblRoom, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(30, 30, 30))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnBack)
+                .addGap(63, 63, 63)
+                .addComponent(lblRubrik)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblRubrik, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBack))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblDate)
+                    .addComponent(lblDescription))
+                .addGap(7, 7, 7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblTime)
+                        .addGap(3, 3, 3)
+                        .addComponent(tfTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblRoom)
+                        .addGap(3, 3, 3)
+                        .addComponent(tfRoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1))
+                .addGap(26, 26, 26)
+                .addComponent(lblReciever)
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cbReciver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAddReciver)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnResetReciver)
+                        .addGap(18, 18, 18)
+                        .addComponent(jDelete))
+                    .addComponent(jScrollPane3))
+                .addGap(41, 41, 41)
+                .addComponent(btnCreateMeeting)
+                .addGap(27, 27, 27))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCreateMeetingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateMeetingActionPerformed
+        if(editorMode == true){
+        UpdateMeeting();
+        }
+        else{
         CreateMeeting();
+        }
     }//GEN-LAST:event_btnCreateMeetingActionPerformed
 
     private void cbReciverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbReciverMouseClicked
@@ -304,27 +407,40 @@ public class CreateMeeting extends javax.swing.JFrame {
     private void btnAddReciverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddReciverActionPerformed
         String selectedName;
         selectedName = (String) cbReciver.getSelectedItem();
-        String texten = taReciver.getText().trim();
 
-        if (!texten.equals("")) {
+            taReciver.append(selectedName);
             taReciver.append("\n");
-            taReciver.append(selectedName);
-            System.out.println("HEj2");
-        } else {
-            taReciver.append(selectedName);
-            System.out.println("HEj1");
-        }
-        cbReciver.removeItem(selectedName);
+            cbReciver.removeItem(selectedName);
     }//GEN-LAST:event_btnAddReciverActionPerformed
+
+    private void jDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDeleteActionPerformed
+        try{
+            idb.delete("DELETE FROM MEETINGREQUEST WHERE MEETING_ID = '" + meetingToEdit + "'");
+            idb.delete("DELETE FROM MEETING WHERE MEETING_ID = '" + meetingToEdit + "'");
+            idb.delete("DELETE FROM MEETINGNOTES WHERE MEETINGID = '" + meetingToEdit + "'");
+            dispose();
+            new Calendar(idb, currentUser, "1").setVisible(true);
+        }
+        catch(InfException e){
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_jDeleteActionPerformed
+
+    private void tfTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfTimeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfTimeActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddReciver;
+    private javax.swing.JButton btnBack;
     private javax.swing.JButton btnCreateMeeting;
     private javax.swing.JButton btnResetReciver;
     private javax.swing.JComboBox<String> cbReciver;
+    private javax.swing.JButton jButton1;
     private com.toedter.calendar.JDateChooser jDateChooser;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton jDelete;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblDescription;
@@ -333,7 +449,7 @@ public class CreateMeeting extends javax.swing.JFrame {
     private javax.swing.JLabel lblRubrik;
     private javax.swing.JLabel lblTime;
     private javax.swing.JTextArea taReciver;
-    private javax.swing.JTextField tfDescription;
+    private javax.swing.JTextArea tfDescription;
     private javax.swing.JTextField tfRoom;
     private javax.swing.JTextField tfTime;
     // End of variables declaration//GEN-END:variables

@@ -15,18 +15,17 @@ public class UserIDParse {
     public UserIDParse(InfDB idb){
         
     }
-    public static int ReturnIDFromEmail(String email, InfDB idb){
-        int parsedID = 0;
+    public static String ReturnIDFromEmail(String email, InfDB idb){
+        String checkID = "";
         try{
         String sqlID = "SELECT USER_ID from USER1 where EMAIL = '"+email+"'";
-        String checkID = idb.fetchSingle(sqlID);
-        parsedID = Integer.parseInt(checkID);
+        checkID = idb.fetchSingle(sqlID);
         
         }
         catch(InfException idFail){
           JOptionPane.showMessageDialog(null, "Ej giltig email!");
           System.out.println(idFail.getMessage()); 
         }
-        return parsedID; 
+        return checkID; 
     }  
 }

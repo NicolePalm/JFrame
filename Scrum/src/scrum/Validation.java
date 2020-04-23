@@ -3,6 +3,7 @@ package scrum;
 
 import com.toedter.calendar.JDateChooser;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -47,7 +48,7 @@ public class Validation {
         Matcher m = p.matcher(toCheck.getText());
             if(!m.matches())
             {
-                JOptionPane.showMessageDialog(null, "Tiden måste vara i formatet 00:00");
+                JOptionPane.showMessageDialog(null, "Time must be in the format HH:MM");
                 toCheck.requestFocus();
                 result = false;
             }             
@@ -69,16 +70,75 @@ public class Validation {
         return resultat;
     }
     
-    public static boolean tfHarVarde(JTextField rutaAttKolla)
+      public static boolean descriptionValues(JTextArea rutaAttKolla)
     {
         boolean resultat = true;
         
         if(rutaAttKolla.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null, "Beskrivning eller rum är tomt");
+            JOptionPane.showMessageDialog(null, "Enter a description of the meeting");
             resultat = false;
             rutaAttKolla.requestFocus();
         }       
         
         return resultat;
     }
+    
+    public static boolean tfHarVarde(JTextField rutaAttKolla)
+    {
+        boolean resultat = true;
+        
+        if(rutaAttKolla.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Enter a room where the meeting will take place");
+            resultat = false;
+            rutaAttKolla.requestFocus();
+        }       
+        
+        return resultat;
+    }
+    
+    public static boolean emailValidator(String email) {
+        String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+ 
+        Pattern pattern = Pattern.compile(regex);
+        
+        Matcher matcher = pattern.matcher(email);
+        if(matcher.matches() == false) {
+            JOptionPane.showMessageDialog(null, "Invalid email!");
+        }
+        return matcher.matches();
+    }
+    
+     public static boolean emailValidator(String email, JTextField field) {
+        String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+ 
+        Pattern pattern = Pattern.compile(regex);
+        
+        Matcher matcher = pattern.matcher(email);
+        if(matcher.matches() == false) {
+            JOptionPane.showMessageDialog(null, "Please enter a valid email");
+            field.requestFocus();
+        }
+        return matcher.matches();
+    }
+    
+    public static boolean validEmail(String email, String currentEmail, ArrayList<String> emails){
+            boolean result = true;
+            
+                for(String m : emails) {
+                    if(m.equals(currentEmail)) {
+                        emails.remove(m);
+                        System.out.println(m);
+                    }
+                }
+                
+                
+                for(String mail : emails){
+                    if(email.equals(mail)){
+                        result = false;
+                        JOptionPane.showMessageDialog(null, "That email is already registred");
+                    } 
+                }
+           
+            return result;
+        }
 }

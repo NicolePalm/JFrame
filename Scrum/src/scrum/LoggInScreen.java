@@ -1,27 +1,20 @@
 package scrum;
-import java.sql.SQLException;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import oru.inf.InfDB;
-
-
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import oru.inf.InfException;
 
- //@author Danie
- 
-/**
- *
- * @author Danie
- */
+
 public class LoggInScreen extends javax.swing.JFrame {
 
         private InfDB idb;
         
+        
         public LoggInScreen(InfDB idb) {
         initComponents();
         this.idb = idb;
+        JUserName.requestFocus();
     }
 
     
@@ -40,7 +33,7 @@ public class LoggInScreen extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("JLoggIn"); // NOI18N
 
-        JbtnLoggIn.setText("Logga in");
+        JbtnLoggIn.setText("Log in");
         JbtnLoggIn.setName("JbtnLoggIn"); // NOI18N
         JbtnLoggIn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -48,7 +41,8 @@ public class LoggInScreen extends javax.swing.JFrame {
             }
         });
 
-        JlblInformatik.setText("Inlogging för Informatiks kommunikationssystem");
+        JlblInformatik.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        JlblInformatik.setText("Informatik");
         JlblInformatik.setName("JlblInloggning"); // NOI18N
 
         JUserName.setName("JEmail"); // NOI18N
@@ -63,14 +57,19 @@ public class LoggInScreen extends javax.swing.JFrame {
                 JPassWordActionPerformed(evt);
             }
         });
+        JPassWord.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                JPassWordKeyPressed(evt);
+            }
+        });
 
         JlblEmail.setText("Email");
         JlblEmail.setName("JlblEmail"); // NOI18N
 
-        JlblPassword.setText("Lösenord");
+        JlblPassword.setText("Password");
         JlblPassword.setName("JlblPassword"); // NOI18N
 
-        JbtnRegistrera.setText("Registrera dig");
+        JbtnRegistrera.setText("Create an account");
         JbtnRegistrera.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JbtnRegistreraActionPerformed(evt);
@@ -82,33 +81,31 @@ public class LoggInScreen extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(155, 155, 155)
-                .addComponent(JlblEmail)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(JlblPassword)
-                .addGap(157, 157, 157))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(101, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(JlblInformatik)
-                        .addGap(171, 171, 171))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(JUserName, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                            .addComponent(JbtnLoggIn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(JUserName)
+                                .addComponent(JbtnLoggIn, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(JlblEmail))
                         .addGap(77, 77, 77)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(JPassWord, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                            .addComponent(JbtnRegistrera, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(98, 98, 98))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(JlblPassword)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(JPassWord)
+                                .addComponent(JbtnRegistrera, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(187, 187, 187)
+                        .addComponent(JlblInformatik)))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(48, 48, 48)
+                .addContainerGap(20, Short.MAX_VALUE)
                 .addComponent(JlblInformatik)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JlblEmail)
                     .addComponent(JlblPassword))
@@ -124,6 +121,7 @@ public class LoggInScreen extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void JUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JUserNameActionPerformed
@@ -135,52 +133,66 @@ public class LoggInScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_JPassWordActionPerformed
 
     private void JbtnLoggInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbtnLoggInActionPerformed
-     
         String email = JUserName.getText();
         String pw = JPassWord.getText();
+        ArrayList <String> emails = new ArrayList();
+        boolean exists = false;
         
         if(email.isEmpty()|| pw.isEmpty()){
-        JOptionPane.showMessageDialog(null, "Ange email och lösenord!");
+        JOptionPane.showMessageDialog(null, "Please enter email and password");
         JUserName.requestFocus();
         }
         else{
         try{
-         String checkPW = "SELECT USER_PASSWORD from USER1 where EMAIL = '"+email+"'";
-         String checkAdmin = "SELECT ADMINSTATUS from USER1 where EMAIL = '"+email+"'";
+        if(Validation.emailValidator(email, JUserName)){
+         emails = idb.fetchColumn("SELECT EMAIL FROM USER1");
+         for(String e : emails){
+            if(e.equals(email))
+            {  
+                exists = true;
+                break;
+            }
+            }
+            if(exists == true){
+                
+              String password = idb.fetchSingle("SELECT USER_PASSWORD from USER1 where EMAIL = '"+email+"'");
+                 if(pw.equals(password))
+                 {
+                    String checkAdmin = idb.fetchSingle("SELECT ADMINSTATUS from USER1 where EMAIL = '"+email+"'");
+                    String userID = UserIDParse.ReturnIDFromEmail(email, idb);
+                    new UserPanel(idb,userID,checkAdmin).setVisible(true);
+                    dispose();
+                 }
+                 else{
+                     JOptionPane.showMessageDialog(null, "This password doesn't match the entered email");
+                     JPassWord.requestFocus();  
+                 }
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "This email isn't registered");
+                JUserName.requestFocus();
+            }
+            }
+         }
          
-         try{
-         String svarPW = idb.fetchSingle(checkPW);
-         String svarAdmin = idb.fetchSingle(checkAdmin);
-         int admin = Integer.parseInt(svarAdmin);
-         int userID = UserIDParse.ReturnIDFromEmail(email, idb);
-         if(svarPW.equals(pw)){
-             if(admin == 1){
-               new AdminPanel(idb,userID).setVisible(true);
-               dispose();  
-             }
-             else{
-                 new UserPanel(idb,userID).setVisible(true);
-                 dispose();
-             }
-         }
-         }
-         catch(NumberFormatException e){
-          JOptionPane.showMessageDialog(null, "Fel inloggningsuppgifter!");
+         catch(InfException e){
+          JOptionPane.showMessageDialog(null, "Wrong email and password");
           System.out.println(e.getMessage());  
           JUserName.requestFocus();
          }
-         }
-         catch(InfException loginFail){
-         JOptionPane.showMessageDialog(null, "Ange email och lösenord!");
-         System.out.println(loginFail.getMessage());    
-         }
-         }
+        
+        }
     }//GEN-LAST:event_JbtnLoggInActionPerformed
 
     private void JbtnRegistreraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbtnRegistreraActionPerformed
         new CreateAccount(idb).setVisible(true);
         dispose();
     }//GEN-LAST:event_JbtnRegistreraActionPerformed
+
+    private void JPassWordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JPassWordKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER)        
+        JbtnLoggIn.doClick();
+    }//GEN-LAST:event_JPassWordKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

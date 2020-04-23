@@ -19,13 +19,13 @@ import oru.inf.InfException;
 public class PendingRequests {
 
     
-   public static String currentRequests(InfDB idb, int currentUser){
+   public static String currentRequests(InfDB idb, String currentUser){
         
         int pendingRequests = 0;
         ArrayList<String> requests = new ArrayList();
         
         try {
-            requests = idb.fetchColumn("SELECT MEETING_ID FROM MEETINGREQUEST WHERE RECEIVER_ID = " + currentUser + " AND status = 0");
+            requests = idb.fetchColumn("SELECT MEETING_ID FROM MEETINGREQUEST WHERE RECEIVER_ID = '" + currentUser + "' AND status = 0");
         } catch (InfException ex) {
             Logger.getLogger(HandleMeetingRequests.class.getName()).log(Level.SEVERE, null, ex);
         }
