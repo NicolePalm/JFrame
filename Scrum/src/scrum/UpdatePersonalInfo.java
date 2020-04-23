@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package scrum;
 
 import java.util.ArrayList;
@@ -10,10 +5,6 @@ import javax.swing.JOptionPane;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 
-/**
- *
- * @author marvi
- */
 public class UpdatePersonalInfo extends javax.swing.JFrame {
 
     private InfDB idb;
@@ -60,6 +51,7 @@ public class UpdatePersonalInfo extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         pfConfirmPassword = new javax.swing.JPasswordField();
         btnChangeInfo = new javax.swing.JButton();
+        jBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -89,32 +81,46 @@ public class UpdatePersonalInfo extends javax.swing.JFrame {
             }
         });
 
+        jBack.setText("Back");
+        jBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBackActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(120, 120, 120)
+                .addContainerGap()
+                .addComponent(jBack)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblTitel)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(pfConfirmPassword)
-                        .addComponent(jLabel1)
-                        .addComponent(pfPassword)
-                        .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(tfLastname)
-                        .addComponent(lblLastname, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(tfFirstname)
-                        .addComponent(lblFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(tfEmail)
-                        .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnChangeInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)))
-                .addContainerGap(131, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(pfConfirmPassword)
+                            .addComponent(jLabel1)
+                            .addComponent(pfPassword)
+                            .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfLastname)
+                            .addComponent(lblLastname, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfFirstname)
+                            .addComponent(lblFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfEmail)
+                            .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnChangeInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(lblTitel))
+                .addGap(0, 96, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(lblTitel)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblTitel)
+                    .addComponent(jBack))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblEmail)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -137,10 +143,11 @@ public class UpdatePersonalInfo extends javax.swing.JFrame {
                 .addComponent(pfConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnChangeInfo)
-                .addGap(0, 11, Short.MAX_VALUE))
+                .addGap(0, 25, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void tfLastnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfLastnameActionPerformed
@@ -149,7 +156,7 @@ public class UpdatePersonalInfo extends javax.swing.JFrame {
 
     private void btnChangeInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeInfoActionPerformed
 
-        if(Validation.tfHarVarde(tfEmail) && Validation.tfHarVarde(pfPassword) && Validation.tfHarVarde(tfFirstname) && Validation.tfHarVarde(tfLastname)) {
+        if(Validation.tfHarVarde(tfEmail, "Enter your email") && Validation.tfHarVarde(pfPassword, "Enter your password") && Validation.tfHarVarde(tfFirstname, "Enter your firstname") && Validation.tfHarVarde(tfLastname, "Enter your lastname") && Validation.tfHarVarde(pfConfirmPassword, "Confirm your password")) {
             try {
                 ArrayList<String> emails;
                 emails = idb.fetchColumn("select EMAIL from USER1");
@@ -162,16 +169,19 @@ public class UpdatePersonalInfo extends javax.swing.JFrame {
                 String password = pfPassword.getText();
                 String confirmPassword = pfConfirmPassword.getText();
                 if(Validation.validEmail(email, currentEmail, emails))
-                {
+              {
                     if(password.equals(confirmPassword)) {
                         String updateSql = "UPDATE USER1 SET EMAIL ='"+email+"', FIRSTNAME = '"+firstname+"', LASTNAME = '"+lastname+"', USER_PASSWORD = '"+password+"' WHERE USER_ID ='"+currentUser+"'";
                         idb.update(updateSql);
                         JOptionPane.showMessageDialog(null, "User info changed");
+                        fillTf();
+                        
                     }
                     else {
                         JOptionPane.showMessageDialog(null, "Passwords does not match");
+                        pfConfirmPassword.requestFocus();
                     }
-                }
+               }
 
             }
             catch(InfException e) {
@@ -181,10 +191,16 @@ public class UpdatePersonalInfo extends javax.swing.JFrame {
         fillTf();
     }//GEN-LAST:event_btnChangeInfoActionPerformed
 
+    private void jBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBackActionPerformed
+        ReturnToHome.CreateHomeScreen(idb, currentUser);
+        dispose();
+    }//GEN-LAST:event_jBackActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChangeInfo;
+    private javax.swing.JButton jBack;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblFirstname;

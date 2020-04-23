@@ -25,6 +25,7 @@ public class CreateMeeting extends javax.swing.JFrame {
         this.currentUser = id;
         FillReciver();
         this.editorMode = edit;
+        tfDescription.requestFocus();
         jDelete.setVisible(false);
         taReciver.setLineWrap(true);
         tfDescription.setLineWrap(true);
@@ -44,7 +45,7 @@ public class CreateMeeting extends javax.swing.JFrame {
         if(Validation.checkIfDateNull(jDateChooser)==false){
         Date dateChoosed = jDateChooser.getDate();
         String date = Calendar.ConvertDate(dateChoosed);
-        if(!Validation.CheckDateTwo(date) && Validation.checkTime(tfTime) && Validation.taHarVarde(taReciver) && Validation.descriptionValues(tfDescription) && Validation.tfHarVarde(tfRoom)){
+        if(!Validation.CheckDateTwo(date) && Validation.checkTime(tfTime) && Validation.taHarVarde(taReciver) && Validation.descriptionValues(tfDescription) && Validation.tfHarVarde(tfRoom, "Enter a room where the meeting will take place")){
         try {
             String creator = currentUser;
             String description = tfDescription.getText();
@@ -71,8 +72,16 @@ public class CreateMeeting extends javax.swing.JFrame {
                         idb.insert(sqlInsert);
                     }
                     String sqlInsertSelf = "INSERT INTO MEETINGREQUEST VALUES (1,"+currentUser+", 1)";
-                    idb.insert(sqlInsertSelf);    
-                    JOptionPane.showMessageDialog(null, "The meeting has been created"); 
+                    idb.insert(sqlInsertSelf);
+                    JOptionPane.showMessageDialog(null, "The meeting has been created");
+                    tfDescription.setText("");
+                    tfTime.setText("15:00");
+                    tfRoom.setText("");
+                    taReciver.setText("");
+                    jDateChooser.setDateFormatString("");
+                    FillReciver();
+                    tfDescription.requestFocus();
+                    
                 }
             }
             else {
@@ -90,6 +99,13 @@ public class CreateMeeting extends javax.swing.JFrame {
                     String sqlInsertSelf = "INSERT INTO MEETINGREQUEST VALUES ("+mID+","+currentUser+", 1)";
                     idb.insert(sqlInsertSelf);    
                     JOptionPane.showMessageDialog(null, "The meeting has been created"); 
+                    tfDescription.setText("");
+                    tfTime.setText("15:00");
+                    tfRoom.setText("");
+                    taReciver.setText("");
+                    jDateChooser.setDateFormatString("");
+                    FillReciver();
+                    tfDescription.requestFocus();
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "You have already added a meeting on exactly that day and time");
@@ -182,7 +198,7 @@ public class CreateMeeting extends javax.swing.JFrame {
         if(Validation.checkIfDateNull(jDateChooser)==false){
         Date dateChoosed = jDateChooser.getDate();
         String date = Calendar.ConvertDate(dateChoosed);
-        if(!Validation.CheckDateTwo(date) && Validation.checkTime(tfTime) && Validation.taHarVarde(taReciver) && Validation.descriptionValues(tfDescription) && Validation.tfHarVarde(tfRoom)){
+        if(!Validation.CheckDateTwo(date) && Validation.checkTime(tfTime) && Validation.taHarVarde(taReciver) && Validation.descriptionValues(tfDescription) && Validation.tfHarVarde(tfRoom, "Enter a room where the meeting will take place")){
         
             try{
                 String description = tfDescription.getText();
@@ -301,6 +317,11 @@ public class CreateMeeting extends javax.swing.JFrame {
         });
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         tfDescription.setColumns(20);
         tfDescription.setRows(5);
@@ -427,8 +448,13 @@ public class CreateMeeting extends javax.swing.JFrame {
     }//GEN-LAST:event_jDeleteActionPerformed
 
     private void tfTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfTimeActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_tfTimeActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        ReturnToHome.CreateHomeScreen(idb, currentUser);
+        dispose();
+    }//GEN-LAST:event_btnBackActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

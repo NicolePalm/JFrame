@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 
-/**
- *
- * @author nicol
- */
+
 public class UpdateMeetings {
     private InfDB idb;
     private String currentUser;

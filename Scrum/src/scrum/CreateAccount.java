@@ -1,18 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package scrum;
 import javax.swing.JOptionPane;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 import java.util.ArrayList;
 
-/**
- *
- * @author Danie
- */
 public class CreateAccount extends javax.swing.JFrame {
 
         private InfDB idb;
@@ -20,6 +11,7 @@ public class CreateAccount extends javax.swing.JFrame {
         public CreateAccount(InfDB idb) {
         initComponents();
         this.idb = idb;
+        JFirstname.requestFocus();
         
     }
         public void RegistreraDig() {
@@ -32,28 +24,36 @@ public class CreateAccount extends javax.swing.JFrame {
             boolean emptyFields = false;
             
             if(Firstname.isEmpty() || Lastname.isEmpty() || Email.isEmpty() || Password.isEmpty() || PasswordIgen.isEmpty()){
-                JOptionPane.showMessageDialog(null, "Var vänlig och fyll i alla fält!");
+                JOptionPane.showMessageDialog(null, "Don't leave any field blank");
                 emptyFields = true;
             }
             
             if(emptyFields == false){
             boolean InvalidEmail = validEmail(Email);
-            if(Validation.emailValidator(Email)) {
-            if(Password.equals(PasswordIgen) && InvalidEmail == false){ 
+            if(Validation.emailValidator(Email, JEmail)) {
+            if(InvalidEmail == false){
+                if(Password.equals(PasswordIgen)){ 
             boolean test = NewUser.InsertNewUser(Firstname, Lastname, Email, Password,idb);
             
             if(test = true){
-            JOptionPane.showMessageDialog(null, "Välkommen "+Firstname+"!");
+            JOptionPane.showMessageDialog(null, "Welcome "+Firstname+"!");
             String userID = UserIDParse.ReturnIDFromEmail(Email, idb);
             new UserPanel(idb,userID,"0").setVisible(true);
             dispose();
             }
            }
+            else{
+                   JOptionPane.showMessageDialog(null, "The password doesn't match");
+                   JPassword.requestFocus();
+                }
+            }
             else{ 
-            JOptionPane.showMessageDialog(null, "Lösenord matchar inte eller email redan tagen");
+            JOptionPane.showMessageDialog(null, "The email is already registered");
+            JEmail.requestFocus();
             }  
+            
             }
-            }
+        }
         }
         
         public boolean validEmail(String Email){

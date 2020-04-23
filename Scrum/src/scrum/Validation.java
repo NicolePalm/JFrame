@@ -10,10 +10,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-/**
- *
- * @author marvi
- */
 public class Validation {
     
     
@@ -62,7 +58,7 @@ public class Validation {
         boolean resultat = true;
         
         if(rutaAttKolla.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null, "Mottagningsrutan är tom!");
+            JOptionPane.showMessageDialog(null, "Must add at least one reciever");
             resultat = false;
             rutaAttKolla.requestFocus();
         }       
@@ -83,12 +79,12 @@ public class Validation {
         return resultat;
     }
     
-    public static boolean tfHarVarde(JTextField rutaAttKolla)
+    public static boolean tfHarVarde(JTextField rutaAttKolla, String message)
     {
         boolean resultat = true;
         
         if(rutaAttKolla.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null, "Enter a room where the meeting will take place");
+            JOptionPane.showMessageDialog(null, message);
             resultat = false;
             rutaAttKolla.requestFocus();
         }       
@@ -127,15 +123,14 @@ public class Validation {
                 for(String m : emails) {
                     if(m.equals(currentEmail)) {
                         emails.remove(m);
-                        System.out.println(m);
+                        break;
                     }
                 }
-                
-                
                 for(String mail : emails){
                     if(email.equals(mail)){
                         result = false;
                         JOptionPane.showMessageDialog(null, "That email is already registred");
+                        break;
                     } 
                 }
            

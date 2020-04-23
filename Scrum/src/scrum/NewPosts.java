@@ -12,7 +12,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import oru.inf.InfDB;
 import oru.inf.InfException;
-import org.apache.commons.io.FilenameUtils;
 
 public class NewPosts extends javax.swing.JFrame {
 
@@ -30,6 +29,7 @@ public class NewPosts extends javax.swing.JFrame {
         jTitle.requestFocus();
         jValue.setVisible(false);
         jSetPublish.doClick();
+        jText.setLineWrap(true);
     }
 
     @SuppressWarnings("unchecked")
@@ -49,6 +49,7 @@ public class NewPosts extends javax.swing.JFrame {
         jHome = new javax.swing.JButton();
         jSetPublish = new javax.swing.JCheckBox();
         jValue = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,7 +64,7 @@ public class NewPosts extends javax.swing.JFrame {
         jText.setRows(5);
         jScrollPane1.setViewportView(jText);
 
-        jNewCategory.setText("Skapa ny kategori");
+        jNewCategory.setText("Create new category");
         jNewCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jNewCategoryActionPerformed(evt);
@@ -78,7 +79,7 @@ public class NewPosts extends javax.swing.JFrame {
 
         jlblTitle.setText("Title");
 
-        jCreatePost.setText("Skapa inlägg");
+        jCreatePost.setText("Create post");
         jCreatePost.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCreatePostActionPerformed(evt);
@@ -92,7 +93,7 @@ public class NewPosts extends javax.swing.JFrame {
             }
         });
 
-        jHome.setText("Home");
+        jHome.setText("Back");
         jHome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jHomeActionPerformed(evt);
@@ -106,7 +107,11 @@ public class NewPosts extends javax.swing.JFrame {
             }
         });
 
-        jValue.setText("jLabel1");
+        jValue.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
+        jValue.setText("value");
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setText("Create post");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -115,41 +120,41 @@ public class NewPosts extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jHome)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jFile)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jFileName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jCreatePost))
+                    .addComponent(jScrollPane1)
+                    .addComponent(jTitle)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jType, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(37, 37, 37)
-                        .addComponent(jValue, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jSetPublish)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                        .addComponent(jNewCategory))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jlblTitle)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jlblTitle)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jFile)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jFileName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jCreatePost))
-                            .addComponent(jScrollPane1)
-                            .addComponent(jTitle)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jType, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(37, 37, 37)
-                                .addComponent(jCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jSetPublish)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
-                                .addComponent(jNewCategory)))
-                        .addContainerGap())))
+                        .addComponent(jHome)
+                        .addGap(18, 18, 18)
+                        .addComponent(jValue)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addContainerGap(13, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jHome, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jlblTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -172,6 +177,7 @@ public class NewPosts extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTitleActionPerformed
@@ -261,7 +267,7 @@ public class NewPosts extends javax.swing.JFrame {
         int publishStatus = GetCheckBoxStatus();
 
         if (title.isEmpty() || content.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Fyll i både titel och text!");
+            JOptionPane.showMessageDialog(null, "Enter both title and text!");
             jTitle.requestFocus();
         } else {
             String category = jCategories.getSelectedItem().toString();
@@ -283,7 +289,7 @@ public class NewPosts extends javax.swing.JFrame {
                     idb.insert(insertPost);
                 }
 
-                JOptionPane.showMessageDialog(null, "Nytt inlägg skapat!");
+                JOptionPane.showMessageDialog(null, "New post created");
 
                 dispose();
             } catch (InfException ex) {
@@ -326,7 +332,7 @@ public class NewPosts extends javax.swing.JFrame {
     }//GEN-LAST:event_jFileActionPerformed
 
     private void jHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jHomeActionPerformed
-
+        ReturnToHome.CreateHomeScreen(idb, currentUser);
         dispose();
     }//GEN-LAST:event_jHomeActionPerformed
 
@@ -361,6 +367,7 @@ public class NewPosts extends javax.swing.JFrame {
     private javax.swing.JButton jFile;
     private javax.swing.JLabel jFileName;
     private javax.swing.JButton jHome;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JButton jNewCategory;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JCheckBox jSetPublish;

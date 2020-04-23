@@ -98,7 +98,12 @@ public class MyPosts extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jPublishedPosts);
 
-        jButton1.setText("Home");
+        jButton1.setText("Back");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("My published posts");
 
@@ -169,6 +174,11 @@ public class MyPosts extends javax.swing.JFrame {
         dispose();
         }
     }//GEN-LAST:event_jUnPublishedPostsMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       ReturnToHome.CreateHomeScreen(idb, currentUser);
+       dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     
     

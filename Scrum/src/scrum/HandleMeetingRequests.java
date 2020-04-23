@@ -1,26 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package scrum;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import static java.util.Collections.list;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
-import javax.swing.JList;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 
-/**
- *
- * @author nicol
- */
+
 public class HandleMeetingRequests extends javax.swing.JFrame {
 
     private InfDB idb;
@@ -35,6 +21,7 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         FillRequestList();
         FillAcceptedList();
         SetDefaultValues();
+        jtxtADescription.setLineWrap(true);
     }
  
     
@@ -330,6 +317,7 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jlRequestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlRequestsMouseClicked
