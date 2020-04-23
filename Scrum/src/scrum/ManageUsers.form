@@ -6,7 +6,7 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
-    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
   </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -122,16 +122,25 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Delete User"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jDeleteUserActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jMakeAdmin">
       <Properties>
         <Property name="text" type="java.lang.String" value="Make admin"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMakeAdminActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jHome">
       <Properties>
         <Property name="text" type="java.lang.String" value="Back"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jHomeActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jSelectUser">
       <Properties>
@@ -145,6 +154,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Remove admin status"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jUnAdminActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

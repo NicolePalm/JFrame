@@ -35,7 +35,9 @@ public class ManageUsers extends javax.swing.JFrame {
  
     
 public void fillCombobox(){
-        
+  
+ jUserList.removeAllItems();
+    
 ArrayList <String> getEmails = new ArrayList();
 try{        
 getEmails = idb.fetchColumn("select EMAIL from USER1 where USER_ID <> '"+currentUser+"'");
@@ -82,10 +84,25 @@ System.out.println(e);
         jLabel1.setText("Manage users");
 
         jDeleteUser.setText("Delete User");
+        jDeleteUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jDeleteUserActionPerformed(evt);
+            }
+        });
 
         jMakeAdmin.setText("Make admin");
+        jMakeAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMakeAdminActionPerformed(evt);
+            }
+        });
 
         jHome.setText("Back");
+        jHome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jHomeActionPerformed(evt);
+            }
+        });
 
         jSelectUser.setText("Select user");
         jSelectUser.addActionListener(new java.awt.event.ActionListener() {
@@ -95,6 +112,11 @@ System.out.println(e);
         });
 
         jUnAdmin.setText("Remove admin status");
+        jUnAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jUnAdminActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -145,6 +167,7 @@ System.out.println(e);
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jUserListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jUserListMouseClicked
@@ -201,6 +224,59 @@ System.out.println(e);
         
     }//GEN-LAST:event_jSelectUserActionPerformed
 
+    private void jUnAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUnAdminActionPerformed
+        try {
+            idb.update("UPDATE USER1 SET ADMINSTATUS = 0 WHERE EMAIL = '"+userToEdit+"'");
+            jUserInfo.setText("User is no longer admin");
+            jMakeAdmin.setVisible(true);
+            jDeleteUser.setVisible(true);
+            jUnAdmin.setVisible(false);
+            
+        } catch (InfException ex) {
+            Logger.getLogger(ManageUsers.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jUnAdminActionPerformed
+
+    private void jMakeAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMakeAdminActionPerformed
+       try {
+            idb.update("UPDATE USER1 SET ADMINSTATUS = 1 WHERE EMAIL = '"+userToEdit+"'");
+            jUserInfo.setText("User is now admin");
+            jDeleteUser.setVisible(false);
+            jMakeAdmin.setVisible(false);
+            jUnAdmin.setVisible(true);
+            
+        } catch (InfException ex) {
+            Logger.getLogger(ManageUsers.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMakeAdminActionPerformed
+
+    private void jDeleteUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDeleteUserActionPerformed
+        try {
+            String id = idb.fetchSingle("SELECT USER_ID FROM USER1 WHERE EMAIL ='"+userToEdit+"'");
+            idb.delete("DELETE FROM COMMENT WHERE COMMENTER_ID ='"+id+"'");
+            idb.delete("DELETE FROM POST WHERE POSTER_ID ='"+id+"'");
+            idb.delete("DELETE FROM MEETINGNOTES WHERE USERID ='"+id+"'");
+            idb.delete("DELETE FROM MEETINGREQUEST WHERE RECEIVER_ID ='"+id+"'");
+            idb.delete("DELETE FROM MEETING WHERE MEETINGCREATER_ID ='"+id+"'");
+            idb.delete("DELETE FROM USER1 WHERE USER_ID ='"+id+"'");
+            jUserInfo.setText("User has been deleted!");
+            
+            jMakeAdmin.setVisible(false);
+            jDeleteUser.setVisible(false);
+            jUnAdmin.setVisible(false);
+            fillCombobox();
+
+            userToEdit = "";
+            
+        } catch (InfException ex) {
+            Logger.getLogger(ManageUsers.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jDeleteUserActionPerformed
+
+    private void jHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jHomeActionPerformed
+       ReturnToHome.CreateHomeScreen(idb, currentUser);
+    }//GEN-LAST:event_jHomeActionPerformed
+
     
     
 
@@ -216,3 +292,4 @@ System.out.println(e);
     private javax.swing.JComboBox<String> jUserList;
     // End of variables declaration//GEN-END:variables
 }
+
