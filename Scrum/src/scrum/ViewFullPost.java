@@ -17,10 +17,11 @@ import oru.inf.InfDB;
 import oru.inf.InfException;
 
 public class ViewFullPost extends javax.swing.JFrame {
+
     private InfDB idb;
     private final String currentUser;
     private final String currentPost;
-    
+
     public ViewFullPost(InfDB idb, String currentUser, String currentPost) {
         initComponents();
         this.idb = idb;
@@ -37,158 +38,154 @@ public class ViewFullPost extends javax.swing.JFrame {
         jViewComments.setLineWrap(true);
         ShowComments();
         controlAdminStatus();
-      
-     
+
     }
-    
-    private void controlAdminStatus(){
-        
-    int currentUs = Integer.parseInt(currentUser);
-    try{String fraga = "Select adminstatus from user1 where user_id ="+currentUs+";";
-    String svar = idb.fetchSingle(fraga);
-    if(svar.equals("1")){
-      btnRemove.setVisible(true);
-      btnEdit.setVisible(true);
-    }else{
-      btnRemove.setVisible(false);
-        btnEdit.setVisible(false);
+
+    private void controlAdminStatus() {
+
+        int currentUs = Integer.parseInt(currentUser);
+        try {
+            String fraga = "Select adminstatus from user1 where user_id =" + currentUs + ";";
+            String svar = idb.fetchSingle(fraga);
+            if (svar.equals("1")) {
+                btnRemove.setVisible(true);
+                btnEdit.setVisible(true);
+            } else {
+                btnRemove.setVisible(false);
+                btnEdit.setVisible(false);
+            }
+
+        } catch (InfException e) {
+            System.out.print("Error");
+        }
     }
-    
-    }catch(InfException e){
-        System.out.print("Error");
-    }}
-    
-public String GetPostTitle(){
+
+    public String GetPostTitle() {
         String title = "";
         try {
-            title = idb.fetchSingle("SELECT TITLE FROM POST WHERE POST_ID ='"+currentPost+"'");
-            
+            title = idb.fetchSingle("SELECT TITLE FROM POST WHERE POST_ID ='" + currentPost + "'");
+
         } catch (InfException ex) {
             Logger.getLogger(ViewFullPost.class.getName()).log(Level.SEVERE, null, ex);
         }
         return title;
-}
-public String GetPostDate(){
+    }
+
+    public String GetPostDate() {
         String date = "";
         String time = "";
         String dateandtime = "";
         try {
-            time = idb.fetchSingle("SELECT POSTTIME FROM POST WHERE POST_ID ='"+currentPost+"'");
-            date = idb.fetchSingle("SELECT POSTDATE FROM POST WHERE POST_ID ='"+currentPost+"'");
-            dateandtime = time+ "  "+date;
-            
+            time = idb.fetchSingle("SELECT POSTTIME FROM POST WHERE POST_ID ='" + currentPost + "'");
+            date = idb.fetchSingle("SELECT POSTDATE FROM POST WHERE POST_ID ='" + currentPost + "'");
+            dateandtime = time + "  " + date;
+
         } catch (InfException ex) {
             Logger.getLogger(ViewFullPost.class.getName()).log(Level.SEVERE, null, ex);
         }
         return dateandtime;
-}
-public String GetPostContent(){
+    }
+
+    public String GetPostContent() {
         String content = "";
         try {
-            content = idb.fetchSingle("SELECT CONTENT FROM POST WHERE POST_ID ='"+currentPost+"'");
-            
+            content = idb.fetchSingle("SELECT CONTENT FROM POST WHERE POST_ID ='" + currentPost + "'");
+
         } catch (InfException ex) {
             Logger.getLogger(ViewFullPost.class.getName()).log(Level.SEVERE, null, ex);
         }
         return content;
-}
-public String GetPosterName(){
+    }
+
+    public String GetPosterName() {
         String firstName = "";
         String lastName = "";
         String posterID = "";
         String fullName = "";
         try {
-            posterID = idb.fetchSingle("SELECT POSTER_ID FROM POST WHERE POST_ID ='"+currentPost+"'");
-            firstName = idb.fetchSingle("SELECT FIRSTNAME FROM USER1 WHERE USER_ID ="+posterID);
-            lastName = idb.fetchSingle("SELECT LASTNAME FROM USER1 WHERE USER_ID ="+posterID);
-            fullName = firstName +" "+lastName;
-            
+            posterID = idb.fetchSingle("SELECT POSTER_ID FROM POST WHERE POST_ID ='" + currentPost + "'");
+            firstName = idb.fetchSingle("SELECT FIRSTNAME FROM USER1 WHERE USER_ID =" + posterID);
+            lastName = idb.fetchSingle("SELECT LASTNAME FROM USER1 WHERE USER_ID =" + posterID);
+            fullName = firstName + " " + lastName;
 
-            
         } catch (InfException ex) {
             Logger.getLogger(ViewFullPost.class.getName()).log(Level.SEVERE, null, ex);
         }
         return fullName;
-}
+    }
 
-public void UsePostFile(){
-    String filePath = "";
-    String fileExt = "";
+    public void UsePostFile() {
+        String filePath = "";
+        String fileExt = "";
         try {
-            filePath = idb.fetchSingle("SELECT SEARCHPATH FROM POST WHERE POST_ID ='"+currentPost+"'");
+            filePath = idb.fetchSingle("SELECT SEARCHPATH FROM POST WHERE POST_ID ='" + currentPost + "'");
             fileExt = HandleFiles.getExtensionByApacheCommonLib(filePath);
-   
+
         } catch (InfException ex) {
             Logger.getLogger(ViewFullPost.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        try{
-        if(fileExt.equals("jpg") || fileExt.equals("png")){
+
+        try {
+            if (fileExt.equals("jpg") || fileExt.equals("png")) {
                 BufferedImage myPicture = ImageIO.read(new File(filePath));
-                Image dimg = myPicture.getScaledInstance(jPicture.getWidth(), jPicture.getHeight(),Image.SCALE_SMOOTH);
-                jPicture.setIcon (new ImageIcon(dimg));
-            }
-            else if(fileExt.equals("txt")){
+                Image dimg = myPicture.getScaledInstance(jPicture.getWidth(), jPicture.getHeight(), Image.SCALE_SMOOTH);
+                jPicture.setIcon(new ImageIcon(dimg));
+            } else if (fileExt.equals("txt")) {
                 SetDefaultPicture();
                 jFile.setText(filePath);
                 jDownload.setVisible(true);
-            }
-            else{
+            } else {
                 SetDefaultPicture();
             }
-        }
-        catch(IOException ex){
-            Logger.getLogger(ViewFullPost.class.getName()).log(Level.SEVERE, null, ex);
-        }
-}
-
-        public void SetDefaultPicture(){
-            BufferedImage myPicture;
-        try {
-            myPicture = ImageIO.read(new File("c://JFrame/Scrum/oru.png"));
-            jPicture.setIcon (new ImageIcon(myPicture));
         } catch (IOException ex) {
             Logger.getLogger(ViewFullPost.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
-}
-        public void ShowComments(){
-            try{
-            ArrayList <HashMap <String, String>> comments = idb.fetchRows("SELECT COMMENTER_ID, COMMENT FROM COMMENT WHERE POST_ID = '" + currentPost + "'");
-            if(!PendingRequests.ContainsAllNulls(comments)){
-            for(HashMap <String, String> comment : comments){
-            String commenter = comment.get("COMMENTER_ID");
-            String postedComment = comment.get("COMMENT");
-            String date = idb.fetchSingle("SELECT COMMENTDATE FROM COMMENT WHERE COMMENTER_ID = '" + commenter + "' AND POST_ID = '" + currentPost + "' AND COMMENT = '" + postedComment +"'");
-            String firstName = idb.fetchSingle("SELECT FIRSTNAME FROM USER1 WHERE USER_ID = '" + commenter + "'");
-            String lastName = idb.fetchSingle("SELECT LASTNAME FROM USER1 WHERE USER_ID = '" + commenter + "'");
-            jViewComments.append(postedComment + "\n" + "-" + firstName + " " + lastName + " " + date + "\n" + "\n");
+    }
+
+    public void SetDefaultPicture() {
+        BufferedImage myPicture;
+        try {
+            myPicture = ImageIO.read(new File("c://JFrame/Scrum/oru.png"));
+            jPicture.setIcon(new ImageIcon(myPicture));
+        } catch (IOException ex) {
+            Logger.getLogger(ViewFullPost.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ShowComments() {
+        try {
+            ArrayList<HashMap<String, String>> comments = idb.fetchRows("SELECT COMMENTER_ID, COMMENT FROM COMMENT WHERE POST_ID = '" + currentPost + "'");
+            if (!PendingRequests.ContainsAllNulls(comments)) {
+                for (HashMap<String, String> comment : comments) {
+                    String commenter = comment.get("COMMENTER_ID");
+                    String postedComment = comment.get("COMMENT");
+                    String date = idb.fetchSingle("SELECT COMMENTDATE FROM COMMENT WHERE COMMENTER_ID = '" + commenter + "' AND POST_ID = '" + currentPost + "' AND COMMENT = '" + postedComment + "'");
+                    String firstName = idb.fetchSingle("SELECT FIRSTNAME FROM USER1 WHERE USER_ID = '" + commenter + "'");
+                    String lastName = idb.fetchSingle("SELECT LASTNAME FROM USER1 WHERE USER_ID = '" + commenter + "'");
+                    jViewComments.append(postedComment + "\n" + "-" + firstName + " " + lastName + " " + date + "\n" + "\n");
+                }
+            } else {
+                // jViewComments.setText("No comments yet");
             }
-            }
-            else{
-           // jViewComments.setText("No comments yet");
-            }
-            }
-            catch (InfException ex) {
+        } catch (InfException ex) {
             System.out.println(ex.getMessage());
         }
-        }
-        
-        public void ShowNewComment(){
-            String comment = jComment.getText();
-            LocalDate currentDate = LocalDate.now();
-            try{
+    }
+
+    public void ShowNewComment() {
+        String comment = jComment.getText();
+        LocalDate currentDate = LocalDate.now();
+        try {
             String firstName = idb.fetchSingle("SELECT FIRSTNAME FROM USER1 WHERE USER_ID = '" + currentUser + "'");
             String lastName = idb.fetchSingle("SELECT LASTNAME FROM USER1 WHERE USER_ID = '" + currentUser + "'");
             jViewComments.append(comment + "\n" + "-" + firstName + " " + lastName + " " + currentDate + "\n" + "\n");
-            }
-            catch(InfException ex){
-                System.out.println(ex.getMessage());
-            }
-            
-            
+        } catch (InfException ex) {
+            System.out.println(ex.getMessage());
         }
-    
+
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -211,6 +208,7 @@ public void UsePostFile(){
         jLabel2 = new javax.swing.JLabel();
         btnRemove = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -282,6 +280,13 @@ public void UsePostFile(){
             }
         });
 
+        jButton1.setText("Comments");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -304,25 +309,26 @@ public void UsePostFile(){
                                     .addComponent(jAuthor)
                                     .addComponent(jTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jpostDate))))
-                        .addGap(0, 21, Short.MAX_VALUE))
+                        .addGap(0, 7, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane2)))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jScrollPane3)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLeaveComment, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jSend)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane3)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLeaveComment, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jSend))
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addComponent(btnRemove)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnEdit)))
+                        .addComponent(btnEdit)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -351,7 +357,8 @@ public void UsePostFile(){
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnRemove)
-                            .addComponent(btnEdit))
+                            .addComponent(btnEdit)
+                            .addComponent(jButton1))
                         .addGap(28, 28, 28)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -374,57 +381,61 @@ public void UsePostFile(){
     }//GEN-LAST:event_jToUserPanelActionPerformed
 
     private void jDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDownloadActionPerformed
-    String filePath = "";
-    
-    try{
-    filePath = idb.fetchSingle("SELECT SEARCHPATH FROM POST WHERE POST_ID ='"+currentPost+"'");
-    }
-    catch(InfException e){
-        System.out.println(e.getMessage());
-    }
-    
-    try{    
-        File currentFile = new File(filePath);
-        ArrayList<String> lines = HandleFiles.ReadFile(currentFile);
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
-        String newPath = fileChooser.getSelectedFile().getAbsolutePath();
-        newPath = newPath + "/" + jTitle.getText() + "-AttachedFile.txt";
-        HandleFiles.SaveFile(lines, newPath);
-        jFile.setText("File saved");
+        String filePath = "";
+
+        try {
+            filePath = idb.fetchSingle("SELECT SEARCHPATH FROM POST WHERE POST_ID ='" + currentPost + "'");
+        } catch (InfException e) {
+            System.out.println(e.getMessage());
         }
-    else{
-        System.out.println("No file choosen!");
-    }    
-    }
-    catch(IOException e){
-        System.out.println(e.getMessage());
-    }   
+
+        try {
+            File currentFile = new File(filePath);
+            ArrayList<String> lines = HandleFiles.ReadFile(currentFile);
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                String newPath = fileChooser.getSelectedFile().getAbsolutePath();
+                newPath = newPath + "/" + jTitle.getText() + "-AttachedFile.txt";
+                HandleFiles.SaveFile(lines, newPath);
+                jFile.setText("File saved");
+            } else {
+                System.out.println("No file choosen!");
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }//GEN-LAST:event_jDownloadActionPerformed
 
     private void jSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSendActionPerformed
-         String comment = jComment.getText();
+        String comment = jComment.getText();
         LocalDate currentDate = LocalDate.now();
-        if(comment != null && !comment.equals("")){
-            if(comment.length()+1 <= 250){
-        try{
-            idb.insert("INSERT INTO Comment (COMMENTER_ID, POST_ID, COMMENTDATE, COMMENT) VALUES ('" + currentUser + "', '" + currentPost + "','" + currentDate + "', '" + comment + "')");
-            ShowNewComment();
-            jComment.setText("");
-            jLeaveComment.setText("Thanks for commenting");
-        }
-        catch(InfException e){
-            System.out.println(e.getMessage());
-        }
-        }
-            else{
+        if (comment != null && !comment.equals("")) {
+            if (comment.length() + 1 <= 250) {
+
+                try {
+                    String autoId = "";
+                    String fraga = "select first 1 comment_id from comment";
+                    String svar = idb.fetchSingle(fraga);
+                    if (svar != null) {
+                        autoId = idb.getAutoIncrement("COMMENT", "COMMENT_ID");
+                    } else {
+                        autoId = "1";
+                    }
+
+                    idb.insert("INSERT INTO Comment VALUES ('" + currentUser + "', '" + currentPost + "','" + currentDate + "', '" + comment + "', '" + autoId + "')");
+                    ShowNewComment();
+                    jComment.setText("");
+                    jLeaveComment.setText("Thanks for commenting");
+                } catch (InfException e) {
+                    System.out.println(e.getMessage());
+                }
+            } else {
                 jLeaveComment.setText("Too many characters!");
             }
-      }
-         else{
-                jLeaveComment.setText("Can't publish an empty comment!");
-            }
+        } else {
+            jLeaveComment.setText("Can't publish an empty comment!");
+        }
     }//GEN-LAST:event_jSendActionPerformed
 
     private void jCommentKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jCommentKeyTyped
@@ -433,18 +444,21 @@ public void UsePostFile(){
     }//GEN-LAST:event_jCommentKeyTyped
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
-       int janej = JOptionPane.showConfirmDialog(null, "Are you sure?");
-        if (janej==0){
-        try{ String fraga = "Delete from post where post_id = "+currentPost+";";
-     
-        idb.delete(fraga);
-    System.out.print("Deleted");
-    ReturnToHome.CreateHomeScreen(idb, currentUser);
-        dispose();
-    }catch(InfException e){
-         System.out.print("Delete Failed");
-     }
-}else {System.out.print("Cancel");}
+        int janej = JOptionPane.showConfirmDialog(null, "Are you sure?");
+        if (janej == 0) {
+            try {
+                String fraga = "Delete from post where post_id = " + currentPost + ";";
+
+                idb.delete(fraga);
+                System.out.print("Deleted");
+                ReturnToHome.CreateHomeScreen(idb, currentUser);
+                dispose();
+            } catch (InfException e) {
+                System.out.print("Delete Failed");
+            }
+        } else {
+            System.out.print("Cancel");
+        }
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -452,12 +466,20 @@ public void UsePostFile(){
         NewPosts posts = new NewPosts(idb, currentUser);
         posts.setVisible(true);
         posts.RecreatePost(currentPost);
+        dispose();
     }//GEN-LAST:event_btnEditActionPerformed
-    
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        EditComments comments = new EditComments(idb, currentUser, currentPost);
+        comments.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnRemove;
     private javax.swing.JLabel jAuthor;
+    private javax.swing.JButton jButton1;
     private javax.swing.JTextArea jComment;
     private javax.swing.JButton jDownload;
     private javax.swing.JLabel jFile;

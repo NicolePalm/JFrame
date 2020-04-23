@@ -14,7 +14,6 @@ import oru.inf.InfDB;
 import oru.inf.InfException;
 import org.apache.commons.io.FilenameUtils;
 
-
 public class NewPosts extends javax.swing.JFrame {
 
     private InfDB idb;
@@ -22,8 +21,8 @@ public class NewPosts extends javax.swing.JFrame {
     private File currentFile;
     private String currentExt;
     private String currentPost;
-        
-        public NewPosts(InfDB idb, String id) {
+
+    public NewPosts(InfDB idb, String id) {
         initComponents();
         new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, "Jobb");
         this.idb = idb;
@@ -179,25 +178,25 @@ public class NewPosts extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTitleActionPerformed
 
-    private int GetCheckBoxStatus(){
-    boolean boxStatus = jSetPublish.isSelected();
-    int boxStatusInt = 0;
-    if(boxStatus == true){
-       boxStatusInt = 1;
+    private int GetCheckBoxStatus() {
+        boolean boxStatus = jSetPublish.isSelected();
+        int boxStatusInt = 0;
+        if (boxStatus == true) {
+            boxStatusInt = 1;
+        }
+        return boxStatusInt;
     }
-    return boxStatusInt;
-    }
-    
-    public void RecreatePost(String postId){
+
+    public void RecreatePost(String postId) {
         String content;
         String categoryId;
         String categoryName;
         String categoryType;
         String title;
         String file;
-        try{
-            content = idb.fetchSingle("SELECT CONTENT FROM POST WHERE POST_ID ='"+postId+"'");
-            categoryId = idb.fetchSingle("SELECT CATEGORY_ID FROM POST WHERE POST_ID ='"+postId+"'");
+        try {
+            content = idb.fetchSingle("SELECT CONTENT FROM POST WHERE POST_ID ='" + postId + "'");
+            categoryId = idb.fetchSingle("SELECT CATEGORY_ID FROM POST WHERE POST_ID ='" + postId + "'");
             categoryName = idb.fetchSingle("SELECT CATEGORYNAME FROM CATEGORY WHERE CATEGORY_ID = '" + categoryId + "'");
             categoryType = idb.fetchSingle("SELECT CATEGORYTYPE FROM CATEGORY WHERE CATEGORY_ID = '" + categoryId + "'");
             title = idb.fetchSingle("SELECT TITLE FROM POST WHERE POST_ID ='" + postId + "'");
@@ -208,18 +207,17 @@ public class NewPosts extends javax.swing.JFrame {
             this.currentPost = postId;
             jType.setSelectedItem(categoryType);
             jCategories.setSelectedItem(categoryName);
-            
-            if(!file.equals("default")){
+
+            if (!file.equals("default")) {
                 jFileName.setText(file);
             }
-            }
-        catch(InfException e){
+        } catch (InfException e) {
             System.out.println(e.getMessage());
         }
-    
+
     }
-    
-    private void UpdatePost(){
+
+    private void UpdatePost() {
         String title = jTitle.getText();
         String content = jText.getText();
         int publishStatus = GetCheckBoxStatus();
@@ -227,110 +225,104 @@ public class NewPosts extends javax.swing.JFrame {
         System.out.println(publishStatus);
         String filePath = "default";
         String fileName = jFileName.getText();
-        
-        if(title.isEmpty() || content.isEmpty()){
+
+        if (title.isEmpty() || content.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Fyll i både titel och text!");
             jTitle.requestFocus();
-        }
-        
-        else{
-        String category = jCategories.getSelectedItem().toString();
-        String sqlCategoryID = "SELECT CATEGORY_ID FROM CATEGORY WHERE CATEGORYNAME = '"+category+"'";
-        String tiden = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-        LocalDate currentDate = LocalDate.now();
-        if(currentFile == null){
-            if(!fileName.equals("")){
-                filePath = fileName;
+        } else {
+            String category = jCategories.getSelectedItem().toString();
+            String sqlCategoryID = "SELECT CATEGORY_ID FROM CATEGORY WHERE CATEGORYNAME = '" + category + "'";
+            String tiden = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+            LocalDate currentDate = LocalDate.now();
+            if (currentFile == null) {
+                if (!fileName.equals("")) {
+                    filePath = fileName;
+                }
+            } else {
+                filePath = GetCurrentFile();
+                jFileName.setText(filePath);
             }
-        }
-        else{
-            filePath = GetCurrentFile();
-            jFileName.setText(filePath);
-        }
-        
-        try{
-            String categoryID = idb.fetchSingle(sqlCategoryID);
-            idb.update("UPDATE POST SET TITLE = '" + title + "', CONTENT= '" + content + "', SEARCHPATH = '" + filePath + "', POSTDATE = '" + currentDate + "', POSTTIME = '" + tiden + "', CATEGORY_ID = " + categoryID + ", POSTSTATUS = " + publishStatus + " WHERE POST_ID = '" + currentPost + "'");
-            JOptionPane.showMessageDialog(null, "The post is updated!");
-            dispose();
-        }
-        catch(InfException e){
-            System.out.println(e.getMessage());
-        }
-        
+
+            try {
+                String categoryID = idb.fetchSingle(sqlCategoryID);
+                idb.update("UPDATE POST SET TITLE = '" + title + "', CONTENT= '" + content + "', SEARCHPATH = '" + filePath + "', POSTDATE = '" + currentDate + "', POSTTIME = '" + tiden + "', CATEGORY_ID = " + categoryID + ", POSTSTATUS = " + publishStatus + " WHERE POST_ID = '" + currentPost + "'");
+                JOptionPane.showMessageDialog(null, "The post is updated!");
+                dispose();
+            } catch (InfException e) {
+                System.out.println(e.getMessage());
+            }
+
         }
     }
-    
-    private void CreatePost(){
+
+    private void CreatePost() {
         String title = jTitle.getText();
         String content = jText.getText();
         int publishStatus = GetCheckBoxStatus();
-        
-        if(title.isEmpty() || content.isEmpty()){
+
+        if (title.isEmpty() || content.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Fyll i både titel och text!");
             jTitle.requestFocus();
-        }
-        else{
-        String category = jCategories.getSelectedItem().toString();
-        String sqlCategoryID = "SELECT CATEGORY_ID FROM CATEGORY WHERE CATEGORYNAME = '"+category+"'";
-        String tiden = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-        LocalDate currentDate = LocalDate.now();
-        
-        try {
-            String categoryID = idb.fetchSingle(sqlCategoryID);
-            
-            String id = idb.getAutoIncrement("POST","POST_ID");
-            
-            if(currentFile == null){
-                String insertPost = "INSERT INTO POST (POST_ID,TITLE,CONTENT,SEARCHPATH,POSTDATE,POSTTIME,POSTER_ID,CATEGORY_ID,POSTSTATUS) VALUES ("+id+",'"+title+"','"+content+"','default','"+currentDate+"','"+tiden+"',"+currentUser+","+categoryID+","+publishStatus+")";
-                idb.insert(insertPost);
+        } else {
+            String category = jCategories.getSelectedItem().toString();
+            String sqlCategoryID = "SELECT CATEGORY_ID FROM CATEGORY WHERE CATEGORYNAME = '" + category + "'";
+            String tiden = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+            LocalDate currentDate = LocalDate.now();
+
+            try {
+                String categoryID = idb.fetchSingle(sqlCategoryID);
+
+                String id = idb.getAutoIncrement("POST", "POST_ID");
+
+                if (currentFile == null) {
+                    String insertPost = "INSERT INTO POST (POST_ID,TITLE,CONTENT,SEARCHPATH,POSTDATE,POSTTIME,POSTER_ID,CATEGORY_ID,POSTSTATUS) VALUES (" + id + ",'" + title + "','" + content + "','default','" + currentDate + "','" + tiden + "'," + currentUser + "," + categoryID + "," + publishStatus + ")";
+                    idb.insert(insertPost);
+                } else {
+                    String filePath = GetCurrentFile();
+                    String insertPost = "INSERT INTO POST (POST_ID,TITLE,CONTENT,SEARCHPATH,POSTDATE,POSTTIME,POSTER_ID,CATEGORY_ID, POSTSTATUS) VALUES (" + id + ",'" + title + "','" + content + "','" + filePath + "','" + currentDate + "','" + tiden + "'," + currentUser + "," + categoryID + "," + publishStatus + ")";
+                    idb.insert(insertPost);
+                }
+
+                JOptionPane.showMessageDialog(null, "Nytt inlägg skapat!");
+
+                dispose();
+            } catch (InfException ex) {
+                Logger.getLogger(NewPosts.class.getName()).log(Level.SEVERE, null, ex);
             }
-            else{
-            String filePath = GetCurrentFile();    
-            String insertPost = "INSERT INTO POST (POST_ID,TITLE,CONTENT,SEARCHPATH,POSTDATE,POSTTIME,POSTER_ID,CATEGORY_ID, POSTSTATUS) VALUES ("+id+",'"+title+"','"+content+"','"+filePath+"','"+currentDate+"','"+tiden+"',"+currentUser+","+categoryID+"," + publishStatus + ")";
-            idb.insert(insertPost);
-            }
-            
-            JOptionPane.showMessageDialog(null, "Nytt inlägg skapat!");
-            
-            dispose();
-        } catch (InfException ex) {
-            Logger.getLogger(NewPosts.class.getName()).log(Level.SEVERE, null, ex);
         }
-       }
     }
-    
+
     private void jCreatePostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCreatePostActionPerformed
-        if(jValue.getText().equals("1")){
-        UpdatePost();
-        }
-        else{
-        CreatePost();
+
+        if (jValue.getText().equals("1")) {
+            UpdatePost();
+            new ViewFullPost(idb, currentUser, currentPost).setVisible(true);
+        } else {
+            CreatePost();
         }
     }//GEN-LAST:event_jCreatePostActionPerformed
 
     private void jTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTypeActionPerformed
         jCategories.removeAllItems();
         String type = jType.getSelectedItem().toString();
-        new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, type);        
+        new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, type);
     }//GEN-LAST:event_jTypeActionPerformed
 
     private void jNewCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNewCategoryActionPerformed
-       new CreateNewCategory(idb).setVisible(true);
+        new CreateNewCategory(idb).setVisible(true);
     }//GEN-LAST:event_jNewCategoryActionPerformed
 
     private void jFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileActionPerformed
-    JFileChooser fileChooser = new JFileChooser();
-    HandleFiles.FileExtensions(fileChooser);
-    
-    if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-        this.currentFile = fileChooser.getSelectedFile();  
-        String fileName = currentFile.getAbsolutePath();
-        this.jFileName.setText(fileName);
-    }
-    else {
-        System.out.println("No file choosen!");
-    }     
+        JFileChooser fileChooser = new JFileChooser();
+        HandleFiles.FileExtensions(fileChooser);
+
+        if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            this.currentFile = fileChooser.getSelectedFile();
+            String fileName = currentFile.getAbsolutePath();
+            this.jFileName.setText(fileName);
+        } else {
+            System.out.println("No file choosen!");
+        }
     }//GEN-LAST:event_jFileActionPerformed
 
     private void jHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jHomeActionPerformed
@@ -339,34 +331,29 @@ public class NewPosts extends javax.swing.JFrame {
     }//GEN-LAST:event_jHomeActionPerformed
 
     private void jSetPublishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSetPublishActionPerformed
-        
+
     }//GEN-LAST:event_jSetPublishActionPerformed
-    
-    private String GetCurrentFile() 
-    {
-        
-        
+
+    private String GetCurrentFile() {
+
         String fileName = currentFile.getAbsolutePath();
         this.currentExt = HandleFiles.getExtensionByApacheCommonLib(fileName);
-        String filename= LocalTime.now().format(DateTimeFormatter.ofPattern("HH-mm-ss")) + currentUser;
-        String filePath = "c://JFrame/Scrum/files/"+filename+"."+currentExt;
-    
-        if(currentExt.equals("png") || currentExt.equals("jpg")){
+        String filename = LocalTime.now().format(DateTimeFormatter.ofPattern("HH-mm-ss")) + currentUser;
+        String filePath = "c://JFrame/Scrum/files/" + filename + "." + currentExt;
+
+        if (currentExt.equals("png") || currentExt.equals("jpg")) {
             HandleFiles.SaveImage(currentFile, currentExt, filePath);
-        } 
-        else if(currentExt.equals("txt")){
-            try{
-            ArrayList<String> lines = HandleFiles.ReadFile(currentFile);
-            HandleFiles.SaveFile(lines, filePath);
-            }
-            catch(IOException e){
-                
+        } else if (currentExt.equals("txt")) {
+            try {
+                ArrayList<String> lines = HandleFiles.ReadFile(currentFile);
+                HandleFiles.SaveFile(lines, filePath);
+            } catch (IOException e) {
+
             }
         }
         return filePath;
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> jCategories;
@@ -384,8 +371,3 @@ public class NewPosts extends javax.swing.JFrame {
     private javax.swing.JLabel jlblTitle;
     // End of variables declaration//GEN-END:variables
 }
-
-
-
-
-
