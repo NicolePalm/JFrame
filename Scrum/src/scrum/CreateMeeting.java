@@ -363,7 +363,7 @@ public class CreateMeeting extends javax.swing.JFrame {
                         .addComponent(lblRoom)
                         .addGap(3, 3, 3)
                         .addComponent(tfRoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1))
                 .addGap(26, 26, 26)
                 .addComponent(lblReciever)
                 .addGap(11, 11, 11)

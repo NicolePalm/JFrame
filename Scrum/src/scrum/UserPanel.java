@@ -34,6 +34,9 @@ public class UserPanel extends javax.swing.JFrame {
         SetRequests();
         uppdateraUnderKategori();
         sokDatum();
+        if(admin.equals("0")){
+        jUsers.setVisible(false);
+        }
     }
     
     
@@ -112,6 +115,7 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
         jfirstdate = new com.toedter.calendar.JDateChooser();
         jShowMyPosts = new javax.swing.JButton();
         btnUpPersonalInfo = new javax.swing.JButton();
+        jUsers = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -204,6 +208,13 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
             }
         });
 
+        jUsers.setText("Manage users");
+        jUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jUsersActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -228,6 +239,8 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLatestPosts)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jUsers)
+                            .addGap(18, 18, 18)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createSequentialGroup()
@@ -256,7 +269,8 @@ JOptionPane.showMessageDialog(null, "Oops!\nSer ut som att det inte finns inläg
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jUsers))
                             .addComponent(jseconddate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jfirstdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
@@ -332,6 +346,7 @@ uppdateraUnderKategori();
 
     private void btnCreateMeetingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateMeetingActionPerformed
         new CreateMeeting(idb,currentUser, false).setVisible(true);
+        dispose();
     }//GEN-LAST:event_btnCreateMeetingActionPerformed
 
     private void jUnderKategoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUnderKategoriActionPerformed
@@ -353,19 +368,28 @@ uppdateraUnderKategori();
 
     private void jShowRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jShowRequestsActionPerformed
        new HandleMeetingRequests(idb, currentUser).setVisible(true);
+       dispose();
     }//GEN-LAST:event_jShowRequestsActionPerformed
 
     private void jShowCalendarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jShowCalendarActionPerformed
         new Calendar(idb, currentUser, admin).setVisible(true);
+        dispose();
     }//GEN-LAST:event_jShowCalendarActionPerformed
 
     private void jShowMyPostsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jShowMyPostsActionPerformed
         new MyPosts(idb, currentUser).setVisible(true);
+        dispose();
     }//GEN-LAST:event_jShowMyPostsActionPerformed
 
     private void btnUpPersonalInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpPersonalInfoActionPerformed
         new UpdatePersonalInfo(idb, currentUser).setVisible(true);
+        dispose();
     }//GEN-LAST:event_btnUpPersonalInfoActionPerformed
+
+    private void jUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUsersActionPerformed
+      new ManageUsers(idb, currentUser, admin).setVisible(true);
+      dispose();
+    }//GEN-LAST:event_jUsersActionPerformed
  
     public void SetRequests(){
     
@@ -401,6 +425,7 @@ jseconddate.setDate(dat);
     private javax.swing.JButton jShowMyPosts;
     private javax.swing.JButton jShowRequests;
     private javax.swing.JComboBox<String> jUnderKategori;
+    private javax.swing.JButton jUsers;
     private com.toedter.calendar.JDateChooser jfirstdate;
     private com.toedter.calendar.JDateChooser jseconddate;
     private javax.swing.JList<String> postList;

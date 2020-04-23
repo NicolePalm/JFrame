@@ -48,6 +48,8 @@
                       <Group type="102" attributes="0">
                           <Component id="jLatestPosts" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
+                          <Component id="jUsers" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jButton1" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
@@ -85,6 +87,7 @@
                           <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="categoryCbx" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jUnderKategori" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jUsers" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jseconddate" min="-2" max="-2" attributes="0"/>
                           <Component id="jfirstdate" min="-2" max="-2" attributes="0"/>
@@ -241,6 +244,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpPersonalInfoActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jUsers">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Manage users"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jUsersActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
