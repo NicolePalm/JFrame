@@ -30,7 +30,7 @@ public class CreateAccount extends javax.swing.JFrame {
             
             if(emptyFields == false){
             boolean InvalidEmail = validEmail(Email);
-            if(Validation.emailValidator(Email, JEmail)) {
+            if(Validation.emailValidator(Email, JEmail) && Validation.inmatningFnuttar(Email) && Validation.inmatningFnuttar(Firstname) && Validation.inmatningFnuttar(Lastname) && Validation.inmatningFnuttar(Password)) {
             if(InvalidEmail == false){
                 if(Password.equals(PasswordIgen)){ 
             boolean test = NewUser.InsertNewUser(Firstname, Lastname, Email, Password,idb);

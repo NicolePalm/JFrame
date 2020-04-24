@@ -114,7 +114,7 @@ public class CreateNewCategory extends javax.swing.JFrame {
            matchingName = true;
            }
            }
-           if(matchingName == false){
+           if(matchingName == false && Validation.inmatningFnuttar(name) && Validation.inmatningFnuttar(type)){
              idb.insert(sql);
              dispose();
            }

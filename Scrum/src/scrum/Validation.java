@@ -92,6 +92,14 @@ public class Validation {
         return resultat;
     }
     
+    static public boolean inmatningFnuttar(String inmatning){
+        if(inmatning.contains("'") || inmatning.contains("\"")){
+            JOptionPane.showMessageDialog(null, "No fnutts!");
+            return false;
+        }
+        return true;
+    }
+    
     public static boolean emailValidator(String email) {
         String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
  

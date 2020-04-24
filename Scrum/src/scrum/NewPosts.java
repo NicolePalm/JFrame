@@ -279,7 +279,7 @@ public class NewPosts extends javax.swing.JFrame {
                 String categoryID = idb.fetchSingle(sqlCategoryID);
 
                 String id = idb.getAutoIncrement("POST", "POST_ID");
-
+                if(Validation.inmatningFnuttar(content) && Validation.inmatningFnuttar(title)){
                 if (currentFile == null) {
                     String insertPost = "INSERT INTO POST (POST_ID,TITLE,CONTENT,SEARCHPATH,POSTDATE,POSTTIME,POSTER_ID,CATEGORY_ID,POSTSTATUS) VALUES (" + id + ",'" + title + "','" + content + "','default','" + currentDate + "','" + tiden + "'," + currentUser + "," + categoryID + "," + publishStatus + ")";
                     idb.insert(insertPost);
@@ -290,8 +290,10 @@ public class NewPosts extends javax.swing.JFrame {
                 }
 
                 JOptionPane.showMessageDialog(null, "New post created");
+                
 
-                dispose();
+                dispose(); 
+                }
             } catch (InfException ex) {
                 Logger.getLogger(NewPosts.class.getName()).log(Level.SEVERE, null, ex);
             }
