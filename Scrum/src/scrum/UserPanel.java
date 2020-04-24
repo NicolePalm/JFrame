@@ -1,5 +1,4 @@
 package scrum;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.text.SimpleDateFormat;
 import javax.swing.*;
@@ -25,33 +24,11 @@ public class UserPanel extends javax.swing.JFrame {
         updateMeeting();
         SetRequests();
         uppdateraUnderKategori();
-        timesSelected();
+      // timesSelected();
         sokDatum();
         if(admin.equals("0")){
         jUsers.setVisible(false);
         }
-    }
-    
-    private void timesSelected(){
-        ArrayList<String> meetingId = new ArrayList();
-        ArrayList<String> meetingTimeId = new ArrayList();
-        try{
-        meetingId = idb.fetchColumn("SELECT MEETING_ID FROM MEETING");
-        meetingTimeId = idb.fetchColumn("SELECT MEETING_ID FROM MEETINGTIME");
-        
-        if(PendingRequests.ContainsAllNulls(meetingId) == false){
-        for(String id : meetingId){
-            if(!meetingTimeId.contains(id)){
-                idb.delete("DELETE FROM MEETING WHERE MEETING_ID = '" + id + "'");
-            } 
-        }
-        }
-        }
-
-        catch(InfException e){
-        System.out.println(e.getMessage());   
-        }
-
     }
     
     
@@ -75,8 +52,6 @@ public class UserPanel extends javax.swing.JFrame {
             String second = ConvertDate(seconda);
             String first = ConvertDate(firsta);
             
-             System.out.println(first);
-             System.out.println(second);
             String postQuery = "SELECT post_id, title, postdate, posttime, post.category_id FROM post, category \n"
                     + "WHERE post.CATEGORY_ID = category.CATEGORY_ID AND categorytype = '"+category+"' and post.CATEGORY_ID = "+sver+" AND POSTSTATUS = 1 AND POSTDATE BETWEEN '"+second+"' and '"+first+"' ORDER BY postdate DESC, posttime DESC";
                     
@@ -103,7 +78,7 @@ public class UserPanel extends javax.swing.JFrame {
         postList.setModel(listModel);
         }
 
-        catch (Exception e) {
+        catch (NumberFormatException | InfException e) {
             System.out.println("Error");
             JOptionPane.showMessageDialog(null, "No posts in this category");
         }
@@ -335,7 +310,6 @@ public class UserPanel extends javax.swing.JFrame {
         
         for (String id : post_id){
             pId = id;
-            System.out.println(pId);
             break;
         }
         int postId = Integer.parseInt(pId);
@@ -356,9 +330,11 @@ public class UserPanel extends javax.swing.JFrame {
         String type = categoryCbx.getSelectedItem().toString();
         new FillComboBoxFromDb(idb).fillComboboxCategories(jUnderKategori, type);       
     }
-    private void updateMeeting(){
+    
+    public void updateMeeting(){
         UpdateMeetings update = new UpdateMeetings(idb, currentUser);
-        update.deletePassedMeetings();
+        update.setMeetingTimes();
+        update.timesSelected();
     }
     
     

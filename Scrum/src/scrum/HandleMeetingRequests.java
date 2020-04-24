@@ -38,11 +38,10 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         if(PendingRequests.ContainsAllNulls(requests)==false){
         try{ 
         for(String request : requests){
-            String time = idb.fetchSingle("SELECT MEETINGTIME FROM MEETING WHERE MEETING_ID = '" + request + "'");
             String date = idb.fetchSingle("SELECT MEETINGDATE FROM MEETING WHERE MEETING_ID = '" + request + "'");
             String createrid = idb.fetchSingle("SELECT MEETINGCREATER_ID FROM MEETING WHERE MEETING_ID = '" + request + "'");
             String createrEmail = idb.fetchSingle("SELECT EMAIL FROM USER1 WHERE USER_ID = '" + createrid + "'");
-            String meetingInfo = createrEmail + " " + time + " " + date;
+            String meetingInfo = "Meeting: " + request + " - " + createrEmail + " " + date;
             demoList.addElement(meetingInfo);
         }
         }
@@ -64,23 +63,28 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         String value = jlRequests.getSelectedValue();
         if(!value.equals("No meetingrequests")){
         String[] requestInfo = value.split(" ");
-        String email = requestInfo[0];
-        String time = requestInfo[1];
-        String date = requestInfo[2];
+        String id = requestInfo[1];
         
         try{
-            String userId = idb.fetchSingle("SELECT user_id FROM USER1 WHERE email = '" + email + "'");
+            String userId = idb.fetchSingle("SELECT MEETINGCREATER_ID FROM MEETING WHERE MEETING_ID = '" + id + "'");
             String firstName = idb.fetchSingle("SELECT firstname FROM USER1 WHERE user_id = '" + userId + "'");
             String lastName = idb.fetchSingle("SELECT lastname FROM USER1 WHERE user_id = '" + userId + "'");
-            String meeting = idb.fetchSingle("SELECT meeting_id FROM MEETING WHERE meetingcreater_id = '" + userId + "' AND meetingdate = '" + date + "' AND meetingtime = '" + time + "'");
-            String room = idb.fetchSingle("SELECT roomname FROM meeting WHERE meeting_id = '" + meeting + "'");
-            String description = idb.fetchSingle("SELECT description FROM meeting WHERE meeting_id = '" + meeting + "'");
+            String room = idb.fetchSingle("SELECT roomname FROM meeting WHERE meeting_id = '" + id + "'");
+            String description = idb.fetchSingle("SELECT description FROM meeting WHERE meeting_id = '" + id + "'");
+            String date = idb.fetchSingle("SELECT meetingdate FROM meeting WHERE meeting_id = '" + id + "'");
+            String time = idb.fetchSingle("SELECT meetingtime FROM meeting WHERE meeting_id = '" + id + "'");
+            time = time.substring(0, 5);
             jlblRequested.setText("Requested by: " + firstName + " " + lastName);
             jlblRoom.setText("Room: " + room);
             jlblDate.setText("Date: " + date);
+            if(!time.equals("00:00")){
             jlblTime.setText("Time: " + time);
+            }
+            else{
+                jlblTime.setText("Time not selected yet");
+            }
             jtxtADescription.setText(description);
-            this.selectedMeeting = meeting;
+            this.selectedMeeting = id;
         }
         catch(InfException e){
             System.out.println(e.getMessage());
@@ -104,11 +108,10 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         if(PendingRequests.ContainsAllNulls(acceptedRequests)==false){
         try{ 
         for(String request : acceptedRequests){
-            String time = idb.fetchSingle("SELECT MEETINGTIME FROM MEETING WHERE MEETING_ID = '" + request + "'");
             String date = idb.fetchSingle("SELECT MEETINGDATE FROM MEETING WHERE MEETING_ID = '" + request + "'");
             String createrid = idb.fetchSingle("SELECT MEETINGCREATER_ID FROM MEETING WHERE MEETING_ID = '" + request + "'");
             String createrEmail = idb.fetchSingle("SELECT EMAIL FROM USER1 WHERE USER_ID = '" + createrid + "'");
-            String meetingInfo = createrEmail + " " + time + " " + date;
+            String meetingInfo = "Meeting: " + request + " - " + createrEmail + " " + date;
             demoList.addElement(meetingInfo);
         }
         }
@@ -126,23 +129,28 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         String value = jlAccepted.getSelectedValue();
         if(!value.equals("No accepted meetings")){
         String[] requestInfo = value.split(" ");
-        String email = requestInfo[0];
-        String time = requestInfo[1];
-        String date = requestInfo[2];
+        String id = requestInfo[1];
         
         try{
-            String userId = idb.fetchSingle("SELECT user_id FROM USER1 WHERE email = '" + email + "'");
+            String userId = idb.fetchSingle("SELECT MEETINGCREATER_ID FROM MEETING WHERE MEETING_ID = '" + id + "'");
             String firstName = idb.fetchSingle("SELECT firstname FROM USER1 WHERE user_id = '" + userId + "'");
             String lastName = idb.fetchSingle("SELECT lastname FROM USER1 WHERE user_id = '" + userId + "'");
-            String meeting = idb.fetchSingle("SELECT meeting_id FROM MEETING WHERE meetingcreater_id = '" + userId + "' AND meetingdate = '" + date + "' AND meetingtime = '" + time + "'");
-            String room = idb.fetchSingle("SELECT roomname FROM meeting WHERE meeting_id = '" + meeting + "'");
-            String description = idb.fetchSingle("SELECT description FROM meeting WHERE meeting_id = '" + meeting + "'");
+            String room = idb.fetchSingle("SELECT roomname FROM meeting WHERE meeting_id = '" + id + "'");
+            String description = idb.fetchSingle("SELECT description FROM meeting WHERE meeting_id = '" + id + "'");
+            String date = idb.fetchSingle("SELECT meetingdate FROM meeting WHERE meeting_id = '" + id + "'");
+            String time = idb.fetchSingle("SELECT meetingtime FROM meeting WHERE meeting_id = '" + id + "'");
+            time = time.substring(0, 5);
             jlblRequested.setText("Requested by: " + firstName + " " + lastName);
             jlblRoom.setText("Room: " + room);
             jlblDate.setText("Date: " + date);
+            if(time.equals("00:00")){
+                jlblTime.setText("Time not selected yet");
+            }
+            else{
             jlblTime.setText("Time: " + time);
+            }
             jtxtADescription.setText(description);
-            this.selectedMeeting = meeting;
+            this.selectedMeeting = id;
         }
         catch(InfException e){
             System.out.println(e.getMessage());
@@ -165,6 +173,7 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         jbtnDecline.setVisible(false);
         
     }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -200,10 +209,13 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         jtxtADescription.setRows(5);
         jScrollPane2.setViewportView(jtxtADescription);
 
+        jlblTime.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jlblTime.setText("Time:");
 
+        jlblRoom.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jlblRoom.setText("Room:");
 
+        jlblRequested.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jlblRequested.setText("Requested by:");
 
         jbtnAccept.setText("Accept");
@@ -220,6 +232,7 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
             }
         });
 
+        jlblDescription.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jlblDescription.setText("Description");
 
         jlAccepted.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -229,10 +242,13 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(jlAccepted);
 
+        jlblMeetingRequests.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jlblMeetingRequests.setText("Meetingrequests");
 
+        jlblAcceptedMeeting.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jlblAcceptedMeeting.setText("Accepted meetings");
 
+        jlblDate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jlblDate.setText("Date:");
 
         jbtnBack.setText("Back");
@@ -249,32 +265,34 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jlblAcceptedMeeting, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 222, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jlblMeetingRequests, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addGap(28, 28, 28)))
+                        .addGap(28, 28, 28))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jlblMeetingRequests, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlblAcceptedMeeting, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jlblRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jlblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
-                        .addComponent(jlblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jlblDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(54, 54, 54)
-                        .addComponent(jbtnAccept)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jbtnAccept)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jbtnDecline))
                     .addComponent(jScrollPane2)
-                    .addComponent(jlblRequested, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jlblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 39, Short.MAX_VALUE))
+                            .addComponent(jlblRequested, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jlblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlblRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(25, 25, 25))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -286,14 +304,16 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jbtnBack)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jlblRequested)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlblRoom)
-                    .addComponent(jlblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlblDate)
-                    .addComponent(jlblMeetingRequests))
+                    .addComponent(jlblRequested)
+                    .addComponent(jlblRoom))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jlblDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jlblMeetingRequests)
+                        .addComponent(jlblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -303,15 +323,11 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jlblDescription)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jbtnAccept)
-                                    .addComponent(jbtnDecline))
-                                .addGap(14, 14, 14)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jlblDescription)
+                            .addComponent(jbtnDecline)
+                            .addComponent(jbtnAccept))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(21, 21, 21))
         );
@@ -340,16 +356,24 @@ public class HandleMeetingRequests extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtnDeclineActionPerformed
 
     private void jbtnAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAcceptActionPerformed
-
+        String meetingTime = jlblTime.getText();
+        String time = "Time not selected yet";
+        System.out.println(meetingTime);
+        System.out.println(time);
         try{
             idb.update("UPDATE meetingrequest SET status = 1 WHERE receiver_id = '" + currentUser + "' AND meeting_id = '" + selectedMeeting + "'");
+            if(meetingTime.equals(time)){
+            new VoteOnTime(idb, selectedMeeting, currentUser).setVisible(true);
+           }
         }
         catch(InfException e){
-            
+        
         }
         SetDefaultValues();
         FillAcceptedList();
         FillRequestList();
+       
+
     }//GEN-LAST:event_jbtnAcceptActionPerformed
 
     private void jlAcceptedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlAcceptedMouseClicked
