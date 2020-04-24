@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import javax.swing.DefaultListModel;
+import oru.inf.InfException;
 import static scrum.Calendar.ConvertDate;
 
 public class UserPanel extends javax.swing.JFrame {
@@ -24,10 +25,33 @@ public class UserPanel extends javax.swing.JFrame {
         updateMeeting();
         SetRequests();
         uppdateraUnderKategori();
+        timesSelected();
         sokDatum();
         if(admin.equals("0")){
         jUsers.setVisible(false);
         }
+    }
+    
+    private void timesSelected(){
+        ArrayList<String> meetingId = new ArrayList();
+        ArrayList<String> meetingTimeId = new ArrayList();
+        try{
+        meetingId = idb.fetchColumn("SELECT MEETING_ID FROM MEETING");
+        meetingTimeId = idb.fetchColumn("SELECT MEETING_ID FROM MEETINGTIME");
+        
+        if(PendingRequests.ContainsAllNulls(meetingId) == false){
+        for(String id : meetingId){
+            if(!meetingTimeId.contains(id)){
+                idb.delete("DELETE FROM MEETING WHERE MEETING_ID = '" + id + "'");
+            } 
+        }
+        }
+        }
+
+        catch(InfException e){
+        System.out.println(e.getMessage());   
+        }
+
     }
     
     
