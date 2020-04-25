@@ -478,8 +478,14 @@ public class CreateMeeting extends javax.swing.JFrame {
     }//GEN-LAST:event_jDeleteActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        if(editorMode == false){
         ReturnToHome.CreateHomeScreen(idb, currentUser);
         dispose();
+        }
+        else{
+            ReturnToHome.CreateCalendar(idb, currentUser);
+            dispose();
+        }
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void tfDescriptionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfDescriptionKeyTyped

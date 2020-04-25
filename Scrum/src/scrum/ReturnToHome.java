@@ -26,5 +26,19 @@ public class ReturnToHome{
            Logger.getLogger(ReturnToHome.class.getName()).log(Level.SEVERE, null, ex);
        }
 }
+     public static void CreateCalendar(InfDB idb, String currentUser){
+    
+    String checkAdmin = "SELECT ADMINSTATUS from USER1 where USER_ID = '"+currentUser+"'";
+       try {
+           
+           String svarAdmin = idb.fetchSingle(checkAdmin);
+       
+                 new Calendar(idb,currentUser,svarAdmin).setVisible(true);
+
+           
+       } catch (InfException ex) {
+           Logger.getLogger(ReturnToHome.class.getName()).log(Level.SEVERE, null, ex);
+       }
+}
  
 }

@@ -232,8 +232,10 @@ public class Calendar extends javax.swing.JFrame {
 
         if(PendingRequests.ContainsAllNulls(notes)==false){
         jNotes.setText(notes.get(0));
-        System.out.print(notes.get(0));
         savedNote = true;
+        }
+        else{
+            savedNote= false;
         }
         
     }
@@ -257,6 +259,9 @@ public class Calendar extends javax.swing.JFrame {
         try{ 
         for(String meeting : meetings){
             String time = idb.fetchSingle("SELECT MEETINGTIME FROM MEETING WHERE MEETING_ID = '" +meeting+ "'");
+            if(time.equals("00:00:00")){
+                time= "";
+            }
             String roomName = idb.fetchSingle("SELECT ROOMNAME FROM MEETING WHERE MEETING_ID = '" +meeting+ "'");
             String meetingCreater = idb.fetchSingle("SELECT MEETINGCREATER_ID FROM MEETING WHERE MEETING_ID ='"+meeting+"'");
             String email = idb.fetchSingle("SELECT EMAIL FROM USER1 WHERE USER_ID = '" +meetingCreater+ "'");
@@ -277,6 +282,7 @@ public class Calendar extends javax.swing.JFrame {
     
     //returns to userpanel
     private void jBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBackButtonActionPerformed
+
         ReturnToHome.CreateHomeScreen(idb, currentUser);
         dispose();
     }//GEN-LAST:event_jBackButtonActionPerformed
@@ -338,6 +344,8 @@ public class Calendar extends javax.swing.JFrame {
    
     //selects meeting, and finds its description, attendants and personal note
     public void SelectMeeting(){
+        jNotes.setText("");
+        jCountWords.setText("Personal note");
         String value = jMeetingList.getSelectedValue();
         ArrayList<String> attendants = new ArrayList();
         DefaultListModel demoList = new DefaultListModel();
@@ -359,10 +367,14 @@ public class Calendar extends javax.swing.JFrame {
             String description = idb.fetchSingle("SELECT description FROM meeting WHERE meeting_id = '" + selectedMeeting + "'");
             jAttendants.setModel(demoList);
             jDescription.setText(description);
+            String creater = idb.fetchSingle("SELECT MEETINGCREATER_ID FROM MEETING WHERE MEETING_ID = '" + selectedMeeting + "'");
             findNote();
-            if(admin.equals("1")){
+            if(admin.equals("1") || currentUser.equals(creater)){
             jEditMeeting.setVisible(true);
         }
+            else{
+                jEditMeeting.setVisible(false);
+            }
 
         }
         catch(InfException e){
@@ -385,6 +397,7 @@ public class Calendar extends javax.swing.JFrame {
         jNotes.setText("");
         jAttendants.setModel(demoList);
         jCountWords.setText("Personal note");
+        savedNote = false;
      
     }
     

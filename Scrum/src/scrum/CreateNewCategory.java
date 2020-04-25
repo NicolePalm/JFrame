@@ -11,6 +11,7 @@ public class CreateNewCategory extends javax.swing.JFrame {
         initComponents();
         this.idb = idb;
         this.jErrorMessage.setVisible(false);
+        jCategoryName.requestFocus();
     }
     
     

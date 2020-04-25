@@ -14,7 +14,7 @@ public class UpdatePersonalInfo extends javax.swing.JFrame {
         initComponents();
         this.idb = idb;
         this.currentUser = id;
-        fillTf();
+        fillTf(); 
     }
 
    public void fillTf() {

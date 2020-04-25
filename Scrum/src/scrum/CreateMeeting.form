@@ -40,38 +40,33 @@
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblDate" min="-2" pref="55" max="-2" attributes="0"/>
-                                  <Component id="jDateChooser" min="-2" pref="171" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="tfRoom" min="-2" pref="179" max="-2" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="lblRoom" min="-2" pref="44" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jCounterRoom" min="-2" pref="138" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
+                          <Component id="lblDate" min="-2" pref="55" max="-2" attributes="0"/>
+                          <Component id="jDateChooser" min="-2" pref="171" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="tfRoom" min="-2" pref="179" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="lblRoom" min="-2" pref="44" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jCounterRoom" min="-2" pref="138" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="btnCreateMeeting" alignment="1" max="32767" attributes="0"/>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="cbReciver" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="btnResetReciver" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="jDelete" alignment="1" max="32767" attributes="0"/>
-                                      <Component id="btnAddReciver" min="-2" pref="166" max="-2" attributes="0"/>
-                                      <Component id="lblReciever" alignment="0" min="-2" pref="73" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace type="unrelated" max="32767" attributes="0"/>
-                                  <Component id="jScrollPane3" max="32767" attributes="0"/>
-                              </Group>
+                      </Group>
+                  </Group>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="btnCreateMeeting" alignment="1" max="32767" attributes="0"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="cbReciver" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btnResetReciver" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jDelete" alignment="1" max="32767" attributes="0"/>
+                              <Component id="btnAddReciver" min="-2" pref="166" max="-2" attributes="0"/>
+                              <Component id="lblReciever" alignment="0" min="-2" pref="73" max="-2" attributes="0"/>
                           </Group>
+                          <EmptySpace type="unrelated" max="32767" attributes="0"/>
+                          <Component id="jScrollPane3" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
