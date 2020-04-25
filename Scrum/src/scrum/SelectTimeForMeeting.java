@@ -13,6 +13,9 @@ public class SelectTimeForMeeting extends javax.swing.JFrame {
         initComponents();
         this.idb = idb;
         this.currentMeeting = id;
+        jTime2.setVisible(false);
+        jTime3.setVisible(false);
+        jTime4.setVisible(false);
     }
     
   
@@ -30,12 +33,27 @@ public class SelectTimeForMeeting extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTime3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No time selected", "06:00", "06:30", "07:00", "07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00" }));
+        jTime3.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jTime3ItemStateChanged(evt);
+            }
+        });
 
         jTime2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No time selected", "06:00", "06:30", "07:00", "07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00" }));
+        jTime2.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jTime2ItemStateChanged(evt);
+            }
+        });
 
         jTime4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No time selected", "06:00", "06:30", "07:00", "07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00" }));
 
         jTime1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No time selected", "06:00", "06:30", "07:00", "07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00" }));
+        jTime1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jTime1ItemStateChanged(evt);
+            }
+        });
 
         jConfirm.setText("Confirm");
         jConfirm.addActionListener(new java.awt.event.ActionListener() {
@@ -67,7 +85,7 @@ public class SelectTimeForMeeting extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(100, 100, 100))
+                .addGap(99, 99, 99))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -80,11 +98,11 @@ public class SelectTimeForMeeting extends javax.swing.JFrame {
                     .addComponent(jTime1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTime4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTime3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jTime3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTime4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addComponent(jConfirm)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGap(18, 18, 18))
         );
 
         pack();
@@ -133,6 +151,27 @@ public class SelectTimeForMeeting extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_jConfirmActionPerformed
+
+    private void jTime1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jTime1ItemStateChanged
+        String value = jTime1.getSelectedItem().toString();
+        if(!value.equals("No time selected")){
+            jTime2.setVisible(true);
+        }
+    }//GEN-LAST:event_jTime1ItemStateChanged
+
+    private void jTime2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jTime2ItemStateChanged
+        String value = jTime2.getSelectedItem().toString();
+        if(!value.equals("No time selected")){
+            jTime3.setVisible(true);
+        }
+    }//GEN-LAST:event_jTime2ItemStateChanged
+
+    private void jTime3ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jTime3ItemStateChanged
+        String value = jTime3.getSelectedItem().toString();
+        if(!value.equals("No time selected")){
+            jTime4.setVisible(true);
+        }
+    }//GEN-LAST:event_jTime3ItemStateChanged
 
   
 

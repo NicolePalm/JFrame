@@ -26,7 +26,11 @@
           <Group type="102" alignment="0" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnRemove" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="btnEdit" min="-2" pref="112" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="jFile" min="-2" pref="238" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Component id="jDownload" min="-2" max="-2" attributes="0"/>
@@ -34,18 +38,18 @@
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jToUserPanel" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" attributes="0">
+                          <Component id="jToUserPanel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
                               <Component id="jPicture" min="-2" pref="336" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jAuthor" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTitle" min="-2" pref="354" max="-2" attributes="0"/>
                                   <Component id="jpostDate" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jTitle" min="-2" pref="391" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace min="0" pref="7" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
@@ -62,13 +66,9 @@
                       <Component id="jSend" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jLabel2" min="-2" pref="158" max="-2" attributes="0"/>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                      <Component id="btnRemove" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="btnEdit" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="-2" pref="107" max="-2" attributes="0"/>
+                      <Component id="btnComment" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -97,17 +97,17 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jFile" min="-2" pref="21" max="-2" attributes="0"/>
                           <Component id="jDownload" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="btnRemove" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnEdit" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jScrollPane2" min="-2" pref="276" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="btnRemove" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnEdit" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="btnComment" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -130,7 +130,7 @@
     <Component class="javax.swing.JLabel" name="jTitle">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="36" style="1"/>
+          <Font name="Tahoma" size="30" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Title : The post"/>
       </Properties>
@@ -155,7 +155,7 @@
             <Property name="editable" type="boolean" value="false"/>
             <Property name="columns" type="int" value="20"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="14" style="0"/>
+              <Font name="Arial" size="18" style="0"/>
             </Property>
             <Property name="rows" type="int" value="5"/>
           </Properties>
@@ -165,7 +165,7 @@
     <Component class="javax.swing.JLabel" name="jpostDate">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="14" style="0"/>
+          <Font name="Tahoma" size="16" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Date"/>
       </Properties>
@@ -244,7 +244,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnRemove">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Remove"/>
+        <Property name="text" type="java.lang.String" value="Remove post"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRemoveActionPerformed"/>
@@ -252,18 +252,18 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnEdit">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Edit"/>
+        <Property name="text" type="java.lang.String" value="Edit post"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="btnComment">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Comments"/>
+        <Property name="text" type="java.lang.String" value="Delete comments"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCommentActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

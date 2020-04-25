@@ -50,9 +50,12 @@ public class ViewFullPost extends javax.swing.JFrame {
             if (svar.equals("1")) {
                 btnRemove.setVisible(true);
                 btnEdit.setVisible(true);
+                btnComment.setVisible(true);
+                
             } else {
                 btnRemove.setVisible(false);
                 btnEdit.setVisible(false);
+                btnComment.setVisible(false);
             }
 
         } catch (InfException e) {
@@ -208,11 +211,11 @@ public class ViewFullPost extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         btnRemove = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnComment = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTitle.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jTitle.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
         jTitle.setText("Title : The post");
 
         jAuthor.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -220,11 +223,11 @@ public class ViewFullPost extends javax.swing.JFrame {
 
         jPostBody.setEditable(false);
         jPostBody.setColumns(20);
-        jPostBody.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jPostBody.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jPostBody.setRows(5);
         jScrollPane2.setViewportView(jPostBody);
 
-        jpostDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jpostDate.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jpostDate.setText("Date");
 
         jToUserPanel.setText("Back");
@@ -266,24 +269,24 @@ public class ViewFullPost extends javax.swing.JFrame {
 
         jLabel2.setText("Comments");
 
-        btnRemove.setText("Remove");
+        btnRemove.setText("Remove post");
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveActionPerformed(evt);
             }
         });
 
-        btnEdit.setText("Edit");
+        btnEdit.setText("Edit post");
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditActionPerformed(evt);
             }
         });
 
-        jButton1.setText("Comments");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnComment.setText("Delete comments");
+        btnComment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnCommentActionPerformed(evt);
             }
         });
 
@@ -294,7 +297,11 @@ public class ViewFullPost extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addContainerGap()
+                        .addComponent(btnRemove)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jFile, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(27, 27, 27)
                         .addComponent(jDownload))
@@ -304,12 +311,12 @@ public class ViewFullPost extends javax.swing.JFrame {
                             .addComponent(jToUserPanel)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPicture, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(37, 37, 37)
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jAuthor)
-                                    .addComponent(jTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jpostDate))))
-                        .addGap(0, 7, Short.MAX_VALUE))
+                                    .addComponent(jpostDate)
+                                    .addComponent(jTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane2)))
@@ -322,13 +329,9 @@ public class ViewFullPost extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jSend))
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(btnRemove)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnEdit)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(107, 107, 107)
+                        .addComponent(btnComment)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -350,15 +353,15 @@ public class ViewFullPost extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jFile, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jDownload))
+                            .addComponent(jDownload)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnRemove)
+                                .addComponent(btnEdit)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnRemove)
-                            .addComponent(btnEdit)
-                            .addComponent(jButton1))
+                        .addComponent(btnComment)
                         .addGap(28, 28, 28)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -470,17 +473,17 @@ public class ViewFullPost extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnEditActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnCommentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCommentActionPerformed
         EditComments comments = new EditComments(idb, currentUser, currentPost);
         comments.setVisible(true);
         dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnCommentActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnComment;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnRemove;
     private javax.swing.JLabel jAuthor;
-    private javax.swing.JButton jButton1;
     private javax.swing.JTextArea jComment;
     private javax.swing.JButton jDownload;
     private javax.swing.JLabel jFile;

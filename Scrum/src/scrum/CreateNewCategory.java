@@ -2,6 +2,7 @@ package scrum;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 public class CreateNewCategory extends javax.swing.JFrame {
 
@@ -26,7 +27,7 @@ public class CreateNewCategory extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTyp.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Jobb", "Fritid" }));
+        jTyp.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Formal", "Informal" }));
 
         jCategoryName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -59,16 +60,19 @@ public class CreateNewCategory extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTyp, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jErrorMessage)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(jTyp, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addComponent(jCategoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jCreateButton, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(23, 23, 23))
+                        .addGap(115, 115, 115))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jCreateButton)
+                            .addComponent(jCategoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -102,6 +106,7 @@ public class CreateNewCategory extends javax.swing.JFrame {
     private void jCreateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCreateButtonActionPerformed
         try{
            String name = jCategoryName.getText();
+           if(name.length() <= 35){
            String type = jTyp.getSelectedItem().toString();
            ArrayList<String>names = new ArrayList<String>();
            names = idb.fetchColumn("select CATEGORYNAME from CATEGORY");
@@ -117,6 +122,11 @@ public class CreateNewCategory extends javax.swing.JFrame {
            if(matchingName == false && Validation.inmatningFnuttar(name) && Validation.inmatningFnuttar(type)){
              idb.insert(sql);
              dispose();
+           }
+           }
+           else{
+               JOptionPane.showMessageDialog(null, "Categoryname can only be 35 characters");
+               jCategoryName.requestFocus();
            }
          
        }

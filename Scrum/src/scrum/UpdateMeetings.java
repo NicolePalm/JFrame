@@ -43,7 +43,6 @@ public class UpdateMeetings {
                   String sql = "SELECT TIME_" + voteIndex + " FROM MEETINGTIME WHERE MEETING_ID = '" + meetingId + "'";
                   String time = idb.fetchSingle(sql);
                   idb.update("UPDATE MEETING SET MEETINGTIME = '" + time + "' WHERE MEETING_ID = '" + meetingId + "'");
-                  //idb.delete("DELETE FROM MEETINGTIME WHERE MEETING_ID = '" + meetingId + "'");
 
                 }
             }
@@ -111,7 +110,6 @@ public class UpdateMeetings {
             if(PendingRequests.ContainsAllNulls(meetingTimeId) == false){
         for(String id : meetingId){
              String time = idb.fetchSingle("SELECT MEETINGTIME FROM MEETING WHERE MEETING_ID = '" + id + "'");
-            System.out.println(time);
             if(!meetingTimeId.contains(id) && time.equals("00:00:00")){
                 idb.delete("DELETE FROM MEETING WHERE MEETING_ID = '" + id + "'");
             } 

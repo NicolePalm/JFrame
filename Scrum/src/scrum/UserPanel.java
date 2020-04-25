@@ -24,7 +24,6 @@ public class UserPanel extends javax.swing.JFrame {
         updateMeeting();
         SetRequests();
         uppdateraUnderKategori();
-      // timesSelected();
         sokDatum();
         if(admin.equals("0")){
         jUsers.setVisible(false);
@@ -51,29 +50,44 @@ public class UserPanel extends javax.swing.JFrame {
            
             String second = ConvertDate(seconda);
             String first = ConvertDate(firsta);
-            
-            String postQuery = "SELECT post_id, title, postdate, posttime, post.category_id FROM post, category \n"
-                    + "WHERE post.CATEGORY_ID = category.CATEGORY_ID AND categorytype = '"+category+"' and post.CATEGORY_ID = "+sver+" AND POSTSTATUS = 1 AND POSTDATE BETWEEN '"+second+"' and '"+first+"' ORDER BY postdate DESC, posttime DESC";
-                    
-            ArrayList<HashMap<String, String>> posts = idb.fetchRows(postQuery);
-            String queryId;
-            String queryTitle;
-            String queryContent;
-            String querySearchpath;
-            String queryDate;
-            String queryTime;
             DefaultListModel listModel = new DefaultListModel();
+            
+           // String postQuery = "SELECT post_id, title, postdate, posttime, post.category_id FROM post, category \n"
+                //    + "WHERE post.CATEGORY_ID = category.CATEGORY_ID AND categorytype = '"+category+"' and post.CATEGORY_ID = "+sver+" AND POSTSTATUS = 1 AND POSTDATE BETWEEN '"+second+"' and '"+first+"' ORDER BY postdate DESC, posttime DESC";
+            
+//            ArrayList<HashMap<String, String>> posts = idb.fetchRows(postQuery);
+//            String queryId;
+//            String queryTitle;
+//            String queryContent;
+//            String querySearchpath;
+//            String queryDate;
+//            String queryTime;
+//            DefaultListModel listModel = new DefaultListModel();
+//
+//            for (HashMap<String, String> post : posts){
+//                queryId = post.get("POST_ID");
+//                queryTitle = post.get("TITLE");
+//                queryContent = post.get("CONTENT");
+//                querySearchpath = post.get("SEARCHPATH");
+//                queryDate = post.get("POSTDATE");
+//                queryTime = post.get("POSTTIME");
+//                listModel.addElement(queryId + " | " + queryTitle + " | " + queryDate + " | " + queryTime);
+//
+//            }
 
-            for (HashMap<String, String> post : posts){
-                queryId = post.get("POST_ID");
-                queryTitle = post.get("TITLE");
-                queryContent = post.get("CONTENT");
-                querySearchpath = post.get("SEARCHPATH");
-                queryDate = post.get("POSTDATE");
-                queryTime = post.get("POSTTIME");
-                listModel.addElement(queryId + " | " + queryTitle + " | " + queryDate + " | " + queryTime);
-
-            }
+        String title = "";
+        String date = "";
+        String time = "";
+         ArrayList <String> publishedId = new ArrayList();
+         publishedId = idb.fetchColumn("SELECT POST_ID FROM POST WHERE CATEGORY_ID = '" + svaret + "' AND POSTSTATUS = 1 AND POSTDATE BETWEEN '" + second + "' and '"+ first +"' ORDER BY postdate DESC, posttime DESC");
+         if(PendingRequests.ContainsAllNulls(publishedId) == false){
+             for(String id : publishedId){
+                 title = idb.fetchSingle("SELECT TITLE FROM POST WHERE POST_ID = '" + id + "'");
+                 date = idb.fetchSingle("SELECT POSTDATE FROM POST WHERE POST_ID = '" + id + "'");
+                 time = idb.fetchSingle("SELECT POSTTIME FROM POST WHERE POST_ID = '" + id + "'");
+                 listModel.addElement(id + " | " + title + " | " + date + " | " + time);
+             }
+         }
 
         postList.setModel(listModel);
         }
@@ -92,8 +106,6 @@ public class UserPanel extends javax.swing.JFrame {
         dateComponentFormatter1 = new org.jdatepicker.impl.DateComponentFormatter();
         jLatestPosts = new javax.swing.JLabel();
         jNewPost = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        postList = new javax.swing.JList<>();
         categoryCbx = new javax.swing.JComboBox<>();
         btnCreateMeeting = new javax.swing.JButton();
         jUnderKategori = new javax.swing.JComboBox<>();
@@ -107,6 +119,8 @@ public class UserPanel extends javax.swing.JFrame {
         btnUpPersonalInfo = new javax.swing.JButton();
         jUsers = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        postList = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -119,21 +133,7 @@ public class UserPanel extends javax.swing.JFrame {
             }
         });
 
-        postList.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
-        postList.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        postList.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                postListMouseEntered(evt);
-            }
-        });
-        postList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                postListValueChanged(evt);
-            }
-        });
-        jScrollPane2.setViewportView(postList);
-
-        categoryCbx.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Jobb", "Fritid" }));
+        categoryCbx.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Formal", "Informal" }));
         categoryCbx.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 categoryCbxActionPerformed(evt);
@@ -213,17 +213,50 @@ public class UserPanel extends javax.swing.JFrame {
             }
         });
 
+        postList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                postListMouseEntered(evt);
+            }
+        });
+        postList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                postListValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(postList);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(33, 33, 33)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLatestPosts)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jPendingRequests)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jUsers))
+                                    .addComponent(jButton2))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jseconddate, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jfirstdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jShowMyPosts)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jNewPost)
@@ -232,53 +265,35 @@ public class UserPanel extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnCreateMeeting, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jShowRequests, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jShowRequests, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnUpPersonalInfo))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 678, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPendingRequests)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jUsers))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton2)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)
-                                .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jseconddate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jfirstdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(33, Short.MAX_VALUE))
+                                .addComponent(btnUpPersonalInfo)))
+                        .addGap(33, 33, 33))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jUsers)
-                        .addComponent(jPendingRequests))
-                    .addComponent(jseconddate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jfirstdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(3, 3, 3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(jButton2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jPendingRequests)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jUsers)))
+                            .addComponent(jfirstdate, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jseconddate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
                 .addComponent(jLatestPosts)
-                .addGap(2, 2, 2)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnUpPersonalInfo)
                     .addComponent(jShowMyPosts)
@@ -302,29 +317,6 @@ public class UserPanel extends javax.swing.JFrame {
         uppdateraUnderKategori();       
     }//GEN-LAST:event_categoryCbxActionPerformed
 
-    private void postListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_postListValueChanged
-        try {
-        String listItem = postList.getSelectedValue();
-        String[] post_id = listItem.split(" ");
-        String pId = "";
-        
-        for (String id : post_id){
-            pId = id;
-            break;
-        }
-        int postId = Integer.parseInt(pId);
-        
-        new ViewFullPost(idb, currentUser, pId).setVisible(true);
-        
-        dispose();
-        }
-        
-        catch (Exception e) {
-            System.out.println("Nåt sket sig");
-        
-        }
-    }//GEN-LAST:event_postListValueChanged
-
     public void uppdateraUnderKategori(){
      jUnderKategori.removeAllItems();
         String type = categoryCbx.getSelectedItem().toString();
@@ -339,10 +331,6 @@ public class UserPanel extends javax.swing.JFrame {
     
     
     
-    private void postListMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_postListMouseEntered
-        postList.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }//GEN-LAST:event_postListMouseEntered
-
     private void btnCreateMeetingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateMeetingActionPerformed
         new CreateMeeting(idb,currentUser, false).setVisible(true);
         dispose();
@@ -362,7 +350,7 @@ public class UserPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_jUnderKategoriMouseReleased
 
     private void jUnderKategoriMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jUnderKategoriMouseClicked
-    post();  
+    //post();  
     }//GEN-LAST:event_jUnderKategoriMouseClicked
 
     private void jShowRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jShowRequestsActionPerformed
@@ -394,6 +382,33 @@ public class UserPanel extends javax.swing.JFrame {
         new LoggInScreen(idb).setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void postListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_postListValueChanged
+        try {
+        String listItem = postList.getSelectedValue();
+        String[] post_id = listItem.split(" ");
+        String pId = "";
+        
+        for (String id : post_id){
+            pId = id;
+            break;
+        }
+        int postId = Integer.parseInt(pId);
+        
+        new ViewFullPost(idb, currentUser, pId).setVisible(true);
+        
+        dispose();
+        }
+        
+        catch (Exception e) {
+            System.out.println("Nåt sket sig");
+        
+        }
+    }//GEN-LAST:event_postListValueChanged
+
+    private void postListMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_postListMouseEntered
+        postList.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_postListMouseEntered
  
     public void SetRequests(){
     
@@ -425,7 +440,7 @@ jseconddate.setDate(dat);
     private javax.swing.JLabel jLatestPosts;
     private javax.swing.JButton jNewPost;
     private javax.swing.JLabel jPendingRequests;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jShowCalendar;
     private javax.swing.JButton jShowMyPosts;
     private javax.swing.JButton jShowRequests;

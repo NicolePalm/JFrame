@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package scrum;
 
 import java.util.ArrayList;
@@ -11,19 +7,13 @@ import javax.swing.DefaultListModel;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 
-/**
- *
- * @author jomil
- */
 public class EditComments extends javax.swing.JFrame {
 
     private InfDB idb;
     private final String currentUser;
     private final String currentPost;
 
-    /**
-     * Creates new form EditComments
-     */
+    
     public EditComments(InfDB idb, String currentUser, String currentPost) {
         initComponents();
         this.idb = idb;
@@ -44,7 +34,10 @@ public class EditComments extends javax.swing.JFrame {
                     String date = idb.fetchSingle("SELECT COMMENTDATE FROM COMMENT WHERE COMMENTER_ID = '" + commenter + "' AND POST_ID = '" + currentPost + "' AND COMMENT = '" + postedComment + "'");
                     String firstName = idb.fetchSingle("SELECT FIRSTNAME FROM USER1 WHERE USER_ID = '" + commenter + "'");
                     String lastName = idb.fetchSingle("SELECT LASTNAME FROM USER1 WHERE USER_ID = '" + commenter + "'");
-                    listModel.addElement(postedComment_Id + " " + postedComment + "\n" + " " + firstName + " " + lastName + " " + date + "\n" + "\n");
+                    String template = "<html> %s %s %s %s <br> %s <br> </html>";
+                    String text = String.format(template, postedComment_Id, firstName, lastName, date, postedComment);
+                    //listModel.addElement(postedComment_Id + "<html> : "  + firstName + " " + lastName + "<br>" + postedComment + "<br> </html>" + date);
+                    listModel.addElement(text);
 
                 }
                 commentLista.setModel(listModel);
@@ -72,14 +65,10 @@ public class EditComments extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        commentLista.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        commentLista.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jScrollPane1.setViewportView(commentLista);
 
-        jButton1.setText("DELETE");
+        jButton1.setText("Delete comment");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -97,25 +86,30 @@ public class EditComments extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 242, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton2)
+                    .addComponent(jButton1))
+                .addGap(24, 24, 24)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -124,13 +118,14 @@ public class EditComments extends javax.swing.JFrame {
 
             //System.out.println(listItem);
             String[] comment = listItem.split(" ");
-            String pId = "";
+            String pId = comment[1];
+            System.out.println(pId);
 
-            for (String id : comment) {
-                pId = id;
-
-                break;
-            }
+//            for (String id : comment) {
+//                pId = id;
+//                System.out.println(pId);
+               // break;
+            
 
             int post = Integer.parseInt(currentPost);
             System.out.println(pId);

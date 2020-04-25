@@ -29,6 +29,8 @@ public class CreateMeeting extends javax.swing.JFrame {
         jDelete.setVisible(false);
         taReciver.setLineWrap(true);
         tfDescription.setLineWrap(true);
+        jCounterDes.setVisible(false);
+        jCounterRoom.setVisible(false);
 
     }
 
@@ -44,14 +46,16 @@ public class CreateMeeting extends javax.swing.JFrame {
   
     //NYA VERSIONEN
     public void CreateMeeting() {
+        String description = tfDescription.getText();
+        String room = tfRoom.getText();
         if(Validation.checkIfDateNull(jDateChooser)==false){
         Date dateChoosed = jDateChooser.getDate();
         String date = Calendar.ConvertDate(dateChoosed);
         if(!Validation.CheckDateTwo(date) && Validation.taHarVarde(taReciver) && Validation.descriptionValues(tfDescription) && Validation.tfHarVarde(tfRoom, "Enter a room where the meeting will take place")){
-        try {
+         if (description.length() + 1 <= 250) {
+             if(room.length() + 1 <= 30){
+            try {
             String creator = currentUser;
-            String description = tfDescription.getText();
-            String room = tfRoom.getText();
             String mID = idb.getAutoIncrement("MEETING", "MEETING_ID");
             String sql = "insert into MEETING values(" + idb.getAutoIncrement("MEETING", "MEETING_ID") + "," + creator + ",'" + description + "','" + date + "','00:00','" + room + "')";
             String ifTableEmptySql = "insert into MEETING values(1,"+ creator + ",'" + description + "','" + date + "','00:00','" + room + "')";
@@ -73,7 +77,6 @@ public class CreateMeeting extends javax.swing.JFrame {
                     tfDescription.setText("");
                     tfRoom.setText("");
                     taReciver.setText("");
-                    jDateChooser.setDateFormatString("");
                     FillReciver();
                     tfDescription.requestFocus();
                     new SelectTimeForMeeting(idb, "1").setVisible(true);
@@ -95,17 +98,25 @@ public class CreateMeeting extends javax.swing.JFrame {
                     tfDescription.setText("");
                     tfRoom.setText("");
                     taReciver.setText("");
-                    jDateChooser.setDateFormatString("");
                     FillReciver();
                     tfDescription.requestFocus();
                     new SelectTimeForMeeting(idb, mID).setVisible(true);
                
                 }
-            
-        } catch (InfException e) {
+            }
+            catch (InfException e) {
 
             System.out.println(e.getMessage());
+        }  
         }
+         else{
+             jCounterRoom.setVisible(true);
+             jCounterRoom.setText("Too many characters");
+         }
+         }
+         else{
+             jCounterDes.setText("Too long description");
+          }
         
         }
         }
@@ -187,11 +198,12 @@ public class CreateMeeting extends javax.swing.JFrame {
         if(Validation.checkIfDateNull(jDateChooser)==false){
         Date dateChoosed = jDateChooser.getDate();
         String date = Calendar.ConvertDate(dateChoosed);
+        String description = tfDescription.getText();;
+        String room = tfRoom.getText();
         if(!Validation.CheckDateTwo(date) && Validation.taHarVarde(taReciver) && Validation.descriptionValues(tfDescription) && Validation.tfHarVarde(tfRoom, "Enter a room where the meeting will take place")){
-        
+        if (description.length() + 1 <= 250) {
+            if(room.length() + 1 <= 30){
             try{
-                String description = tfDescription.getText();;
-                String room = tfRoom.getText();
                 idb.update("UPDATE MEETING SET description = '" + description + "', meetingdate = '" + date + "', roomname = '" + room + "' WHERE meeting_id = '" + meetingToEdit + "'");
                 String creator = idb.fetchSingle("SELECT MEETINGCREATER_ID FROM MEETING WHERE MEETING_ID = '" + meetingToEdit + "'");
                 idb.delete("DELETE FROM MEETINGREQUEST WHERE RECEIVER_ID NOT IN ('" + creator + "') AND MEETING_ID = '" + meetingToEdit + "'");
@@ -211,6 +223,15 @@ public class CreateMeeting extends javax.swing.JFrame {
                 System.out.println(e.getMessage());
             }
          }
+        else{
+            jCounterRoom.setVisible(true);
+            jCounterRoom.setText("Too many characters");
+        }
+        }
+        else{
+            jCounterDes.setText("Too long description");
+        }
+        }
     }
     }
 
@@ -237,6 +258,8 @@ public class CreateMeeting extends javax.swing.JFrame {
         btnBack = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tfDescription = new javax.swing.JTextArea();
+        jCounterDes = new javax.swing.JLabel();
+        jCounterRoom = new javax.swing.JLabel();
 
         jButton1.setText("jButton1");
 
@@ -246,6 +269,14 @@ public class CreateMeeting extends javax.swing.JFrame {
         lblRubrik.setText("Create meeting");
 
         lblDescription.setText("Description:");
+
+        tfRoom.setMaximumSize(new java.awt.Dimension(30, 2147483647));
+        tfRoom.setName(""); // NOI18N
+        tfRoom.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfRoomKeyTyped(evt);
+            }
+        });
 
         lblRoom.setText("Room:");
 
@@ -302,43 +333,62 @@ public class CreateMeeting extends javax.swing.JFrame {
 
         tfDescription.setColumns(20);
         tfDescription.setRows(5);
+        tfDescription.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfDescriptionKeyTyped(evt);
+            }
+        });
         jScrollPane1.setViewportView(tfDescription);
+
+        jCounterDes.setText("counter");
+
+        jCounterRoom.setText("counter");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jCounterDes, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2))
+                    .addComponent(jScrollPane1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tfRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lblRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jCounterRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btnCreateMeeting, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(cbReciver, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnResetReciver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jDelete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnAddReciver, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblReciever, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane3))))))
+                .addGap(28, 28, 28))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnBack)
                 .addGap(76, 76, 76)
                 .addComponent(lblRubrik)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnCreateMeeting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cbReciver, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnResetReciver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jDelete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
-                                    .addComponent(btnAddReciver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblReciever, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jDateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
-                                    .addComponent(tfRoom)
-                                    .addComponent(lblRoom, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(30, 30, 30))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -351,21 +401,22 @@ public class CreateMeeting extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(lblRubrik, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addComponent(lblDescription)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDescription)
+                    .addComponent(jCounterDes))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblRoom)
-                            .addComponent(lblDate))
-                        .addGap(3, 3, 3)
-                        .addComponent(tfRoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblRoom)
+                    .addComponent(lblDate)
+                    .addComponent(jCounterRoom))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tfRoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(lblReciever)
-                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(cbReciver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -375,10 +426,10 @@ public class CreateMeeting extends javax.swing.JFrame {
                         .addComponent(btnResetReciver)
                         .addGap(18, 18, 18)
                         .addComponent(jDelete))
-                    .addComponent(jScrollPane3))
-                .addGap(41, 41, 41)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(btnCreateMeeting)
-                .addGap(27, 27, 27))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
@@ -431,6 +482,16 @@ public class CreateMeeting extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 
+    private void tfDescriptionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfDescriptionKeyTyped
+        int countChar = tfDescription.getText().length() + 1;
+        jCounterDes.setText(countChar + "/250");
+        jCounterDes.setVisible(true);
+    }//GEN-LAST:event_tfDescriptionKeyTyped
+
+    private void tfRoomKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfRoomKeyTyped
+
+    }//GEN-LAST:event_tfRoomKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddReciver;
@@ -439,6 +500,8 @@ public class CreateMeeting extends javax.swing.JFrame {
     private javax.swing.JButton btnResetReciver;
     private javax.swing.JComboBox<String> cbReciver;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jCounterDes;
+    private javax.swing.JLabel jCounterRoom;
     private com.toedter.calendar.JDateChooser jDateChooser;
     private javax.swing.JButton jDelete;
     private javax.swing.JScrollPane jScrollPane1;

@@ -23,13 +23,14 @@ public class NewPosts extends javax.swing.JFrame {
 
     public NewPosts(InfDB idb, String id) {
         initComponents();
-        new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, "Jobb");
+        new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, "Formal");
         this.idb = idb;
         this.currentUser = id;
         jTitle.requestFocus();
         jValue.setVisible(false);
         jSetPublish.doClick();
         jText.setLineWrap(true);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -50,10 +51,11 @@ public class NewPosts extends javax.swing.JFrame {
         jSetPublish = new javax.swing.JCheckBox();
         jValue = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jCounter = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Jobb", "Fritid" }));
+        jType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Formal", "Informal" }));
         jType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTypeActionPerformed(evt);
@@ -61,7 +63,13 @@ public class NewPosts extends javax.swing.JFrame {
         });
 
         jText.setColumns(20);
+        jText.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
         jText.setRows(5);
+        jText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextKeyTyped(evt);
+            }
+        });
         jScrollPane1.setViewportView(jText);
 
         jNewCategory.setText("Create new category");
@@ -113,6 +121,8 @@ public class NewPosts extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("Create post");
 
+        jCounter.setText("0/750");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -123,14 +133,14 @@ public class NewPosts extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jFile)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jFileName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
+                        .addComponent(jFileName, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jCreatePost))
                     .addComponent(jScrollPane1)
                     .addComponent(jTitle)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jType, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
+                        .addComponent(jType, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(jCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jSetPublish)
@@ -144,13 +154,16 @@ public class NewPosts extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jValue)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1)))
+                        .addComponent(jLabel1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jCounter)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(13, Short.MAX_VALUE)
+                .addContainerGap(24, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jHome, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -166,14 +179,16 @@ public class NewPosts extends javax.swing.JFrame {
                     .addComponent(jNewCategory)
                     .addComponent(jSetPublish))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCounter)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jCreatePost)
                         .addComponent(jFile))
                     .addComponent(jFileName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(19, 19, 19))
         );
 
         pack();
@@ -207,12 +222,14 @@ public class NewPosts extends javax.swing.JFrame {
             categoryType = idb.fetchSingle("SELECT CATEGORYTYPE FROM CATEGORY WHERE CATEGORY_ID = '" + categoryId + "'");
             title = idb.fetchSingle("SELECT TITLE FROM POST WHERE POST_ID ='" + postId + "'");
             file = idb.fetchSingle("SELECT SEARCHPATH FROM POST WHERE POST_ID = '" + postId + "'");
+            int contentLenght = content.length();
             jTitle.setText(title);
             jText.setText(content);
             jValue.setText("1");
             this.currentPost = postId;
             jType.setSelectedItem(categoryType);
             jCategories.setSelectedItem(categoryName);
+            jCounter.setText(contentLenght + "/750");
 
             if (!file.equals("default")) {
                 jFileName.setText(file);
@@ -233,9 +250,11 @@ public class NewPosts extends javax.swing.JFrame {
         String fileName = jFileName.getText();
 
         if (title.isEmpty() || content.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Fyll i både titel och text!");
+            JOptionPane.showMessageDialog(null, "Enter both title and text!");
             jTitle.requestFocus();
         } else {
+            if(title.length() + 1 <= 100){
+                if(content.length() + 1 <=750){
             String category = jCategories.getSelectedItem().toString();
             String sqlCategoryID = "SELECT CATEGORY_ID FROM CATEGORY WHERE CATEGORYNAME = '" + category + "'";
             String tiden = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
@@ -257,6 +276,16 @@ public class NewPosts extends javax.swing.JFrame {
             } catch (InfException e) {
                 System.out.println(e.getMessage());
             }
+            }
+                else{
+                 JOptionPane.showMessageDialog(null, "Too long text");
+                 jText.requestFocus();  
+        }
+        }
+          else{
+                 JOptionPane.showMessageDialog(null, "Too long title");
+                 jTitle.requestFocus();   
+        }
 
         }
     }
@@ -270,6 +299,8 @@ public class NewPosts extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Enter both title and text!");
             jTitle.requestFocus();
         } else {
+            if(title.length() + 1 <= 100){
+                if(content.length() + 1 <=750){
             String category = jCategories.getSelectedItem().toString();
             String sqlCategoryID = "SELECT CATEGORY_ID FROM CATEGORY WHERE CATEGORYNAME = '" + category + "'";
             String tiden = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
@@ -297,6 +328,16 @@ public class NewPosts extends javax.swing.JFrame {
             } catch (InfException ex) {
                 Logger.getLogger(NewPosts.class.getName()).log(Level.SEVERE, null, ex);
             }
+            }
+                else{
+                 JOptionPane.showMessageDialog(null, "Too long text");
+                 jText.requestFocus();  
+        }
+        }
+          else{
+                 JOptionPane.showMessageDialog(null, "Too long title");
+                 jTitle.requestFocus();   
+        }
         }
     }
 
@@ -342,6 +383,11 @@ public class NewPosts extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jSetPublishActionPerformed
 
+    private void jTextKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextKeyTyped
+        int countChar = jText.getText().length() + 1;
+        jCounter.setText(countChar + "/750");
+    }//GEN-LAST:event_jTextKeyTyped
+
     private String GetCurrentFile() {
 
         String fileName = currentFile.getAbsolutePath();
@@ -365,6 +411,7 @@ public class NewPosts extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> jCategories;
+    private javax.swing.JLabel jCounter;
     private javax.swing.JButton jCreatePost;
     private javax.swing.JButton jFile;
     private javax.swing.JLabel jFileName;

@@ -168,25 +168,45 @@ public class UpdatePersonalInfo extends javax.swing.JFrame {
                 String lastname = tfLastname.getText();
                 String password = pfPassword.getText();
                 String confirmPassword = pfConfirmPassword.getText();
-                if(Validation.validEmail(email, currentEmail, emails))
+                 if(email.length() <= 30){
+                     if(firstname.length() <= 20 && lastname.length() <= 20){
+                if(Validation.validEmail(email, currentEmail, emails)&& Validation.inmatningFnuttar(email) && Validation.inmatningFnuttar(firstname) && Validation.inmatningFnuttar(lastname) && Validation.inmatningFnuttar(password) && Validation.inmatningFnuttar(confirmPassword))
               {
                     if(password.equals(confirmPassword)) {
+                        if(password.length() <= 25){
                         String updateSql = "UPDATE USER1 SET EMAIL ='"+email+"', FIRSTNAME = '"+firstname+"', LASTNAME = '"+lastname+"', USER_PASSWORD = '"+password+"' WHERE USER_ID ='"+currentUser+"'";
                         idb.update(updateSql);
                         JOptionPane.showMessageDialog(null, "User info changed");
                         fillTf();
                         
                     }
-                    else {
+                    else{
+                        JOptionPane.showMessageDialog(null, "Password can only be 25 characters");
+                        pfPassword.requestFocus();
+                    }
+                    }
+                    
+                    else{
                         JOptionPane.showMessageDialog(null, "Passwords does not match");
                         pfConfirmPassword.requestFocus();
                     }
                }
+            }
+                     else{
+                     JOptionPane.showMessageDialog(null, "Name can only be 20 characters");
+                 }
+                 }
+               
+                 else{
+                     JOptionPane.showMessageDialog(null, "Email can only be 30 characters");
+                     tfEmail.requestFocus();
+                 }
 
             }
             catch(InfException e) {
                 System.out.println(e);
             }
+       
         }
         fillTf();
     }//GEN-LAST:event_btnChangeInfoActionPerformed

@@ -29,10 +29,13 @@ public class CreateAccount extends javax.swing.JFrame {
             }
             
             if(emptyFields == false){
+            if(Email.length() <= 30){
             boolean InvalidEmail = validEmail(Email);
             if(Validation.emailValidator(Email, JEmail) && Validation.inmatningFnuttar(Email) && Validation.inmatningFnuttar(Firstname) && Validation.inmatningFnuttar(Lastname) && Validation.inmatningFnuttar(Password)) {
             if(InvalidEmail == false){
-                if(Password.equals(PasswordIgen)){ 
+                if(Firstname.length() <= 20 && Lastname.length() <= 20){
+                if(Password.equals(PasswordIgen)){
+                    if(Password.length() <= 25){
             boolean test = NewUser.InsertNewUser(Firstname, Lastname, Email, Password,idb);
             
             if(test = true){
@@ -41,20 +44,37 @@ public class CreateAccount extends javax.swing.JFrame {
             new UserPanel(idb,userID,"0").setVisible(true);
             dispose();
             }
+                }
+            else{
+                    JOptionPane.showMessageDialog(null, "Password can only be 25 characters");
+                    JPassword.requestFocus();
            }
+            }
             else{
                    JOptionPane.showMessageDialog(null, "The password doesn't match");
                    JPassword.requestFocus();
                 }
             }
+            else{
+                JOptionPane.showMessageDialog(null, "Name can only be 20 characters");
+            }
+            }
+           
             else{ 
             JOptionPane.showMessageDialog(null, "The email is already registered");
             JEmail.requestFocus();
             }  
+            }
             
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Email can only be 30 characters");
+                JEmail.requestFocus();
             }
         }
         }
+        
+        
         
         public boolean validEmail(String Email){
             boolean InvalidEmail = false;

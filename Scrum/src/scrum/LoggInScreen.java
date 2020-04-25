@@ -144,6 +144,7 @@ public class LoggInScreen extends javax.swing.JFrame {
         }
         else{
         try{
+        if(Validation.inmatningFnuttar(email) && Validation.inmatningFnuttar(pw)){
         if(Validation.emailValidator(email, JUserName)){
          emails = idb.fetchColumn("SELECT EMAIL FROM USER1");
          for(String e : emails){
@@ -173,6 +174,7 @@ public class LoggInScreen extends javax.swing.JFrame {
                 JUserName.requestFocus();
             }
             }
+        }
          }
          
          catch(InfException e){
