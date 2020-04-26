@@ -287,6 +287,8 @@ public class ViewFullPost extends javax.swing.JFrame {
             }
         });
 
+        jFile.setForeground(new java.awt.Color(255, 255, 255));
+
         jPostBody.setEditable(false);
         jPostBody.setColumns(20);
         jPostBody.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N

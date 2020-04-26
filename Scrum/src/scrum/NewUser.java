@@ -19,7 +19,7 @@ public class NewUser {
         try{    
 
             String id = idb.getAutoIncrement("USER1","USER_ID");
-            String sql = "INSERT INTO User1 (user_id, firstname,lastname,email,user_password, adminstatus, blocknotifications) VALUES ("+ id +",'"+ firstname + "','" + lastname + "','" + email + "','" + password + "',0,0)";
+            String sql = "INSERT INTO User1 (user_id, firstname,lastname,email,user_password, adminstatus) VALUES ("+ id +",'"+ firstname + "','" + lastname + "','" + email + "','" + password + "',0)";
 
             idb.insert(sql);
             success = true; 

@@ -48,7 +48,7 @@ for(String emails : getEmails){
 }
  
 }
-catch(Exception e){
+catch(InfException e){
 System.out.println(e);
 }
 }    

@@ -351,7 +351,7 @@ public class UserPanel extends javax.swing.JFrame {
                     .addComponent(jSearchField))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jShowMyPosts)
                     .addComponent(btnUpPersonalInfo)
@@ -361,7 +361,7 @@ public class UserPanel extends javax.swing.JFrame {
                     .addComponent(jNewPost)
                     .addComponent(jShowCalendar)
                     .addComponent(btnCreateMeeting))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -486,10 +486,13 @@ public class UserPanel extends javax.swing.JFrame {
         
         String title = "";
         
-        String searchQuery = jSearchField.getText();
+        String searchQuery = jSearchField.getText().toLowerCase();
+        if(Validation.inmatningFnuttar(searchQuery)){
         if(!searchQuery.equals("")){
         String date = "";
         String time = "";
+        String title_ ="";
+        
         int i = 1;
         DefaultListModel listModel = new DefaultListModel();
          ArrayList <String> publishedId = new ArrayList();
@@ -499,7 +502,8 @@ public class UserPanel extends javax.swing.JFrame {
              for(String id : publishedId){
                  
                  title = idb.fetchSingle("SELECT TITLE FROM POST WHERE POST_ID = '" + id + "'");
-                 if(title.contains(searchQuery)){
+                 title_ = title.toLowerCase();
+                 if(title_.contains(searchQuery)){
                  date = idb.fetchSingle("SELECT POSTDATE FROM POST WHERE POST_ID = '" + id + "'");
                  time = idb.fetchSingle("SELECT POSTTIME FROM POST WHERE POST_ID = '" + id + "'");
                  listModel.addElement(id + " | " + title + " | " + date + " | " + time);
@@ -518,6 +522,7 @@ public class UserPanel extends javax.swing.JFrame {
         catch (NumberFormatException | InfException e) {
             System.out.println("Error");
             JOptionPane.showMessageDialog(null, "No posts in this category");
+        }
         }
         }
         else{

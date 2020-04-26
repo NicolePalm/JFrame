@@ -145,24 +145,21 @@ public class EditComments extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
+            DefaultListModel listModel = new DefaultListModel();
+            listModel.addElement("");
+            
             String listItem = commentLista.getSelectedValue();
 
-            //System.out.println(listItem);
             String[] comment = listItem.split(" ");
             String pId = comment[1];
             System.out.println(pId);
-
-//            for (String id : comment) {
-//                pId = id;
-//                System.out.println(pId);
-               // break;
-            
 
             int post = Integer.parseInt(currentPost);
             System.out.println(pId);
 
             String delete = "delete from comment where post_id= " + post + " and comment_Id = '" + pId + "'";
             idb.delete(delete);
+            commentLista.setModel(listModel);
             System.out.println("Removed");
             showComments();
         } catch (Exception e) {
