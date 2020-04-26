@@ -30,6 +30,7 @@ public class NewPosts extends javax.swing.JFrame {
         jValue.setVisible(false);
         jSetPublish.doClick();
         jText.setLineWrap(true);
+        updateCategories();
 
     }
 
@@ -393,10 +394,19 @@ public class NewPosts extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jCreatePostActionPerformed
 
-    private void jTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTypeActionPerformed
-        jCategories.removeAllItems();
+    private void updateCategories(){
+       jCategories.removeAllItems();
         String type = jType.getSelectedItem().toString();
-        new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, type);
+         if (type.equals("Formal")){
+        new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, "Jobb");   
+        }else{
+        new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, "Fritid");  
+        }
+     
+    }
+    private void jTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTypeActionPerformed
+      updateCategories();
+     
     }//GEN-LAST:event_jTypeActionPerformed
 
     private void jNewCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNewCategoryActionPerformed
