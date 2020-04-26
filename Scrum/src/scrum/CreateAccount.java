@@ -27,7 +27,7 @@ public class CreateAccount extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Don't leave any field blank");
                 emptyFields = true;
             }
-            
+            if(Email.contains("@") && Email.contains(".")){
             if(emptyFields == false){
             if(Email.length() <= 30){
             boolean InvalidEmail = validEmail(Email);
@@ -71,7 +71,11 @@ public class CreateAccount extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Email can only be 30 characters");
                 JEmail.requestFocus();
             }
-        }
+        }}
+            else{
+            JOptionPane.showMessageDialog(null, "Invalid Email format");
+                JEmail.requestFocus();
+            }
         }
         
         
