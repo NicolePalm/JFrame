@@ -361,6 +361,7 @@ public class NewPosts extends javax.swing.JFrame {
 
                 JOptionPane.showMessageDialog(null, "New post created");
                 ReturnToHome.CreateHomeScreen(idb, currentUser);
+                dispose();
 
  
                 }
