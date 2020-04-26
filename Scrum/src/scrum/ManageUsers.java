@@ -61,7 +61,6 @@ System.out.println(e);
         jHome = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jUserList = new javax.swing.JComboBox<>();
-        jSelectUser = new javax.swing.JButton();
         jUnAdmin = new javax.swing.JButton();
         jMakeAdmin = new javax.swing.JButton();
         jDeleteUser = new javax.swing.JButton();
@@ -88,18 +87,14 @@ System.out.println(e);
 
         jUserList.setFont(new java.awt.Font("Verdana", 1, 11)); // NOI18N
         jUserList.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jUserList.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jUserListItemStateChanged(evt);
+            }
+        });
         jUserList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jUserListMouseClicked(evt);
-            }
-        });
-
-        jSelectUser.setFont(new java.awt.Font("Verdana", 1, 11)); // NOI18N
-        jSelectUser.setText("Select user");
-        jSelectUser.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jSelectUser.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jSelectUserActionPerformed(evt);
             }
         });
 
@@ -157,10 +152,7 @@ System.out.println(e);
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jDeleteUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jUserList, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jSelectUser, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(jUserList, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(0, 54, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -172,9 +164,7 @@ System.out.println(e);
                         .addComponent(jHome))
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jSelectUser)
-                    .addComponent(jUserList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jUserList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
@@ -203,56 +193,6 @@ System.out.println(e);
     private void jUserListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jUserListMouseClicked
        
     }//GEN-LAST:event_jUserListMouseClicked
-
-    private void jSelectUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSelectUserActionPerformed
-        userToEdit = jUserList.getSelectedItem().toString();
-            String firstName;
-            String lastName;
-            String passWord;
-            String adminStatus;
-            jUserInfo.setText("");
-            
-        
-        try {
-            firstName = idb.fetchSingle("SELECT FIRSTNAME FROM USER1 WHERE EMAIL ='"+userToEdit+"'");
-            lastName = idb.fetchSingle("SELECT LASTNAME FROM USER1 WHERE EMAIL ='"+userToEdit+"'");
-            passWord = idb.fetchSingle("SELECT USER_PASSWORD FROM USER1 WHERE EMAIL ='"+userToEdit+"'");
-            adminStatus = idb.fetchSingle("SELECT ADMINSTATUS FROM USER1 WHERE EMAIL ='"+userToEdit+"'");
-            jMakeAdmin.setVisible(true);
-            jDeleteUser.setVisible(true);
-            jUnAdmin.setVisible(false);
-            
-            if(adminStatus.equals("1")){
-            jDeleteUser.setVisible(false);
-            jMakeAdmin.setVisible(false);
-            jUnAdmin.setVisible(true);
-            adminStatus = "User is an admin";
-            }
-            else{
-            adminStatus = "User is not an admin";
-            }
-            
-            jUserInfo.append("Name : "+firstName+" "+lastName);
-            jUserInfo.append("\n");
-            
-            jUserInfo.append("Email : "+userToEdit);
-            jUserInfo.append("\n");
-            
-            jUserInfo.append("Password : "+passWord);
-            jUserInfo.append("\n");
-            
-            jUserInfo.append(adminStatus);
-            jUserInfo.append("\n");
-            
-            
-        } catch (InfException ex) {
-            Logger.getLogger(ManageUsers.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-       
-        
-        
-    }//GEN-LAST:event_jSelectUserActionPerformed
 
     private void jUnAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUnAdminActionPerformed
         try {
@@ -308,6 +248,54 @@ System.out.println(e);
        dispose();
     }//GEN-LAST:event_jHomeActionPerformed
 
+    private void jUserListItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jUserListItemStateChanged
+         userToEdit = jUserList.getSelectedItem().toString();
+            String firstName;
+            String lastName;
+            String passWord;
+            String adminStatus;
+            jUserInfo.setText("");
+            
+        
+        try {
+            firstName = idb.fetchSingle("SELECT FIRSTNAME FROM USER1 WHERE EMAIL ='"+userToEdit+"'");
+            lastName = idb.fetchSingle("SELECT LASTNAME FROM USER1 WHERE EMAIL ='"+userToEdit+"'");
+            passWord = idb.fetchSingle("SELECT USER_PASSWORD FROM USER1 WHERE EMAIL ='"+userToEdit+"'");
+            adminStatus = idb.fetchSingle("SELECT ADMINSTATUS FROM USER1 WHERE EMAIL ='"+userToEdit+"'");
+            jMakeAdmin.setVisible(true);
+            jDeleteUser.setVisible(true);
+            jUnAdmin.setVisible(false);
+            
+            if(adminStatus.equals("1")){
+            jDeleteUser.setVisible(false);
+            jMakeAdmin.setVisible(false);
+            jUnAdmin.setVisible(true);
+            adminStatus = "User is an admin";
+            }
+            else{
+            adminStatus = "User is not an admin";
+            }
+            
+            jUserInfo.append("Name : "+firstName+" "+lastName);
+            jUserInfo.append("\n");
+            
+            jUserInfo.append("Email : "+userToEdit);
+            jUserInfo.append("\n");
+            
+            jUserInfo.append("Password : "+passWord);
+            jUserInfo.append("\n");
+            
+            jUserInfo.append(adminStatus);
+            jUserInfo.append("\n");
+            
+            
+        } catch (InfException ex) {
+            Logger.getLogger(ManageUsers.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+       
+    }//GEN-LAST:event_jUserListItemStateChanged
+
     
     
 
@@ -318,7 +306,6 @@ System.out.println(e);
     private javax.swing.JButton jMakeAdmin;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton jSelectUser;
     private javax.swing.JButton jUnAdmin;
     private javax.swing.JTextArea jUserInfo;
     private javax.swing.JComboBox<String> jUserList;
