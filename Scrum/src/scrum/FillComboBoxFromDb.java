@@ -28,7 +28,7 @@ for(String typeCategories : getCategories){
     box.addItem(typeCategories);
 }
 }
-catch(Exception e){
+catch(InfException e){
 System.out.println(e);
 }
 }

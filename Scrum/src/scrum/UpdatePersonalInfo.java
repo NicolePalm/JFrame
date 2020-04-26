@@ -216,14 +216,14 @@ public class UpdatePersonalInfo extends javax.swing.JFrame {
                 String confirmPassword = pfConfirmPassword.getText();
                  if(email.length() <= 30){
                      if(firstname.length() <= 20 && lastname.length() <= 20){
-                if(Validation.validEmail(email, currentEmail, emails)&& Validation.inmatningFnuttar(email) && Validation.inmatningFnuttar(firstname) && Validation.inmatningFnuttar(lastname) && Validation.inmatningFnuttar(password) && Validation.inmatningFnuttar(confirmPassword))
+                if(Validation.validEmail(email, currentEmail, emails)&& email.contains("@")&& email.contains(".")&& Validation.inmatningFnuttar(email) && Validation.inmatningFnuttar(firstname) && Validation.inmatningFnuttar(lastname) && Validation.inmatningFnuttar(password) && Validation.inmatningFnuttar(confirmPassword))
               {
                     if(password.equals(confirmPassword)) {
                         if(password.length() <= 25){
                         String updateSql = "UPDATE USER1 SET EMAIL ='"+email+"', FIRSTNAME = '"+firstname+"', LASTNAME = '"+lastname+"', USER_PASSWORD = '"+password+"' WHERE USER_ID ='"+currentUser+"'";
                         idb.update(updateSql);
                         JOptionPane.showMessageDialog(null, "User info changed");
-                        fillTf();
+                        ReturnToHome.CreateHomeScreen(idb, currentUser);
                         
                     }
                     else{
@@ -237,6 +237,9 @@ public class UpdatePersonalInfo extends javax.swing.JFrame {
                         pfConfirmPassword.requestFocus();
                     }
                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Not valid email adress");
+                }
             }
                      else{
                      JOptionPane.showMessageDialog(null, "Name can only be 20 characters");

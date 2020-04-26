@@ -3,21 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Scrum/JFrame-master/Scrum/src/scrum/UserPanel.java</file>
-            <file>file:/C:/Scrum/JFrame-master/Scrum/src/scrum/Calendar.java</file>
-            <file>file:/C:/Scrum/JFrame-master/Scrum/src/scrum/EditComments.java</file>
-            <file>file:/C:/Scrum/JFrame-master/Scrum/src/scrum/SelectTimeForMeeting.java</file>
-            <file>file:/C:/Scrum/JFrame-master/Scrum/src/scrum/CreateAccount.java</file>
-            <file>file:/C:/Scrum/JFrame-master/Scrum/src/scrum/UpdatePersonalInfo.java</file>
-            <file>file:/C:/Scrum/JFrame-master/Scrum/src/scrum/ViewFullPost.java</file>
-            <file>file:/C:/Scrum/JFrame-master/Scrum/src/scrum/CreateNewCategory.java</file>
-            <file>file:/C:/Scrum/JFrame-master/Scrum/src/scrum/HandleMeetingRequests.java</file>
-            <file>file:/C:/Scrum/JFrame-master/Scrum/src/scrum/ManageUsers.java</file>
-            <file>file:/C:/Scrum/JFrame-master/Scrum/src/scrum/VoteOnTime.java</file>
-            <file>file:/C:/Scrum/JFrame-master/Scrum/src/scrum/LoggInScreen.java</file>
-            <file>file:/C:/Scrum/JFrame-master/Scrum/src/scrum/CreateMeeting.java</file>
-            <file>file:/C:/Scrum/JFrame-master/Scrum/src/scrum/MyPosts.java</file>
-            <file>file:/C:/Scrum/JFrame-master/Scrum/src/scrum/NewPosts.java</file>
+            <file>file:/C:/JFrame/Scrum/src/scrum/UpdateMeetings.java</file>
+            <file>file:/C:/JFrame/Scrum/src/scrum/UpdatePersonalInfo.java</file>
+            <file>file:/C:/JFrame/Scrum/src/scrum/NewPosts.java</file>
+            <file>file:/C:/JFrame/Scrum/src/scrum/Calendar.java</file>
+            <file>file:/C:/JFrame/Scrum/src/scrum/UserPanel.java</file>
+            <file>file:/C:/JFrame/Scrum/src/scrum/Validation.java</file>
         </group>
     </open-files>
 </project-private>

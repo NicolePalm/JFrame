@@ -25,10 +25,49 @@ public class UserPanel extends javax.swing.JFrame {
         SetRequests();
         uppdateraUnderKategori();
         sokDatum();
+        LatestPosts();
         if(admin.equals("0")){
         jUsers.setVisible(false);
+        
         }
     }
+    
+    
+    
+    
+    
+    
+    public void LatestPosts(){
+        
+    String title = "";
+        String date = "";
+        String time = "";
+        int i = 1;
+        DefaultListModel listModel = new DefaultListModel();
+         ArrayList <String> publishedId = new ArrayList();
+         try{
+         publishedId = idb.fetchColumn("SELECT POST_ID FROM POST WHERE POSTSTATUS = 1 ORDER BY postdate DESC, posttime DESC");
+         if(PendingRequests.ContainsAllNulls(publishedId) == false){
+             for(String id : publishedId){
+                 if(i < 6){
+                 title = idb.fetchSingle("SELECT TITLE FROM POST WHERE POST_ID = '" + id + "'");
+                 date = idb.fetchSingle("SELECT POSTDATE FROM POST WHERE POST_ID = '" + id + "'");
+                 time = idb.fetchSingle("SELECT POSTTIME FROM POST WHERE POST_ID = '" + id + "'");
+                 listModel.addElement(id + " | " + title + " | " + date + " | " + time);
+                 i++;
+                 }
+             }
+         }
+
+        postList.setModel(listModel);
+        }
+
+        catch (NumberFormatException | InfException e) {
+            System.out.println("Error");
+            JOptionPane.showMessageDialog(null, "No posts in this category");
+        }
+    }
+    
     
     
         public void post () {
@@ -52,29 +91,6 @@ public class UserPanel extends javax.swing.JFrame {
             String first = ConvertDate(firsta);
             DefaultListModel listModel = new DefaultListModel();
             
-           // String postQuery = "SELECT post_id, title, postdate, posttime, post.category_id FROM post, category \n"
-                //    + "WHERE post.CATEGORY_ID = category.CATEGORY_ID AND categorytype = '"+category+"' and post.CATEGORY_ID = "+sver+" AND POSTSTATUS = 1 AND POSTDATE BETWEEN '"+second+"' and '"+first+"' ORDER BY postdate DESC, posttime DESC";
-            
-//            ArrayList<HashMap<String, String>> posts = idb.fetchRows(postQuery);
-//            String queryId;
-//            String queryTitle;
-//            String queryContent;
-//            String querySearchpath;
-//            String queryDate;
-//            String queryTime;
-//            DefaultListModel listModel = new DefaultListModel();
-//
-//            for (HashMap<String, String> post : posts){
-//                queryId = post.get("POST_ID");
-//                queryTitle = post.get("TITLE");
-//                queryContent = post.get("CONTENT");
-//                querySearchpath = post.get("SEARCHPATH");
-//                queryDate = post.get("POSTDATE");
-//                queryTime = post.get("POSTTIME");
-//                listModel.addElement(queryId + " | " + queryTitle + " | " + queryDate + " | " + queryTime);
-//
-//            }
-
         String title = "";
         String date = "";
         String time = "";
@@ -122,6 +138,8 @@ public class UserPanel extends javax.swing.JFrame {
         jShowCalendar = new javax.swing.JButton();
         jNewPost = new javax.swing.JButton();
         jShowMyPosts = new javax.swing.JButton();
+        jSearch = new javax.swing.JButton();
+        jSearchField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -211,7 +229,6 @@ public class UserPanel extends javax.swing.JFrame {
 
         jShowRequests.setFont(new java.awt.Font("Verdana", 1, 11)); // NOI18N
         jShowRequests.setText("Meeting requests");
-        jShowRequests.setActionCommand("Meeting requests");
         jShowRequests.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jShowRequests.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -255,6 +272,13 @@ public class UserPanel extends javax.swing.JFrame {
             }
         });
 
+        jSearch.setText("Search ");
+        jSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -262,8 +286,19 @@ public class UserPanel extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLatestPosts)
                     .addComponent(jScrollPane1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jNewPost, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                            .addComponent(jShowMyPosts, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(137, 137, 137)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jShowRequests, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCreateMeeting, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnUpPersonalInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                            .addComponent(jShowCalendar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -281,38 +316,35 @@ public class UserPanel extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jfirstdate, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jNewPost, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                            .addComponent(jShowMyPosts, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(137, 137, 137)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jShowRequests, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnCreateMeeting, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLatestPosts)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnUpPersonalInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
-                            .addComponent(jShowCalendar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(40, Short.MAX_VALUE))
+                        .addComponent(jSearchField, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSearch)))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton2)
                         .addComponent(jUsers)
                         .addComponent(categoryCbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jUnderKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jseconddate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jfirstdate, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
+                    .addComponent(jfirstdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jseconddate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jPendingRequests)
                     .addComponent(jButton1))
-                .addGap(18, 18, 18)
-                .addComponent(jLatestPosts)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLatestPosts, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSearch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSearchField))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37)
@@ -325,7 +357,7 @@ public class UserPanel extends javax.swing.JFrame {
                     .addComponent(jNewPost)
                     .addComponent(jShowCalendar)
                     .addComponent(btnCreateMeeting))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -444,6 +476,39 @@ public class UserPanel extends javax.swing.JFrame {
     private void postListMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_postListMouseEntered
         postList.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }//GEN-LAST:event_postListMouseEntered
+
+    private void jSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSearchActionPerformed
+        String title = "";
+        
+        String searchQuery = jSearchField.getText();
+        String date = "";
+        String time = "";
+        int i = 1;
+        DefaultListModel listModel = new DefaultListModel();
+         ArrayList <String> publishedId = new ArrayList();
+         try{
+         publishedId = idb.fetchColumn("SELECT POST_ID FROM POST WHERE POSTSTATUS = 1 ORDER BY postdate DESC, posttime DESC");
+         if(PendingRequests.ContainsAllNulls(publishedId) == false){
+             for(String id : publishedId){
+                 
+                 title = idb.fetchSingle("SELECT TITLE FROM POST WHERE POST_ID = '" + id + "'");
+                 if(title.contains(searchQuery)){
+                 date = idb.fetchSingle("SELECT POSTDATE FROM POST WHERE POST_ID = '" + id + "'");
+                 time = idb.fetchSingle("SELECT POSTTIME FROM POST WHERE POST_ID = '" + id + "'");
+                 listModel.addElement(id + " | " + title + " | " + date + " | " + time);
+                 }
+             }
+         }
+
+        postList.setModel(listModel);
+        }
+
+        catch (NumberFormatException | InfException e) {
+            System.out.println("Error");
+            JOptionPane.showMessageDialog(null, "No posts in this category");
+        }
+    
+    }//GEN-LAST:event_jSearchActionPerformed
  
     public void SetRequests(){
     
@@ -477,6 +542,8 @@ jseconddate.setDate(dat);
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel jPendingRequests;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton jSearch;
+    private javax.swing.JTextField jSearchField;
     private javax.swing.JButton jShowCalendar;
     private javax.swing.JButton jShowMyPosts;
     private javax.swing.JButton jShowRequests;

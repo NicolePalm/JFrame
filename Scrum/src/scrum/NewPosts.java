@@ -181,7 +181,7 @@ public class NewPosts extends javax.swing.JFrame {
                                 .addComponent(jCreatePost))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTitle, javax.swing.GroupLayout.Alignment.LEADING))))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -243,6 +243,8 @@ public class NewPosts extends javax.swing.JFrame {
         }
         return boxStatusInt;
     }
+    
+   
 
     public void RecreatePost(String postId) {
         String content;
@@ -357,9 +359,9 @@ public class NewPosts extends javax.swing.JFrame {
                 }
 
                 JOptionPane.showMessageDialog(null, "New post created");
-                
+                ReturnToHome.CreateHomeScreen(idb, currentUser);
 
-                dispose(); 
+ 
                 }
             } catch (InfException ex) {
                 Logger.getLogger(NewPosts.class.getName()).log(Level.SEVERE, null, ex);
