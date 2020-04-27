@@ -398,9 +398,9 @@ public class NewPosts extends javax.swing.JFrame {
        jCategories.removeAllItems();
         String type = jType.getSelectedItem().toString();
          if (type.equals("Formal")){
-        new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, "Jobb");   
+        new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, "Formal");   
         }else{
-        new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, "Fritid");  
+        new FillComboBoxFromDb(idb).fillComboboxCategories(jCategories, "Informal");  
         }
      
     }

@@ -392,9 +392,9 @@ public class UserPanel extends javax.swing.JFrame {
      jUnderKategori.removeAllItems();
         String type = categoryCbx.getSelectedItem().toString();
         if (type.equals("Formal")){
-        new FillComboBoxFromDb(idb).fillComboboxCategories(jUnderKategori, "Jobb");   
+        new FillComboBoxFromDb(idb).fillComboboxCategories(jUnderKategori, "Formal");   
         }else{
-        new FillComboBoxFromDb(idb).fillComboboxCategories(jUnderKategori, "Fritid");  
+        new FillComboBoxFromDb(idb).fillComboboxCategories(jUnderKategori, "Informal");  
         }
              
     }
